@@ -1,1 +1,0 @@
-<view class="data-v-c4c32062"><view data-event-opts="{{[['touchmove',[['start',['$event']]]]]}}" class="main data-v-c4c32062" style="{{'top:'+(currentheight+'px')+';'}}" bindtouchmove="__e"><view class="content data-v-c4c32062"><view class="touchline data-v-c4c32062"><view class="line data-v-c4c32062"></view></view><slot></slot></view></view></view>
