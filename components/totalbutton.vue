@@ -1,34 +1,59 @@
 <template>
-	<button id="btn" class="btn" :plain="true"  @click="active()">{{text}}</button>
+	<button 
+		id="btn" 
+		class="btn" 
+		:plain="true"  
+		:style="{'border-color':bordercolor}"
+	>
+		{{text}}
+	</button>
 </template>
 
 <script>
 	export default{
-		name:"btn",
-		props:['text'],
 		data(){
 			return {
-				// style:"width:42%;border: 2px solid #66CDAA;border-radius:10px;color:#66CDAA;position:relative;"
-				estyle:{width:'42%',border: '2px solid #66CDAA',radius:'10px',color:'#66CDAA',position:'relative'},
-					
-				
-					
-					
-					
-					// 'top':'20upx' 
-				
+				bordercolor:"rgba(0,0,0,0.3)",
+			}
+			
+		},
+		props:{
+			text:{
+				type:String
+			},
+			selected:{
+				type:Boolean,
+				default:false
+			}
+		},
+		watch:{
+			test:{ 
+				selected:function(){
+				console.log(1)
+				if(this.selected)
+					activate();
+				else inactivate();
+				}
 			}
 			
 		},
 		methods:{
-			active:function(){
-				this.estyle.color='#000000';
-				console.log(1);
+			activate(){
+				this.bordercolor="rgba(102,205,170,1)";
+			},
+			inactivate(){
+				this.bordercolor="rgba(0,0,0,0.3)";
 			} 
 		}
 	}
 </script>
 
-<style>
-	
+<style scoped lang="scss">
+	.btn{
+		height: 120upx;
+		width:270upx;
+		radius: 15px;
+		margin: 20upx;
+		border: 2px solid;
+	}
 </style>
