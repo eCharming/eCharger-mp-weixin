@@ -6,7 +6,6 @@
 		</map>
 		<movebox></movebox>
 		<!-- <babtouchbox maxHeight="1" minHeight="0.1">
-			<totalbutton :text="111"></totalbutton>
 		</babtouchbox> -->
 
 		
