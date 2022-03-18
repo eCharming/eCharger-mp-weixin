@@ -105,11 +105,11 @@
 /******/
 /******/
 /******/ 		// mini-css-extract-plugin CSS loading
-/******/ 		var cssChunks = {"components/bab-Touchbox":1,"uview-ui/components/u-row/u-row":1};
+/******/ 		var cssChunks = {"components/bab-Touchbox":1,"components/moveBox":1,"uview-ui/components/u-row/u-row":1};
 /******/ 		if(installedCssChunks[chunkId]) promises.push(installedCssChunks[chunkId]);
 /******/ 		else if(installedCssChunks[chunkId] !== 0 && cssChunks[chunkId]) {
 /******/ 			promises.push(installedCssChunks[chunkId] = new Promise(function(resolve, reject) {
-/******/ 				var href = "" + ({"components/bab-Touchbox":"components/bab-Touchbox","components/totalbutton":"components/totalbutton","uview-ui/components/u-row/u-row":"uview-ui/components/u-row/u-row"}[chunkId]||chunkId) + ".wxss";
+/******/ 				var href = "" + ({"components/bab-Touchbox":"components/bab-Touchbox","components/moveBox":"components/moveBox","components/totalbutton":"components/totalbutton","uview-ui/components/u-row/u-row":"uview-ui/components/u-row/u-row"}[chunkId]||chunkId) + ".wxss";
 /******/ 				var fullhref = __webpack_require__.p + href;
 /******/ 				var existingLinkTags = document.getElementsByTagName("link");
 /******/ 				for(var i = 0; i < existingLinkTags.length; i++) {

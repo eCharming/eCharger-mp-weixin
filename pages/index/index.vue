@@ -1,18 +1,14 @@
 <template>
 	<view>
-		<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
+		<!-- <map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
 			:markers="covers" :setting="mapSetting" :circles="circles">
 		</map>
 
 		<babtouchbox maxHeight="0.7">
 			<totalbutton :text="111"></totalbutton>
-		</babtouchbox>
+		</babtouchbox> -->
 
-		<!-- <u-tabbar>
-			<u-tabbar-item text="附近" :icon="nearicon"></u-tabbar-item>
-			<u-tabbar-item text="租电桩" :icon="bicon"></u-tabbar-item>
-			<u-tabbar-item text="我的" :icon="myicon"></u-tabbar-item>
-		</u-tabbar> -->
+		<movebox></movebox>
 
 
 	</view>
@@ -21,11 +17,13 @@
 <script>
 	import babtouchbox from '@/components/bab-Touchbox.vue'
 	import totalbutton from '@/components/totalbutton.vue'
+	import movebox from '@/components/moveBox.vue'
 	import QQMapWX from '@/static/js/qqmap-wx-jssdk.min.js'
 	export default {
 		components: {
 			babtouchbox,
-			totalbutton
+			totalbutton,
+			movebox
 		},
 		data() {
 			return {

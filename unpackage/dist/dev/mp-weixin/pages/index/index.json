@@ -2,6 +2,7 @@
   "navigationBarTitleText": "uni-app",
   "usingComponents": {
     "babtouchbox": "/components/bab-Touchbox",
-    "totalbutton": "/components/totalbutton"
+    "totalbutton": "/components/totalbutton",
+    "movebox": "/components/moveBox"
   }
 }
