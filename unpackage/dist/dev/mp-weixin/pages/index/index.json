@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "uni-app",
+  "usingComponents": {
+    "babtouchbox": "/components/bab-Touchbox",
+    "totalbutton": "/components/totalbutton"
+  }
+}

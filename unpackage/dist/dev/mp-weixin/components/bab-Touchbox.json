@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "u-row": "/uview-ui/components/u-row/u-row"
+  },
+  "component": true
+}

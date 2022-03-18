@@ -1,0 +1,1 @@
+<button class="btn" id="btn" plain="{{true}}" data-event-opts="{{[['tap',[['active']]]]}}" bindtap="__e">{{text}}</button>

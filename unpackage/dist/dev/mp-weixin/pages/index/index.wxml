@@ -1,0 +1,1 @@
+<view><map style="width:100%;height:100vh;" latitude="{{latitude}}" longitude="{{longitude}}" markers="{{covers}}"></map><babtouchbox vue-id="8dd740cc-1" maxHeight="0.7" bind:__l="__l" vue-slots="{{['default']}}"><totalbutton vue-id="{{('8dd740cc-2')+','+('8dd740cc-1')}}" text="{{111}}" bind:__l="__l"></totalbutton></babtouchbox></view>
