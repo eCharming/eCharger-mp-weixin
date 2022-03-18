@@ -1,14 +1,15 @@
 <template>
 	<view>
-		<!-- <map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
+		
+		<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
 			:markers="covers" :setting="mapSetting" :circles="circles">
 		</map>
-
-		<babtouchbox maxHeight="0.7">
+		<movebox></movebox>
+		<!-- <babtouchbox maxHeight="1" minHeight="0.1">
 			<totalbutton :text="111"></totalbutton>
 		</babtouchbox> -->
 
-		<movebox></movebox>
+		
 
 
 	</view>

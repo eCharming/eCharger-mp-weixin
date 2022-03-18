@@ -1,5 +1,5 @@
 <template>
-	<button id="btn" class="btn" :plain="true"   @click="active()">{{text}}</button>
+	<button id="btn" class="btn" :plain="true"  @click="active()">{{text}}</button>
 </template>
 
 <script>
