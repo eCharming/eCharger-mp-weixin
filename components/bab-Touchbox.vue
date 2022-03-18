@@ -3,22 +3,17 @@
 		<view :class="isend?'fixedbox2' :'fixedbox'"
 			:style="{'height':windowHeight + 'px','width':windowWidth + 'px','top':fixboxtop +'px','border-top-left-radius':radius,'border-top-right-radius':radius}"
 			@touchmove="getstart($event)" @tap="tap" @touchend="getend" ref="fixbox">
-			
+
 			<view class="content" :style="{'height':windowHeight + 'px'}">
 				<view class="tapBoxTouchLine" v-if="showLine">
 					<view class="line"></view>
 				</view>
-				<u-row
-				    justify="space-between"
-				    gutter="10"
-				>
-					<button :plain="true" style="width: 42%;border: 2px solid #66CDAA;border-radius:10px;color: #66CDAA ;position:relative ;top:20upx">租电桩</button>
-					<button :plain="true" style="width: 42%;border: 2px solid #66CDAA;border-radius:10px;color: #66CDAA ;position:relative ;top:20upx">我的电桩</button>
+				<u-row justify="space-between" gutter="10">
+					<button :plain="true"
+						style="width: 42%;border: 2px solid #66CDAA;border-radius:10px;color: #66CDAA ;position:relative ;top:20upx">租电桩</button>
+					<button :plain="true"
+						style="width: 42%;border: 2px solid #66CDAA;border-radius:10px;color: #66CDAA ;position:relative ;top:20upx">我的电桩</button>
 				</u-row>
-				
-				
-				<slot/>
-				
 			</view>
 		</view>
 	</view>
@@ -59,7 +54,7 @@
 			},
 			minHeight: {
 				type: Number,
-				default: 0.2
+				default: 0.3
 			},
 			maxHeight: {
 				type: Number,
@@ -96,11 +91,11 @@
 			getstart(e) {
 				var screenY;
 				//#ifdef MP-WEIXIN
-				  screenY = e.touches[0].clientY;
-				  //#endif
+				screenY = e.touches[0].clientY;
+				//#endif
 				//#ifndef MP-WEIXIN
-				  screenY = e.touches[0].screenY;
-				  //#endif
+				screenY = e.touches[0].screenY;
+				//#endif
 				// console.log(screenY)
 				// 这里特殊处理 解决：在滑动框内如果存在滚动元素，则会出现滑动时滑动框和内部滚动同时滑的问题
 				if (this.touchHeight !== 0) {
