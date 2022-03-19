@@ -3,8 +3,8 @@
 		<mymap></mymap>
 		<movebox>
 			<card>
-				<totalbutton :text="'租电桩'" :selected="isSelected1" @tap="tap1()" ></totalbutton>
-				<totalbutton :text="'我的电桩'" :selected="isSelected2" @tap="tap2()" ></totalbutton>
+				<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tap1()" ></totalbutton>
+				<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tap2()" ></totalbutton>
 			</card>
 		</movebox>
 	</view>
