@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="gps-view" :style="{top:reloationHeight+'px'}">
+		<view class="gps-view" :style="{'top':top+'px'}">
 			<image src="@/static/image/location.png" mode="widthFix" style="width: 80px;" @click="relocate"></image>
 		</view>
 	</view>
@@ -13,6 +13,12 @@
 			return {
 
 			};
+		},
+		props:{
+			top:{
+				type:Number,
+				default:-80
+			}
 		},
 		methods:{
 			relocate() {
@@ -32,5 +38,7 @@
 		position: absolute;
 		top: calc(-80px);
 		left: calc(80%);
+		transition-property:top;
+		transition-duration: .5s;
 	}
 </style>

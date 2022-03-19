@@ -74,15 +74,15 @@
 		// height:50upx
 		font-size: 30upx;
 		position: relative;
-		bottom: 20upx;
+		bottom: 13upx;
 		right:5upx
 	
 	}
 	.text2{
-		font-size: 25upx;
+		font-size: 22upx;
 		color: rgba(0,0,0,0.3);
 		position: relative;
-		top: 20upx;
+		top: 30upx;
 		right:90upx
 		// height:40%
 
