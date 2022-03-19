@@ -100,7 +100,7 @@
 		height:100%;
 		width:750upx;
 		position: fixed;
-		background-color: #FFFFFF;
+		background-color: rgb(245,245,245);
 		padding: 0 12px;
 		border-top-left-radius:50upx;
 		border-top-right-radius:50upx;
@@ -110,10 +110,10 @@
 		height:100%;
 		width:750upx;
 		position: fixed;
-		background-color: #FFFFFF;
+		background-color: rgb(245,245,245);
 		padding: 0 12px;
-		border-top-left-radius:50upx;
-		border-top-right-radius:50upx;
+		border-top-left-radius:70upx;
+		border-top-right-radius:70upx;
 		transition-property: top;
 		transition-duration: .5s;
 	}
@@ -126,7 +126,6 @@
 	.touchline{
 		margin-top: 20rpx;
 		display: flex;
-		align-items: center;
 		justify-content: center;
 	}
 	
