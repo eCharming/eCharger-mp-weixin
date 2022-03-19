@@ -1,12 +1,14 @@
 <template>
-	<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
-		:markers="covers" :setting="mapSetting" :circles="circles">
-	</map>
+	<view>
+		<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
+			:markers="covers" :setting="mapSetting" :circles="circles">
+		</map>
+	</view>
 </template>
 
 <script>
 	import QQMapWX from '@/static/js/qqmap-wx-jssdk.min.js'
-	export default{
+	export default {
 		data() {
 			return {
 				latitude: 39.909,
@@ -27,12 +29,15 @@
 			}
 		},
 		mounted() {
-			uni.getLocation({
-				type: 'gcj02',
-				success: res => {
+			this.openLocation();
+		},
+		computed: {
+			getRelocationRes() {
+				let res = this.$store.state.locationres;
+				if (res) {
 					this.latitude = res.latitude;
 					this.longitude = res.longitude;
-					this.circles.push({
+					this.circles.splice(0, 1, {
 						latitude: this.latitude,
 						longitude: this.longitude,
 						fillColor: "#4162996A",
@@ -41,11 +46,35 @@
 						strokeWidth: 1,
 					})
 				}
-			});
+				this.$store.commit('setLocationRes',null);
+			}
 		},
+		methods: {
+			openLocation() {
+				wx.startLocationUpdate({
+					success: (res) => {
+						wx.onLocationChange((res) => { //调用实时获取定位
+							this.latitude = res.latitude;
+							this.longitude = res.longitude;
+							this.circles.splice(0, 1, {
+								latitude: this.latitude,
+								longitude: this.longitude,
+								fillColor: "#4162996A",
+								color: "#b0daff",
+								radius: 300,
+								strokeWidth: 1,
+							})
+						});
+					},
+					fail: (err) => {
+						console.error("startLocationUpdate错误", err)
+						reject(err)
+					}
+				})
+			}
+		}
 	}
-	
 </script>
 
-<style>
+<style scoped>
 </style>
