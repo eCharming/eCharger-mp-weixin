@@ -9,12 +9,25 @@
 				</view>
 				
 				
-				<destination class="destination" :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"></destination>
-				<card class="cards" :margintop="margin[1].margintop" :marginbottom="margin[1].marginbottom">
+				<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"></destination>
+				<card :margintop="margin[1].margintop" :marginbottom="margin[1].marginbottom">
 					<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tap1()" ></totalbutton>
 					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tap2()" ></totalbutton>
 				</card>
-				<locationbutton class="locationbutton" :top="top"></locationbutton>
+				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom">
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+					<card><text>逆天</text></card>
+				</scroller>
+				<locationbutton :top="top"></locationbutton>
 				 
 			</view>
 		</view>
@@ -27,13 +40,15 @@
 	import card from  './card.vue'
 	import destination from './destination.vue'
 	import locationbutton from './locationButton.vue'
+	import scroller from './scroller.vue'
 	
 	export default {
 		components:{
 			totalbutton,
 			card,
 			destination,
-			locationbutton
+			locationbutton,
+			scroller
 		},
 		data(){
 			return{
@@ -47,6 +62,10 @@
 				isLow:true,//滑动开始前上拉框处在低位则为真，在高位则为假
 				lastHeight:0,
 				margin:[
+					{
+						margintop:uni.upx2px(20),
+						marginbottom:uni.upx2px(20)
+					},
 					{
 						margintop:uni.upx2px(20),
 						marginbottom:uni.upx2px(20)
@@ -94,14 +113,18 @@
 					this.margin[0].margintop=uni.upx2px(35);
 					this.margin[0].marginbottom=uni.upx2px(0);
 					this.margin[1].margintop=uni.upx2px(35);
-					this.margin[1].marginbottom=uni.upx2px(10);
+					this.margin[1].marginbottom=uni.upx2px(5);
+					this.margin[2].margintop=uni.upx2px(35);
+					this.margin[2].marginbottom=uni.upx2px(10);
 					this.top=-70;
 				}
 				else if(gap>=5){
 					this.margin[0].margintop=uni.upx2px(45);
 					this.margin[0].marginbottom=uni.upx2px(0);
 					this.margin[1].margintop=uni.upx2px(45);
-					this.margin[1].marginbottom=uni.upx2px(10);
+					this.margin[1].marginbottom=uni.upx2px(5);
+					this.margin[2].margintop=uni.upx2px(45);
+					this.margin[2].marginbottom=uni.upx2px(0);
 					this.top=-60;
 				}
 				else if(gap<=-1&&gap>=-5){
@@ -109,13 +132,17 @@
 					this.margin[0].marginbottom=uni.upx2px(5);
 					this.margin[1].margintop=uni.upx2px(10);
 					this.margin[1].marginbottom=uni.upx2px(5);
+					this.margin[2].margintop=uni.upx2px(10);
+					this.margin[2].marginbottom=uni.upx2px(0);
 					this.top=-90;
 				}
 				else if(gap<=-5){
 					this.margin[0].margintop=uni.upx2px(5);
 					this.margin[0].marginbottom=uni.upx2px(5);
-					this.margin[1].margintop=uni.upx2px(0);
-					this.margin[1].marginbottom=uni.upx2px(45);
+					this.margin[1].margintop=uni.upx2px(10);
+					this.margin[1].marginbottom=uni.upx2px(5);
+					this.margin[2].margintop=uni.upx2px(10);
+					this.margin[2].marginbottom=uni.upx2px(0);
 					this.top=-100;
 				}
 					
@@ -144,6 +171,8 @@
 				this.margin[0].marginbottom=uni.upx2px(20);
 				this.margin[1].margintop=uni.upx2px(20);
 				this.margin[1].marginbottom=uni.upx2px(20);
+				this.margin[2].margintop=uni.upx2px(20);
+				this.margin[2].marginbottom=uni.upx2px(20);
 				this.top=-80;
 			},
 			

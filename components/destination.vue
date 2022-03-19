@@ -1,11 +1,11 @@
 <template>
 	<view class="card" :style="{'margin-top':margintop+'px','margin-bottom':marginbottom+'px'}">
-		<view class="test">
+		<view class="near">
 			<text>在附近租电桩 ></text>
 		</view>
 		
 		<view class="destination">
-			<text class="text">请输入你的目的地</text>
+			<text>请输入你的目的地</text>
 		</view>
 	</view>
 </template>
@@ -49,7 +49,7 @@
 		transition-duration: .3s;
 	} 
 	
-	.test{
+	.near{
 		
 		margin: 20upx;
 		margin-left: 45upx;
