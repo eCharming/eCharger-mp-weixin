@@ -16,6 +16,7 @@
 	import movebox from '@/components/moveBox.vue'
 	import card from  '@/components/card.vue'
 	import mymap from '../../components/myMap.vue'
+	
 	export default {
 		components: {
 			babtouchbox,

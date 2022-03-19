@@ -23,6 +23,10 @@
 			selected:{
 				type:Boolean,
 				default:false
+			},
+			percent:{
+				type:Number,
+				default:0
 			}
 		},
 		watch:{
@@ -51,7 +55,7 @@
 	.btn{
 		height: 120upx;
 		width : 270upx;
-		border-radius: 15px;
+		border-radius: 10px;
 		margin: 20upx;
 		border: 2px solid;
 	}
