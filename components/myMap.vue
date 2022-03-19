@@ -26,11 +26,10 @@
 				circles: []
 			}
 		},
-		onLoad() {
+		mounted() {
 			uni.getLocation({
 				type: 'gcj02',
 				success: res => {
-					console.log(1)
 					this.latitude = res.latitude;
 					this.longitude = res.longitude;
 					this.circles.push({

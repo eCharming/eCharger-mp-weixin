@@ -51,7 +51,7 @@
 	.btn{
 		height: 120upx;
 		width : 270upx;
-		radius: 15px;
+		border-radius: 15px;
 		margin: 20upx;
 		border: 2px solid;
 	}

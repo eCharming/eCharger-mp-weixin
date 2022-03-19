@@ -15,6 +15,6 @@
 		border-radius: 70upx;
 		display: flex;
 		justify-content: center;
-
+		box-shadow:0px 6px 12px 4px #e5e5e5 ;
 	}
 </style>
