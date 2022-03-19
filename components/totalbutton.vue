@@ -2,7 +2,7 @@
 	<button 
 		id="btn" 
 		class="btn" 
-		:plain="true"  
+		:plain="true"
 		:style="{'border-color':bordercolor}"
 	>
 		{{text}}
@@ -15,7 +15,6 @@
 			return {
 				bordercolor:"rgba(0,0,0,0.3)",
 			}
-			
 		},
 		props:{
 			text:{
@@ -27,12 +26,12 @@
 			}
 		},
 		watch:{
-			test:{ 
-				selected:function(){
-				console.log(1)
-				if(this.selected)
-					activate();
-				else inactivate();
+			'selected':{ 
+				immediate:true,
+				handler:function(){
+					if(this.selected)
+						this.activate();
+					else this.inactivate();
 				}
 			}
 			
@@ -51,7 +50,7 @@
 <style scoped lang="scss">
 	.btn{
 		height: 120upx;
-		width:270upx;
+		width : 270upx;
 		radius: 15px;
 		margin: 20upx;
 		border: 2px solid;
