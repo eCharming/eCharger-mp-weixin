@@ -24,7 +24,8 @@
 					"showLocation": true,
 					"subkey": "HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73"
 				},
-				covers: [],
+				covers: [
+				],
 				circles: []
 			}
 		},
@@ -64,6 +65,23 @@
 								radius: 300,
 								strokeWidth: 1,
 							})
+							/*
+							ONLY FOR TESTING!!!
+							*/
+						   for (var i = 0; i < 20; i++) {
+						   	this.covers.push({
+						   		title: i,
+						   		id: i,
+						   		latitude: this.latitude + (Math.random() - 0.5) / 100,
+						   		longitude: this.longitude + (Math.random() - 0.5) / 100,
+						   		iconPath: "/static/image/charger.png",
+						   		width: 40,
+						   		height: 40
+						   	});
+						   }
+						   /*
+						   ONLY FOR TESTING!!!
+						   */
 						});
 					},
 					fail: (err) => {
