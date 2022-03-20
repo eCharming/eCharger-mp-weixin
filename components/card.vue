@@ -23,7 +23,8 @@
 	.card{
 		margin:20upx;
 		padding: 15upx;
-		background-color: #FFFFFF;
+		// background-color: #FFFFFF;
+		background-color: rgba(250,255,250,1);
 		border-radius: 40upx;
 		display: flex;
 		justify-content: center;

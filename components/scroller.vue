@@ -1,5 +1,5 @@
 <template>
-	<card :margintop="margintop" :marginbottom="marginbottom">
+	<view class="card" :style="{'margin-top':margintop+'px','margin-bottom':marginbottom+'px'}">
 		<scroll-view 
 			scroll-y="true" 
 			refresher-enabled="true" 
@@ -7,15 +7,12 @@
 		>
 			<slot></slot>
 		</scroll-view>
-	</card>
+	</view>
 </template>
 
 <script>
-	import card from './card.vue'
+	
 	export default{
-		components:{
-			card
-		},
 		props:{
 			margintop:{
 				type:Number,
@@ -37,5 +34,18 @@
 	}
 </script>
 
-<style>
+<style scoped lang="scss">
+	.card{
+		margin:20upx;
+		padding: 15upx;
+		// background-color: #FFFFFF;
+		background-color: rgba(250,255,250,1);
+		border-radius: 40upx;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		box-shadow:0px 6px 12px 4px #e5e5e5 ;
+		transition-property: margin;
+		transition-duration: .3s;
+	}
 </style>

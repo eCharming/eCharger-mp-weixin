@@ -16,6 +16,7 @@
 					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tap2()"></totalbutton>
 				</card>
 				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom">
+					<!-- <card><text>逆天</text></card>
 					<card><text>逆天</text></card>
 					<card><text>逆天</text></card>
 					<card><text>逆天</text></card>
@@ -25,8 +26,67 @@
 					<card><text>逆天</text></card>
 					<card><text>逆天</text></card>
 					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
+					<card><text>逆天</text></card> -->
+					<order>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+					</order>
+					<order>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+					</order>
+					<order>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+					</order>
 				</scroller>
 
 
@@ -41,6 +101,7 @@
 	import destination from './destination.vue'
 	import locationbutton from './locationButton.vue'
 	import scroller from './scroller.vue'
+	import order from './order.vue'
 
 	export default {
 		components: {
@@ -48,7 +109,8 @@
 			card,
 			destination,
 			locationbutton,
-			scroller
+			scroller,
+			order
 		},
 		data() {
 			return {
@@ -216,7 +278,7 @@
 		height: 100%;
 		width: 750upx;
 		position: fixed;
-		background-color: rgb(245, 245, 245);
+		background-color: rgb(240, 245, 240);
 		padding: 0 12px;
 		border-top-left-radius: 40upx;
 		border-top-right-radius: 40upx;
@@ -226,7 +288,7 @@
 		height: 100%;
 		width: 750upx;
 		position: fixed;
-		background-color: rgb(245, 245, 245);
+		background-color: rgb(240, 245, 240);
 		padding: 0 12px;
 		border-top-left-radius: 40upx;
 		border-top-right-radius: 40upx;
