@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
-			:markers="covers" :setting="mapSetting" :circles="circles">
+			:markers="covers" :setting="mapSetting" :circles="circles" :scale="scale">
 		</map>
 	</view>
 </template>
@@ -22,11 +22,12 @@
 					"enableScroll": true,
 					"enableRotate": true,
 					"showLocation": true,
-					"subkey": "HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73"
+					"subkey": "HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73",
 				},
-				covers: [
-				],
-				circles: []
+				covers: [],
+				circles: [],
+				mapContext: null,
+				scale:16,
 			}
 		},
 		mounted() {
@@ -35,7 +36,7 @@
 		computed: {
 			getRelocationRes() {
 				let res = this.$store.state.locationres;
-				if (res) {
+				if (res && res != {} && res.errMsg=="getLocation:ok") {
 					this.latitude = res.latitude;
 					this.longitude = res.longitude;
 					this.circles.splice(0, 1, {
@@ -43,15 +44,22 @@
 						longitude: this.longitude,
 						fillColor: "#4162996A",
 						color: "#b0daff",
-						radius: 300,
+						radius: 300, 
 						strokeWidth: 1,
 					})
 				}
-				this.$store.commit('setLocationRes',null);
+				if (this.mapContext) {
+					this.mapContext.moveToLocation({
+						latitude: this.latitude, 
+						longitude: this.longitude
+					})
+				}
+				this.$store.commit('setLocationRes', null);
 			}
 		},
 		methods: {
 			openLocation() {
+				this.mapContext = uni.createMapContext('myMap', this)
 				wx.startLocationUpdate({
 					success: (res) => {
 						wx.onLocationChange((res) => { //调用实时获取定位
@@ -68,20 +76,20 @@
 							/*
 							ONLY FOR TESTING!!!
 							*/
-						   for (var i = 0; i < 20; i++) {
-						   	this.covers.splice(i,1,{
-						   		title: i,
-						   		id: i,
-						   		latitude: this.latitude + (Math.random() - 0.5) / 100,
-						   		longitude: this.longitude + (Math.random() - 0.5) / 100,
-						   		iconPath: "/static/image/charger.png",
-						   		width: 40,
-						   		height: 40
-						   	});
-						   }
-						   /*
-						   ONLY FOR TESTING!!!
-						   */
+							for (var i = 0; i < 20; i++) {
+								this.covers.splice(i, 1, {
+									title: i,
+									id: i,
+									latitude: this.latitude + (Math.random() - 0.5) / 100,
+									longitude: this.longitude + (Math.random() - 0.5) / 100,
+									iconPath: "/static/image/charger.png",
+									width: 40,
+									height: 40
+								});
+							}
+							/*
+							ONLY FOR TESTING!!!
+							*/
 						});
 					},
 					fail: (err) => {

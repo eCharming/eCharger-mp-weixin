@@ -16,67 +16,7 @@
 					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()"></totalbutton>
 				</card>
 				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom">
-					<!-- <order>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-					</order>
-					<order>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-					</order>
-					<order>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-					</order> -->
-					<order v-for="(order,index) in orders" :index="index" :orderSelected="orderSelected" @emit="tapOrder()">
+					<order v-for="(order,index) in orders" :index="index" :key="index" :orderSelected="orderSelected" @emit="tapOrder()">
 						<view>
 							<text>逆天</text>
 						</view>

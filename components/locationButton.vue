@@ -26,7 +26,10 @@
 					type: "gcj02",
 					success: res => {
 						this.$store.commit('setLocationRes',res);
-					}
+					},
+					fail: () => {
+						this.$store.commit('setLocationRes',{});
+					},
 				});
 			}
 		}
