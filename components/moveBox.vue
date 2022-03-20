@@ -12,22 +12,11 @@
 				</view>
 				<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"></destination>
 				<card :margintop="margin[1].margintop" :marginbottom="margin[1].marginbottom">
-					<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tap1()"></totalbutton>
-					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tap2()"></totalbutton>
+					<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()"></totalbutton>
+					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()"></totalbutton>
 				</card>
 				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom">
-					<!-- <card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card>
-					<card><text>逆天</text></card> -->
-					<order>
+					<!-- <order>
 						<view>
 							<text>逆天</text>
 						</view>
@@ -68,6 +57,26 @@
 						</view>
 					</order>
 					<order>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+						<view>
+							<text>逆天</text>
+						</view>
+					</order> -->
+					<order v-for="(order,index) in orders" :index="index" :orderSelected="orderSelected" @emit="tapOrder()">
 						<view>
 							<text>逆天</text>
 						</view>
@@ -115,6 +124,7 @@
 		data() {
 			return {
 				currentHeight: 200, //当前高度 单位px
+				lastHeight: 0,//手指最后触摸的高度 单位px
 				originHeight: 0, //滑动开始时的高度 单位px
 				originTouch: 0, //滑动开始时手指的位置 单位px
 				currentTouch: 0, //当前手指高度 单位px
@@ -122,7 +132,20 @@
 				windowHeight: 0, //本机的高度 单位px
 				windowWidth: 0, //本机的宽度 单位px
 				isLow: true, //滑动开始前上拉框处在低位则为真，在高位则为假
-				lastHeight: 0,
+				
+				orders:[
+					{
+						text:"逆天"
+					},
+					{
+						text:"逆天"
+					},
+					{
+						text:"逆天"
+					}
+				],
+				orderSelected:-1,
+				
 				margin: [{
 						margintop: uni.upx2px(20),
 						marginbottom: uni.upx2px(20)
@@ -236,14 +259,17 @@
 				this.top = -80;
 			},
 
-			tap1() {
+			tapButton1() {
 				this.isSelected1 = true;
 				this.isSelected2 = false;
 				this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
 			},
-			tap2() {
+			tapButton2() {
 				this.isSelected1 = false
 				this.isSelected2 = true;
+			},
+			tapOrder(data){
+				this.orderSelected=data;
 			}
 		},
 		computed: {

@@ -69,7 +69,7 @@
 							ONLY FOR TESTING!!!
 							*/
 						   for (var i = 0; i < 20; i++) {
-						   	this.covers.push({
+						   	this.covers.splice(i,1,{
 						   		title: i,
 						   		id: i,
 						   		latitude: this.latitude + (Math.random() - 0.5) / 100,

@@ -2,7 +2,6 @@
 	<view class="card" :style="{'margin-top':margintop+'px','margin-bottom':marginbottom+'px'}">
 		<scroll-view 
 			scroll-y="true" 
-			refresher-enabled="true" 
 			:style="{'height':height+'px'}"
 		>
 			<slot></slot>
