@@ -10,6 +10,7 @@
 				<view class="touchline">
 					<view class="line"></view>
 				</view>
+				
 				<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"></destination>
 				
 				
@@ -19,7 +20,11 @@
 							:style="{'filter':'grayscale('+imageFilter1+')','opacity':image1Opacity}"
 						></image>
 					</totalbutton>
-					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()"></totalbutton>
+					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()">
+						<image class="image2" src="../static/image/park.png"
+							:style="{'filter':'grayscale('+imageFilter2+')','opacity':image2Opacity}"
+						></image>
+					</totalbutton>
 				</card>
 				
 				
@@ -83,6 +88,8 @@
 				
 				imageFilter1:0,
 				image1Opacity:1,
+				imageFilter2:1,
+				image2Opacity:0.3,
 				
 				orders:[
 					{
@@ -216,12 +223,17 @@
 				this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
 				this.imageFilter1=0;
 				this.image1Opacity=1;
+				this.imageFilter2=1;
+				this.image2Opacity=0.3;
 			},
 			tapButton2() {
 				this.isSelected1 = false
 				this.isSelected2 = true;
+				this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
 				this.imageFilter1=1;
 				this.image1Opacity=0.3;
+				this.imageFilter2=0;
+				this.image2Opacity=1;
 			},
 			tapOrder(data){
 				this.orderSelected=data;
@@ -305,6 +317,17 @@
 		width: 180upx;
 		position: relative;
 		bottom:154upx;
+		left:70upx;
+		transition-property: opacity,filter;
+		transition-duration: .3s;
+	}
+	
+	.image2{
+		// border: 2px solid red;
+		height: 150upx;
+		width: 150upx;
+		position: relative;
+		bottom:169upx;
 		left:70upx;
 		transition-property: opacity,filter;
 		transition-duration: .3s;

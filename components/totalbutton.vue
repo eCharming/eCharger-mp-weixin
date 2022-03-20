@@ -76,7 +76,6 @@
 		transition-duration: .3s;
 	}
 	.view1{
-		padding: 0upx;
 		font-weight:700 ;
 
 		font-size: 30upx;
