@@ -11,10 +11,18 @@
 					<view class="line"></view>
 				</view>
 				<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"></destination>
+				
+				
 				<card :margintop="margin[1].margintop" :marginbottom="margin[1].marginbottom">
-					<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()"></totalbutton>
+					<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()">
+						<image class="image1" src="../static/image/car&charger_color.png"
+							:style="{'filter':'grayscale('+imageFilter1+')','opacity':image1Opacity}"
+						></image>
+					</totalbutton>
 					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()"></totalbutton>
 				</card>
+				
+				
 				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom">
 					<order v-for="(order,index) in orders" :index="index" :key="index" :orderSelected="orderSelected" @emit="tapOrder()">
 						<view>
@@ -72,6 +80,9 @@
 				windowHeight: 0, //本机的高度 单位px
 				windowWidth: 0, //本机的宽度 单位px
 				isLow: true, //滑动开始前上拉框处在低位则为真，在高位则为假
+				
+				imageFilter1:0,
+				image1Opacity:1,
 				
 				orders:[
 					{
@@ -203,10 +214,14 @@
 				this.isSelected1 = true;
 				this.isSelected2 = false;
 				this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
+				this.imageFilter1=0;
+				this.image1Opacity=1;
 			},
 			tapButton2() {
 				this.isSelected1 = false
 				this.isSelected2 = true;
+				this.imageFilter1=1;
+				this.image1Opacity=0.3;
 			},
 			tapOrder(data){
 				this.orderSelected=data;
@@ -282,5 +297,16 @@
 		border-top-color: rgb(214, 215, 217);
 		border-right-color: rgb(214, 215, 217);
 		border-left-color: rgb(214, 215, 217);
+	}
+	
+	.image1{
+		// border: 2px solid red;
+		height: 180upx;
+		width: 180upx;
+		position: relative;
+		bottom:154upx;
+		left:70upx;
+		transition-property: opacity,filter;
+		transition-duration: .3s;
 	}
 </style>

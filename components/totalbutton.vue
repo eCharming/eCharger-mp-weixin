@@ -5,8 +5,16 @@
 		:plain="true"
 		:style="{'border-color':bordercolor}"
 	>
-		<text class="text1">{{text1}}</text>
-		<text class="text2">{{text2}}</text>
+		<view class="view1">
+			<text class="text1">{{text1}}</text>
+		</view>
+		<view class="view2">
+			<text class="text2">{{text2}}</text>
+		</view>
+		<view>
+			<slot></slot>
+		</view>
+		
 	</button>
 </template>
  
@@ -27,10 +35,6 @@
 			selected:{
 				type:Boolean,
 				default:false
-			},
-			percent:{
-				type:Number,
-				default:0
 			}
 		},
 		watch:{
@@ -58,33 +62,48 @@
 <style scoped lang="scss">
 	.btn{
 		height: 120upx;
-		width : 270upx;
+		width : 280upx;
 		border-radius: 10px;
 		margin: 20upx;
 		padding-left: 10upx;
 		border: 3px solid;
 		overflow: visible;
-		// display: flex;
-		// flex-direction: column;
-		// justify-content: flex-start;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
 		// align-content:flex-start; /*把多余的行高放到两边*/
+		transition-property: border;
+		transition-duration: .3s;
 	}
-	.text1{
+	.view1{
+		padding: 0upx;
 		font-weight:700 ;
-		// height:50upx
+
 		font-size: 30upx;
-		position: relative;
-		bottom: 13upx;
-		right:5upx
-	
+		// position: relative;
+		// bottom: 13upx;
+		// right:5upx
+
 	}
-	.text2{
+	.view2{
 		font-size: 22upx;
 		color: rgba(0,0,0,0.3);
-		position: relative;
-		top: 30upx;
-		right:90upx
+		// position: relative;
+		// top: 30upx;
+		// right:90upx
 		// height:40%
+
+	}
+	.text1{
+		position: relative;
+		right: 65upx;
+		top:5upx;
+
+	}
+	.text2{
+		position: relative;
+		right: 67upx;
+		bottom: 25upx;
 
 		
 	}
