@@ -12,6 +12,11 @@ const app = new Vue({
 app.$mount()
 // #endif
 
+wx.cloud.init({
+  env: 'echarger-7gak78km70d53193', //填上你的云开发环境id
+  traceUser: true,
+})
+
 // #ifdef VUE3
 import { createSSRApp } from 'vue'
 export function createApp() {
