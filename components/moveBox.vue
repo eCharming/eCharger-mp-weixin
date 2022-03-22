@@ -29,26 +29,28 @@
 				
 				
 				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom">
-					<order v-for="(order,index) in orders" :index="index" :key="index" :orderSelected="orderSelected" @emit="tapOrder()">
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
-						<view>
-							<text>逆天</text>
-						</view>
+					<order v-if="isSelected1" v-for="(order,index) in orders" 
+						:index="index" :key="index" 
+						:location="order.location"
+						:distance="order.distance"
+						:price="order.price"
+						:startTime="order.startTime"
+						:endTime="order.endTime"
+						:orderSelected="orderSelected" 
+						@emit="tapOrder()"
+					>
 					</order>
+					<charger v-if="isSelected2" v-for="(charger,index) in chargers"
+						:index="index" :key="index" 
+						:location="charger.location"
+						:state="charger.state"
+						:price="charger.price"
+						:startTime="charger.startTime"
+						:endTime="charger.endTime"
+						:chargerSelected="chargerSelected" 
+						@emit="tapCharger()"
+					>
+					</charger>
 				</scroller>
 
 
@@ -64,6 +66,7 @@
 	import locationbutton from './locationButton.vue'
 	import scroller from './scroller.vue'
 	import order from './order.vue'
+	import charger from './myCharger.vue'
 
 	export default {
 		components: {
@@ -72,7 +75,8 @@
 			destination,
 			locationbutton,
 			scroller,
-			order
+			order,
+			charger
 		},
 		data() {
 			return {
@@ -93,16 +97,53 @@
 				
 				orders:[
 					{
-						text:"逆天"
+						location:'四川大学江安校区',
+						distance:1.3,
+						price:'1.6',
+						startTime:'09:00',
+						endTime:'19:00'
 					},
 					{
-						text:"逆天"
+						location:'华东师范大学中北校区',
+						distance:1.6,
+						price:'1.9',
+						startTime:'15:00',
+						endTime:'20:00'
 					},
 					{
-						text:"逆天"
+						location:'南京理工大学江阴校区',
+						distance:2.3,
+						price:'1.5',
+						startTime:'07:00',
+						endTime:'11:00'
 					}
 				],
 				orderSelected:-1,
+				
+				chargers:[
+					{
+						location:'上海大学宝山校区',
+						state:false,
+						price:'1.9',
+						startTime:'10:00',
+						endTime:'12:00'
+					},
+					{
+						location:'电子科技大学清水河校区',
+						state:true,
+						price:'1.1',
+						startTime:'13:00',
+						endTime:'17:00'
+					},
+					{
+						location:'华东政法大学松江校区',
+						state:false,
+						price:'2.1',
+						startTime:'08:00',
+						endTime:'18:00'
+					}
+				],
+				chargerSelected:-1,
 				
 				margin: [{
 						margintop: uni.upx2px(20),
@@ -225,6 +266,7 @@
 				this.image1Opacity=1;
 				this.imageFilter2=1;
 				this.image2Opacity=0.3;
+				this.chargerSelected=-1;
 			},
 			tapButton2() {
 				this.isSelected1 = false
@@ -234,9 +276,13 @@
 				this.image1Opacity=0.3;
 				this.imageFilter2=0;
 				this.image2Opacity=1;
+				this.orderSelected=-1;
 			},
 			tapOrder(data){
 				this.orderSelected=data;
+			},
+			tapCharger(data){
+				this.chargerSelected=data;
 			}
 		},
 		computed: {
@@ -327,7 +373,7 @@
 		height: 150upx;
 		width: 150upx;
 		position: relative;
-		bottom:169upx;
+		bottom:170upx;
 		left:70upx;
 		transition-property: opacity,filter;
 		transition-duration: .3s;

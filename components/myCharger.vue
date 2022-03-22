@@ -5,11 +5,8 @@
 		>
 		<view class="view1">
 			<text class="location">{{location}}</text>
-			<view>
-				<image class="image" src="../static/image/arrow.png"></image>
-				<text class="distance">{{distance}}km</text>
-			</view>
-			
+			<text class="state1" v-if="state">空闲中</text>
+			<text class="state2" v-if="!state">使用中</text>
 		</view>
 		
 		<view class="view2">
@@ -34,15 +31,15 @@
 			index:{
 				type:Number
 			},
-			orderSelected:{
+			chargerSelected:{
 				type:Number,
 				default:-1
 			},
 			location:{
 				type:String
 			},
-			distance:{
-				type:Number
+			state:{
+				type:Boolean
 			},
 			price:{
 				type:String
@@ -64,8 +61,8 @@
 			}
 		},
 		watch:{
-			orderSelected(){
-				if(this.orderSelected===this.index)
+			chargerSelected(){
+				if(this.chargerSelected===this.index)
 					this.tap();
 				else this.untap();
 			}
@@ -131,9 +128,16 @@
 		width:350upx;
 	}
 	
-	.distance{
-		margin-right:15upx;
-		color:rgba(102,205,170,1) ;
+	.state1{
+		margin:15upx;
+		margin-top: 20upx;
+		color:rgb(102,205,170) ;
+	}
+	
+	.state2{
+		margin:15upx;
+		margin-top: 20upx;
+		color:rgb(255,99,71) ;
 	}
 	
 	.yuan{
@@ -154,15 +158,6 @@
 	
 	.timeview{
 		margin-top: 15upx;
-	}
-	
-	.image{
-		width: 40upx;
-		height: 40upx;
-		position: relative;
-		top:11upx;
-		right:5upx;
-
 	}
 </style>
 
