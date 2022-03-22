@@ -295,6 +295,12 @@
 			this.windowWidth = uni.getSystemInfoSync().windowWidth;
 			this.currentHeight = (1 - this.minHeight) * this.windowHeight;
 			this.lastHeight = this.currentHeight;
+		},
+		onLoad(){
+			const eventChannel = this.getOpenerEventChannel();
+			eventChannel.on('searchResult', (res) => {
+				// res.
+			})
 		}
 	}
 </script>

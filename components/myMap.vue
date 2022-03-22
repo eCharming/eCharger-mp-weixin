@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
-			:markers="covers" :setting="mapSetting" :circles="circles" :scale="scale">
+			:markers="covers" :setting="mapSetting" :circles="circles">
 		</map>
 	</view>
 </template>
@@ -22,12 +22,11 @@
 					"enableScroll": true,
 					"enableRotate": true,
 					"showLocation": true,
-					"subkey": "HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73",
+					"subkey": "HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73"
 				},
-				covers: [],
-				circles: [],
-				mapContext: null,
-				scale: 16,
+				covers: [
+				],
+				circles: []
 			}
 		},
 		mounted() {
@@ -36,7 +35,7 @@
 		computed: {
 			getRelocationRes() {
 				let res = this.$store.state.locationres;
-				if (res && res != {} && res.errMsg == "getLocation:ok") {
+				if (res) {
 					this.latitude = res.latitude;
 					this.longitude = res.longitude;
 					this.circles.splice(0, 1, {
@@ -48,58 +47,14 @@
 						strokeWidth: 1,
 					})
 				}
-				if (this.mapContext) {
-					this.mapContext.moveToLocation({
-						latitude: this.latitude,
-						longitude: this.longitude
-					})
-				}
-				this.getChargerLocation(this.longitude, this.latitude);
-				this.$store.commit('setLocationRes', null);
+				this.$store.commit('setLocationRes',null);
 			}
 		},
 		methods: {
-			getChargerLocation(lon, lat) {
-				wx.cloud.callFunction({
-					name: 'getSurround',
-					data: {
-						longitude: lon,
-						latitude: lat,
-						Distance: 2000
-					}
-				}).then(
-					res => {
-						console.log("callFunction");
-						let chargerList = res.result.data
-						this.covers.splice(0, this.covers.length);
-						if (chargerList) {
-							for (let charger of chargerList) {
-								this.covers.push({
-									title: charger.location,
-									id: charger._id,
-									latitude: charger.geoPoint.coordinates[
-										1],
-									longitude: charger.geoPoint
-										.coordinates[0],
-									iconPath: "/static/image/charger.png",
-									width: 40,
-									height: 40
-								});
-							}
-						}
-					}
-				)
-			},
 			openLocation() {
-				this.mapContext = uni.createMapContext('myMap', this)
 				wx.startLocationUpdate({
 					success: (res) => {
-						let oldlatitude = null;
-						let oldlongtitude = null;
-						let firstFlag = true;
 						wx.onLocationChange((res) => { //调用实时获取定位
-							oldlatitude = this.latitude;
-							oldlongtitude = this.longitude;
 							this.latitude = res.latitude;
 							this.longitude = res.longitude;
 							this.circles.splice(0, 1, {
@@ -110,26 +65,23 @@
 								radius: 300,
 								strokeWidth: 1,
 							})
-							if (firstFlag || (oldlatitude && oldlongtitude && Math.abs(
-									oldlatitude - this.latitude) + Math.abs(oldlongtitude - this
-									.longtitude) > 0.005)) {	//两次定位距离过近时不调用云函数以减小负载
-								this.getChargerLocation(this.longitude, this.latitude);
-							}
 							/*
 							ONLY FOR TESTING!!!
-							for (var i = 0; i < 20; i++) {
-								this.covers.splice(i, 1, {
-									title: i,
-									id: i,
-									latitude: this.latitude + (Math.random() - 0.5) / 100,
-									longitude: this.longitude + (Math.random() - 0.5) / 100,
-									iconPath: "/static/image/charger.png",
-									width: 40,
-									height: 40
-								});
-							}
 							*/
-							firstFlag = false;
+						   // for (var i = 0; i < 20; i++) {
+						   // 	this.covers.splice(i,1,{
+						   // 		title: i,
+						   // 		id: i,
+						   // 		latitude: this.latitude + (Math.random() - 0.5) / 100,
+						   // 		longitude: this.longitude + (Math.random() - 0.5) / 100,
+						   // 		iconPath: "/static/image/charger.png",
+						   // 		width: 40,
+						   // 		height: 40
+						   // 	});
+						   // }
+						   /*
+						   ONLY FOR TESTING!!!
+						   */
 						});
 					},
 					fail: (err) => {

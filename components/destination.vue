@@ -16,7 +16,8 @@
 			</view>
 		</view>
 		
-		<view class="destination">
+		<view class="destination"
+			@tap="navigate()">
 			<image class="image1" src="../static/image/lightning_green.png"></image>
 			<text class="text2">请输入你的目的地</text>
 			
@@ -67,6 +68,17 @@
 				this.text2=this.time2;
 				this.maxTime1=this.time2;
 				this.opacity2=1;
+			},
+			navigate(){
+				uni.navigateTo({
+					url: '../search/search',
+					animationType: 'slide-in-bottom',
+					animationDuration: 200
+				});
+				
+				// uni.switchTab({
+				// 	url: '../pages/index/search'
+				// });
 			}
 		},
 		mounted(){
