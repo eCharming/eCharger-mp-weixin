@@ -31,6 +31,7 @@
 			}
 		},
 		mounted() {
+			this.mapContext = uni.createMapContext('myMap', this);
 			this.openLocation();
 		},
 		computed: {
@@ -113,9 +114,9 @@
 								id: 278,
 								latitude: lat,
 								longitude: lon,
-								iconPath: "/static/image/landmark.png",
-								width: 40,
-								height: 40,
+								iconPath: "/static/image/landmarksolid.png",
+								width: 50,
+								height: 50,
 								callout: {
 									content: tle,
 									color: "#333333",
@@ -126,12 +127,19 @@
 									padding: 10,
 								}
 							});
+							this.circles.splice(1,1,{
+								latitude: lat,
+								longitude: lon,
+								fillColor: "#4162996A",
+								color: "#b0daff",
+								radius: 300,
+								strokeWidth: 1,
+							})
 						}
 					}
 				)
 			},
 			openLocation() {
-				this.mapContext = uni.createMapContext('myMap', this)
 				wx.startLocationUpdate({
 					success: (res) => {
 						let oldlatitude = null;
@@ -167,11 +175,18 @@
 		},
 		watch: {
 			'$store.state.destinationLocation'() {
+				this.$store.state.relocate=false;
+				wx.stopLocationUpdate();
 				var title = this.$store.state.destination;
 				var latitude = this.$store.state.destinationLocation.lat;
 				var longitude = this.$store.state.destinationLocation.lng;
 				this.getChargerLocation(longitude, latitude, title);
 				this.MoveLocation(latitude, longitude)
+			},
+			'$store.state.relocate'(){
+				console.log(1)
+				if(this.$store.state.relocate==true)
+					this.openLocation();
 			}
 		}
 	}

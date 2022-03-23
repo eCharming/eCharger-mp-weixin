@@ -9,6 +9,7 @@ export default new Vuex.Store({
         locationres:null,
 		destination:'请输入你的目的地',
 		destinationLocation:null,
+		relocate:true,
     },
     mutations: {
         setLocationRes(state, locationres){
@@ -19,6 +20,9 @@ export default new Vuex.Store({
 		},
 		setDestinationLocation(state,destinationLocation){
 			state.destinationLocation=destinationLocation;
+		},
+		setRelocate(state,relocate){
+			state.relocate=relocate;
 		}
     },
     actions: {},

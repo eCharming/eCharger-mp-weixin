@@ -31,6 +31,7 @@
 						this.$store.commit('setLocationRes',{});
 					},
 				});
+				this.$store.state.relocate=true;
 			}
 		}
 	}

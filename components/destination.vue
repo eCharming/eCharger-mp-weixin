@@ -121,6 +121,7 @@
 		box-shadow:0px 6px 12px 4px #e5e5e5 ;
 		transition-property: margin;
 		transition-duration: .3s;
+		
 	} 
 	
 	.near{
@@ -146,6 +147,9 @@
 		font-weight: 700;
 		letter-spacing: 2upx;
 		font-size: 35upx;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	
 	.text1{
