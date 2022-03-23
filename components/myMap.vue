@@ -90,6 +90,7 @@
 				)
 			},
 			openLocation() {
+				this.mapContext = uni.createMapContext('myMap', this)
 				wx.startLocationUpdate({
 					success: (res) => {
 						let oldlatitude = null;
