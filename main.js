@@ -13,7 +13,7 @@ app.$mount()
 // #endif
 
 wx.cloud.init({
-  env: 'echarger-7gak78km70d53193', //填上你的云开发环境id
+  env: 'echarger-7gak78km70d53193', //云开发环境id
   traceUser: true,
 })
 
