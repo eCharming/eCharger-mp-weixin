@@ -12,10 +12,23 @@
 		<scroll-view
 			scroll-y="true" :style="{'height': height+'px'}"
 		>
+			<view @tap="clear">清空历史记录</view>
+			<view
+				class="storage"
+				v-if="!isInput"
+				v-for="(storage,index) in storages"
+				:key="index"
+				@tap="tapStorage(storage.title,storage.location)"
+			>
+				
+				<text>{{storage.title}}</text>
+			</view>
+			
 			<view class="suggestion" 
+				v-if="isInput"
 				v-for="(suggestion,index) in suggestions" 
 				:key="index"
-				@tap="tap(suggestion.title,suggestion.location)"
+				@tap="tap(suggestion.id,suggestion.title,suggestion.location)"
 			>
 				<view class="view1">
 					<image class="image2" src="../../static/image/landmark.png"></image>
@@ -43,25 +56,29 @@
 				suggestions:[],
 				height:0,
 				index:0,
+				storages:[],
+				isInput:false
 			}
 		},
 		methods:{
 			request(){
-				
+				this.isInput=true;
 				uni.request({
 					url:'https://apis.map.qq.com/ws/place/v1/suggestion?keyword='+this.position+'&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73',
 					method:'GET',
 					success: (res) => {
 						if(res.data.status =='0'){
 							this.suggestions.splice(0);
+							
 							for(var index in res.data.data){
 								this.suggestions.push({
+									id:res.data.data[index].id,
 									title: res.data.data[index].title,
 									address: res.data.data[index].address,
 									category: res.data.data[index].category,
 									location: res.data.data[index].location,
-								})
-								
+								});
+								console.log(res.data.data[index].id)
 							}
 						} 
 						// else {
@@ -81,13 +98,43 @@
 					// },
 				})
 			},
-			tap(title,location){
+			tap(id,title,location){
+				var keys=uni.getStorageInfoSync().keys;
+				uni.setStorage({
+					key:id,
+					data:{
+						title:title,
+						location:location
+					}
+				});
+				if(keys.length>=10){
+					uni.removeStorageSync(keys[0]);
+				}
 				this.$store.commit('setDestination',title);
 				this.$store.commit('setDestinationLocation',location);
 				uni.navigateBack();
+			},
+			tapStorage(title,location){
+				console.log(title)
+				this.$store.commit('setDestination',title);
+				this.$store.commit('setDestinationLocation',location);
+				uni.navigateBack();
+			},
+			clear(){
+				uni.clearStorageSync();
 			}
 		}, 
 		mounted(){
+			var keys=uni.getStorageInfoSync().keys;
+			if(keys!=null){
+				for(var index in keys){
+					if(uni.getStorageSync(keys[index])!=null)
+						this.storages.push(uni.getStorageSync(keys[index]));
+					
+				}
+				this.storages.reverse();
+			}
+			
 			this.height=uni.getSystemInfoSync().windowHeight*0.9;
 		}
 	}
@@ -125,6 +172,22 @@
 		font-size: 32upx;
 		letter-spacing: 1upx;
 		border-radius: 10upx;
+	}
+	
+	.storage{
+		font-size: 30upx;
+		background-color: rgb(255,255,255);
+		margin: 20upx;
+		margin-left: 30upx;
+		margin-right: 30upx;
+		padding: 15upx;
+		padding-left: 30upx;
+		border-radius: 10upx;
+		display: flex;
+		flex-direction: column;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	
 	.suggestion{
