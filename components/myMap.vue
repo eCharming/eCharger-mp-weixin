@@ -82,7 +82,16 @@
 										.coordinates[0],
 									iconPath: "/static/image/charger.png",
 									width: 40,
-									height: 40
+									height: 40,
+									callout: {
+										content: `${charger.location}`,
+										color: "#333333",
+										fontSize: 13,
+										borderRadius: 20,
+										bgColor: "#e7ffed",
+										textAlign: "center",
+										padding: 10,
+									}
 								});
 							}
 						}
