@@ -54,12 +54,24 @@
 						longitude: this.longitude
 					})
 				}
-				this.getChargerLocation(this.longitude, this.latitude);
+				this.getChargerLocation(this.longitude, this.latitude, null);
 				this.$store.commit('setLocationRes', null);
 			}
 		},
 		methods: {
-			getChargerLocation(lon, lat) {
+			MoveLocation(lat, lon) {
+				let _this = this
+				this.mapContext.moveToLocation({
+					latitude: lat,
+					longitude: lon,
+					fail: e => {	//fail后500ms重新执行
+						setTimeout(function() {
+							_this.MoveLocation(lat, lon)
+						}, 500)
+					}
+				});
+			},
+			getChargerLocation(lon, lat, tle) {
 				wx.cloud.callFunction({
 					name: 'getSurround',
 					data: {
@@ -95,6 +107,26 @@
 								});
 							}
 						}
+						if (tle) {	//为了防止异步问题，所以放在这里
+							this.covers.push({
+								title: tle,
+								id: 278,
+								latitude: lat,
+								longitude: lon,
+								iconPath: "/static/image/landmark.png",
+								width: 40,
+								height: 40,
+								callout: {
+									content: tle,
+									color: "#333333",
+									fontSize: 13,
+									borderRadius: 20,
+									bgColor: "#e7ffed",
+									textAlign: "center",
+									padding: 10,
+								}
+							});
+						}
 					}
 				)
 			},
@@ -121,22 +153,8 @@
 							if (firstFlag || (oldlatitude && oldlongtitude && Math.abs(
 									oldlatitude - this.latitude) + Math.abs(oldlongtitude - this
 									.longtitude) > 0.005)) { //两次定位距离过近时不调用云函数以减小负载
-								this.getChargerLocation(this.longitude, this.latitude);
+								this.getChargerLocation(this.longitude, this.latitude, null);
 							}
-							/*
-							ONLY FOR TESTING!!!
-							// for (var i = 0; i < 20; i++) {
-							// 	this.covers.splice(i,1,{
-							// 		title: i,
-							// 		id: i,
-							// 		latitude: this.latitude + (Math.random() - 0.5) / 100,
-							// 		longitude: this.longitude + (Math.random() - 0.5) / 100,
-							// 		iconPath: "/static/image/charger.png",
-							// 		width: 40,
-							// 		height: 40
-							// 	});
-							// }
-							*/
 							firstFlag = false;
 						});
 					},
@@ -147,34 +165,13 @@
 				})
 			}
 		},
-		watch:{
-			'$store.state.destinationLocation'(){
-				var title=this.$store.state.destination;
-				var latitude=this.$store.state.destinationLocation.lat;
-				var longitude=this.$store.state.destinationLocation.lng;
-				this.getChargerLocation(longitude,latitude);
-				this.covers.push({
-					title: title,
-					id: 278,
-					latitude: latitude,
-					longitude: longitude,
-					iconPath:"/static/image/landmark.png",
-					width: 40,
-					height: 40,
-					callout: {
-						content: `${title}`,
-						color: "#333333",
-						fontSize: 13,
-						borderRadius: 20,
-						bgColor: "#e7ffed",
-						textAlign: "center",
-						padding: 10,
-					}
-				});
-				this.mapContext.moveToLocation({
-					latitude:latitude,
-					longitude:longitude
-				});
+		watch: {
+			'$store.state.destinationLocation'() {
+				var title = this.$store.state.destination;
+				var latitude = this.$store.state.destinationLocation.lat;
+				var longitude = this.$store.state.destinationLocation.lng;
+				this.getChargerLocation(longitude, latitude, title);
+				this.MoveLocation(latitude, longitude)
 			}
 		}
 	}
