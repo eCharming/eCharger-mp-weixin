@@ -146,6 +146,36 @@
 					}
 				})
 			}
+		},
+		watch:{
+			'$store.state.destinationLocation'(){
+				var title=this.$store.state.destination;
+				var latitude=this.$store.state.destinationLocation.lat;
+				var longitude=this.$store.state.destinationLocation.lng;
+				this.getChargerLocation(longitude,latitude);
+				this.covers.push({
+					title: title,
+					id: 278,
+					latitude: latitude,
+					longitude: longitude,
+					iconPath:"/static/image/landmark.png",
+					width: 40,
+					height: 40,
+					callout: {
+						content: `${title}`,
+						color: "#333333",
+						fontSize: 13,
+						borderRadius: 20,
+						bgColor: "#e7ffed",
+						textAlign: "center",
+						padding: 10,
+					}
+				});
+				this.mapContext.moveToLocation({
+					latitude:latitude,
+					longitude:longitude
+				});
+			}
 		}
 	}
 </script>

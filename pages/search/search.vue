@@ -15,7 +15,7 @@
 			<view class="suggestion" 
 				v-for="(suggestion,index) in suggestions" 
 				:key="index"
-				@tap="tap(suggestion.title)"
+				@tap="tap(suggestion.title,suggestion.location)"
 			>
 				<view class="view1">
 					<image class="image2" src="../../static/image/landmark.png"></image>
@@ -81,11 +81,9 @@
 					// },
 				})
 			},
-			tap(title){
-				console.log(title)
-				
+			tap(title,location){
 				this.$store.commit('setDestination',title);
-				
+				this.$store.commit('setDestinationLocation',location);
 				uni.navigateBack();
 			}
 		}, 
