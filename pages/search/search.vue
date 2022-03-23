@@ -14,9 +14,11 @@
 		>
 			<view class="suggestion" 
 				v-for="(suggestion,index) in suggestions" 
-				@tap="tap(index)"
+				:key="index"
+				@tap="tap(suggestion.title)"
 			>
 				<view class="view1">
+					<image class="image2" src="../../static/image/landmark.png"></image>
 					<text class="text1">{{suggestion.title}}</text>
 				</view>
 				<view class="view2">
@@ -79,18 +81,14 @@
 					// },
 				})
 			},
-			tap(index){
-				uni.navigateTo({
-					url:'../index/index',
-					success:function(res){
-						res.eventChannel.emit('searchResult',{
-							title:this.suggestions[index].title,
-							location:this.suggestions[index].location
-						})
-					}
-				})
+			tap(title){
+				console.log(title)
+				
+				this.$store.commit('setDestination',title);
+				
+				uni.navigateBack();
 			}
-		},
+		}, 
 		mounted(){
 			this.height=uni.getSystemInfoSync().windowHeight*0.9;
 		}
@@ -105,6 +103,14 @@
 		width: 70upx;
 		right:65upx;
 		bottom: 15upx; 
+	}
+	.image2{
+		position:relative;
+		height: 50upx;
+		width: 50upx;
+		top:15upx;
+		right:10upx;
+		
 	}
 	
 	.searchbox{
@@ -147,13 +153,13 @@
 	.text2{
 		background-color:rgba(102,205,170,0.2) ;
 		color: rgba(102,205,170,1);
-		margin-left: 30upx;
+		margin-left: 80upx;
 		padding: 10upx;
 		font-size: 20upx;
 	}
 	
 	.view3{
 		margin: 20upx;
-		margin-left: 30upx;
+		margin-left: 82upx;
 	}
 </style>

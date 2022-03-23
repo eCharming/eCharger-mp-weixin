@@ -19,7 +19,7 @@
 		<view class="destination"
 			@tap="navigate()">
 			<image class="image1" src="../static/image/lightning_green.png"></image>
-			<text class="text2">请输入你的目的地</text>
+			<text class="text2" :style="{'color':color}">{{text}}</text>
 			
 		</view>
 	</view>
@@ -37,6 +37,13 @@
 			marginbottom:{
 				type:Number,
 				default:20
+			},
+			text:{
+				type:String,
+				default:'请输入你的目的地'
+			},
+			color:{
+				type:String
 			}
 		},
 		data(){
@@ -75,10 +82,6 @@
 					animationType: 'slide-in-bottom',
 					animationDuration: 200
 				});
-				
-				// uni.switchTab({
-				// 	url: '../pages/index/search'
-				// });
 			}
 		},
 		mounted(){

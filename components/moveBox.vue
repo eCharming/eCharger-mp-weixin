@@ -11,7 +11,9 @@
 					<view class="line"></view>
 				</view>
 				
-				<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"></destination>
+				<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"
+					:text="destination" :color="color"
+				></destination>
 				
 				
 				<card :margintop="margin[1].margintop" :marginbottom="margin[1].marginbottom">
@@ -94,6 +96,9 @@
 				image1Opacity:1,
 				imageFilter2:1,
 				image2Opacity:0.3,
+				
+				destination:this.$store.state.destination,
+				color:"rgb(0,0,0)",
 				
 				orders:[
 					{
@@ -296,11 +301,12 @@
 			this.currentHeight = (1 - this.minHeight) * this.windowHeight;
 			this.lastHeight = this.currentHeight;
 		},
-		onLoad(){
-			const eventChannel = this.getOpenerEventChannel();
-			eventChannel.on('searchResult', (res) => {
-				// res.
-			})
+		watch:{
+			'$store.state.destination'(){
+				console.log(1)
+				this.destination=this.$store.state.destination;
+				this.color="rgb(102,205,170)"
+			}
 		}
 	}
 </script>
