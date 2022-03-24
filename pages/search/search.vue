@@ -14,7 +14,8 @@
 		</view>
 		
 		<scroll-view
-			scroll-y="true" :style="{'height': height+'px'}"
+			scroll-y="true" 
+			:style="{'height': height+'px'}"
 		>
 			<view class="storageview" v-if="!isInput">
 				<view class="history">
@@ -235,7 +236,7 @@
 		font-weight: 700;
 		padding: 20upx;
 		padding-left: 25upx;
-		border-left: 3px solid rgba(102,205,170,0.5);
+		/* border-left: 3px solid rgba(102,205,170,0.5); */
 	}
 	
 	.history{
