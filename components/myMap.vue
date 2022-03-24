@@ -97,7 +97,7 @@
 									width: 40,
 									height: 40,
 									callout: {
-										content: `${charger.location}`,
+										content: charger.location,
 										color: "#333333",
 										fontSize: 13,
 										borderRadius: 20,
