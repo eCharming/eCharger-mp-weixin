@@ -1,28 +1,48 @@
 <template>
 	<view class="searchbox">
-		
-		<textarea class="textarea" 
-			placeholder="输入目的地"
-			auto-focus="true"
-			v-model="position"
-			@input="request()"
-		>
+		<view class="textareaview">
+			<textarea class="textarea" 
+				placeholder="输入目的地"
+				auto-focus="true"
+				v-model="position"
+				@input="request()"
+			>
+				
+			</textarea>
+			<text class="searchtext">搜索</text>
 			<image src="../../static/image/lightning_green.png" class="image1"></image>
-		</textarea>
+		</view>
+		
 		<scroll-view
 			scroll-y="true" :style="{'height': height+'px'}"
 		>
-			<view @tap="clear">清空历史记录</view>
-			<view
-				class="storage"
-				v-if="!isInput"
-				v-for="(storage,index) in storages"
-				:key="index"
-				@tap="tapStorage(storage.title,storage.location)"
-			>
+			<view class="storageview" v-if="!isInput">
+				<view class="history">
+					<view class="historyview">
+						
+						<text>历史记录</text>
+					</view>
+					<view class="clear" @tap="clear">清空历史记录</view>
+				</view>
 				
-				<text>{{storage.title}}</text>
+				<view
+					class="storage"
+					v-for="(storage,index) in storages"
+					:key="index"
+					@tap="tapStorage(storage.title,storage.location)"
+				>
+					<view class="view5">
+						<image src="../../static/image/search.png" class="image3"></image>
+						<text class="text3">{{storage.title}}</text>
+					</view>
+					
+					<view class="view4" @tap.stop.prevent="del(index)">
+						<icon type="cancel" color="rgba(102,205,170,1)"></icon>
+					</view>
+				</view>
 			</view>
+			
+			
 			
 			<view class="suggestion" 
 				v-if="isInput"
@@ -78,7 +98,6 @@
 									category: res.data.data[index].category,
 									location: res.data.data[index].location,
 								});
-								console.log(res.data.data[index].id)
 							}
 						} 
 						// else {
@@ -100,13 +119,12 @@
 			},
 			tap(id,title,location){
 				var keys=uni.getStorageInfoSync().keys;
-				uni.setStorage({
-					key:id,
-					data:{
+				uni.setStorageSync(id,
+					{
 						title:title,
 						location:location
 					}
-				});
+				);
 				if(keys.length>=10){
 					uni.removeStorageSync(keys[0]);
 				}
@@ -115,40 +133,59 @@
 				uni.navigateBack();
 			},
 			tapStorage(title,location){
-				console.log(title)
 				this.$store.commit('setDestination',title);
 				this.$store.commit('setDestinationLocation',location);
 				uni.navigateBack();
 			},
 			clear(){
 				uni.clearStorageSync();
+				this.storages.splice(0);
+			},
+			del(index){
+				this.storages.splice(index,1);
+				var keys=uni.getStorageInfoSync().keys;
+				if(keys!=null){
+					var k=0;
+					for(var i in keys){
+						if(uni.getStorageSync(keys[i]).title!=null){
+							if(k==index){
+								uni.removeStorageSync(keys[i]);
+								break;
+							}
+							k++;
+						}
+					}
+				}
 			}
 		}, 
 		mounted(){
 			var keys=uni.getStorageInfoSync().keys;
 			if(keys!=null){
+				
 				for(var index in keys){
-					if(uni.getStorageSync(keys[index])!=null)
+					if(uni.getStorageSync(keys[index]).title!=null){
 						this.storages.push(uni.getStorageSync(keys[index]));
-					
+						// console.log(keys.length-1-index)
+						// console.log(keys[keys.length-1-index])  keys.length-1-
+					}
+						
 				}
-				this.storages.reverse();
 			}
-			
 			this.height=uni.getSystemInfoSync().windowHeight*0.9;
 		}
 	}
 	
 </script>
 
-<style>
+<style scoped >
 	.image1{
-		position: relative;
+		position: absolute;
 		height: 70upx;
 		width: 70upx;
-		right:65upx;
-		bottom: 15upx; 
+		left:45upx;
+		bottom: 10upx;
 	}
+	
 	.image2{
 		position:relative;
 		height: 50upx;
@@ -158,36 +195,107 @@
 		
 	}
 	
+	.image3{
+		height: 70upx;
+		width: 70upx;
+		/* position:absolute;
+		right:10upx; */
+		/* bottom: 1upx;
+		right:194upx; */
+		
+	}
+	
 	.searchbox{
 		background-color:rgb(240, 240, 240) ;
+	}
+	
+	.textareaview{
+		position: relative;
 	}
 	
 	.textarea{
 		background-color: rgb(255,255,255);
 		margin: 30upx;
-		padding:27upx;
+		padding-top:27upx;
 		padding-left:80upx;
 		width:700upx;
 		height:90upx;
 		font-size: 32upx;
 		letter-spacing: 1upx;
-		border-radius: 10upx;
+		border-radius: 20upx;
+		border: 3px solid rgba(102,205,170,0.5);
+	}
+	
+	.searchtext{
+		position: absolute;
+		left:608upx;
+		bottom:7upx;
+		font-size: 32upx;
+		color: rgba(102,205,170,1);
+		font-weight: 700;
+		padding: 20upx;
+		padding-left: 25upx;
+		border-left: 3px solid rgba(102,205,170,0.5);
+	}
+	
+	.history{
+		display: flex;
+		justify-content: space-between;
+	}
+	
+	.historyview{
+		
+		margin-left: 30upx;
+		border-radius: 8upx;
+		/* box-shadow:0px 5px 5px -3px rgba(102,205,170,1) ; */
+		border-bottom: 3px solid rgba(102,205,170,1);
+		font-size: 30upx;
+		font-weight: 700;
+		letter-spacing: 1upx;
+	}
+	
+	.clear{
+		background-color:rgba(102,205,170,0.2) ;
+		color: rgba(102,205,170,1);
+		margin-right: 30upx;
+		padding: 10upx;
+		font-size: 23upx;
+		font-weight: 700;
 	}
 	
 	.storage{
-		font-size: 30upx;
 		background-color: rgb(255,255,255);
-		margin: 20upx;
-		margin-left: 30upx;
-		margin-right: 30upx;
+		margin: 30upx;
+		/* margin-left: 30upx;
+		margin-right: 30upx; */
 		padding: 15upx;
-		padding-left: 30upx;
+		padding-left: 20upx;
 		border-radius: 10upx;
 		display: flex;
-		flex-direction: column;
+		justify-content: space-between;
+	}
+	
+	.view5{
+		position: relative;
+		display: flex;
+		
+	}
+	
+	.text3{
+		margin: 15upx;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		font-size: 29upx;
+		font-weight: 700;
+		letter-spacing: 1upx;
+		/* border: 2px solid red; */
+	}
+	
+	.view4{
+		margin-top: 10upx;
+		margin-right: 20upx;
+		/* border: 2px solid red; */
 	}
 	
 	.suggestion{
