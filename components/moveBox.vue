@@ -30,7 +30,7 @@
 				</card>
 				
 				
-				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom">
+				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom" @scrolltolower="scrolltolower()">
 					<order v-if="isSelected1" v-for="(order,index) in orders" 
 						:index="index" :key="index" 
 						:location="order.location"
@@ -53,6 +53,10 @@
 						@emit="tapCharger()"
 					>
 					</charger>
+					<view class="scrollerview">
+						<icon :type="icontype" color="rgb(102,205,170)"></icon>
+						<text>{{icontext}}</text>
+					</view>
 				</scroller>
 
 
@@ -100,30 +104,13 @@
 				destination:this.$store.state.destination,
 				color:"rgb(0,0,0)",
 				
-				orders:[
-					{
-						location:'四川大学江安校区',
-						distance:1.3,
-						price:'1.6',
-						startTime:'09:00',
-						endTime:'19:00'
-					},
-					{
-						location:'华东师范大学中北校区',
-						distance:1.6,
-						price:'1.9',
-						startTime:'15:00',
-						endTime:'20:00'
-					},
-					{
-						location:'南京理工大学江阴校区',
-						distance:2.3,
-						price:'1.5',
-						startTime:'07:00',
-						endTime:'11:00'
-					}
-				],
+				icontype:"warn",
+				icontext:"暂无更多",
+				
+				orders:[],
 				orderSelected:-1,
+				orderIndex:0,//记录scroller刷新到哪个order
+				isFull:false,//是否拿满
 				
 				chargers:[
 					{
@@ -288,6 +275,70 @@
 			},
 			tapCharger(data){
 				this.chargerSelected=data;
+			},
+			scrolltolower(){
+				if(this.isSelected1==true&&this.isFull==false){
+					var url='https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from='
+						+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&to=';
+					var orderCopy=[];
+					if(this.$store.state.orders.length-1-this.orderIndex<=5){     //下拉刷新一次数量小于等于五
+						for(var index=this.orderIndex+1;index<=this.$store.state.orders.length-1;index++){
+							orderCopy.push(this.$store.state.orders[index]);
+							if(index!=this.$store.state.orders.length-1){
+								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude+';';
+							}else{
+								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude;
+							}
+						}
+						url+='&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73';
+						uni.request({
+							url:url,
+							method:'GET',
+							success: (res) => {
+								setTimeout(()=>{
+									var distance=res.data.result.rows[0].elements;
+									
+									for(var index in distance){
+										orderCopy[index].distance=distance[index].distance/1000;
+										this.orders.push(orderCopy[index]);
+									}
+								},500);
+							},
+						});	
+						this.orderIndex=this.$store.state.orders.length-1;
+						this.isFull=true;
+					}
+						
+					else{
+						for(var index=this.orderIndex+1;index<=this.orderIndex+5;index++){   //此次拉取数量大于五
+							orderCopy.push(this.$store.state.orders[index]);
+							if(index!=this.orderIndex+5){
+								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude+';';
+							}else{
+								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude;
+							}
+						}
+						url+='&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73';
+						uni.request({
+							url:url,
+							method:'GET',
+							success: (res) => {
+								setTimeout(()=>{
+									var distance=res.data.result.rows[0].elements;
+									for(var index in distance){
+										orderCopy[index].distance=distance[index].distance/1000;
+										this.orders.push(orderCopy[index]);
+									}
+								} ,500)
+								
+							},
+						});	
+						this.orderIndex+=5;
+					}
+				}else{
+					this.icontext="暂无更多";
+					this.icontype="warn";
+				}
 			}
 		},
 		computed: {
@@ -303,9 +354,26 @@
 		},
 		watch:{
 			'$store.state.destination'(){
-				console.log(1)
 				this.destination=this.$store.state.destination;
 				this.color="rgb(102,205,170)"
+			},
+			'$store.state.orders'(){
+				this.icontext="上拉加载更多";
+				this.icontype="download";
+				this.isFull=false;
+				this.orders.splice(0);
+				if(this.$store.state.orders.length<=5){		//数量小于等于5
+					this.orders=this.$store.state.orders;
+					this.orderIndex=this.$store.state.orders.length-1;
+					this.isFull=true;
+				}
+					
+				else{
+					for(var index=0;index<=4;index++){
+						this.orders.push(this.$store.state.orders[index]);
+					}
+					this.orderIndex=4;
+				}
 			}
 		}
 	}
@@ -345,6 +413,11 @@
 		border-top-right-radius: 40upx;
 		transition-property: top;
 		transition-duration: .5s;
+	}
+	
+	.scrollerview{
+		display: flex;
+		justify-content: center;
 	}
 
 	.content {

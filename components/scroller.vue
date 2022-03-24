@@ -3,6 +3,7 @@
 		<scroll-view 
 			scroll-y="true" 
 			:style="{'height':height+'px'}"
+			@scrolltolower="emit"
 		>
 			<slot></slot>
 		</scroll-view>
@@ -20,11 +21,16 @@
 			marginbottom:{
 				type:Number,
 				default:20
-			}
+			},
 		},
 		data(){
 			return{
 				height:0,
+			}
+		},
+		methods:{
+			emit(){
+				this.$emit('scrolltolower');
 			}
 		},
 		mounted() {

@@ -27,7 +27,10 @@
 				covers: [],
 				circles: [],
 				mapContext: null,
-				scale: 16
+				scale: 16,
+				ordersCopy:[],
+				url:'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from=',
+				distance:[],
 			}
 		},
 		mounted() {
@@ -82,9 +85,14 @@
 					}
 				}).then(
 					res => {
-						let chargerList = res.result.data
+						let chargerList = res.result.data;
+						this.ordersCopy.splice(0);
 						this.covers.splice(0, this.covers.length);
-						if (chargerList) {
+						
+						if (chargerList.length!=0) {
+							this.url='https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from=';
+							this.url+=this.latitude+','+this.longitude+'&to=';
+							var index=0;
 							for (let charger of chargerList) {
 								this.covers.push({
 									title: charger.location,
@@ -106,7 +114,40 @@
 										padding: 10,
 									}
 								});
+								this.ordersCopy.push({        //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
+									location: charger.location,
+									id: charger._id,
+									latitude: charger.geoPoint.coordinates[1],
+									longitude: charger.geoPoint.coordinates[0],
+									price:charger.price,
+									startTime:'08:00',
+									endTime:'18:00',
+									distance:'',
+								});
+								if(index<=4){
+									if(index!=chargerList.length-1&&index!=4)
+										this.url+=charger.geoPoint.coordinates[1]+','+charger.geoPoint.coordinates[0]+';';
+									else this.url+=charger.geoPoint.coordinates[1]+','+charger.geoPoint.coordinates[0];
+								}
+								
+								index++;
 							}
+							this.url+='&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73';
+							console.log(this.url)
+							uni.request({
+								url:this.url,
+								method:'GET',
+								success: (res) => {
+									setTimeout(()=>{
+										this.distance=res.data.result.rows[0].elements;
+										for(var index in this.distance){
+											this.ordersCopy[index].distance=this.distance[index].distance/1000;
+										}
+										this.$store.commit('setOrders',this.ordersCopy);
+									},500);
+									
+								},
+							});	
 						}
 						if (tle) {	//为了防止异步问题，所以放在这里
 							this.covers.push({
@@ -150,6 +191,10 @@
 							oldlongtitude = this.longitude;
 							this.latitude = res.latitude;
 							this.longitude = res.longitude;
+							this.$store.commit('setCurrentLocation',{
+								latitude:res.latitude,
+								longitude:res.longitude
+							});
 							this.circles.splice(0, 1, {
 								latitude: this.latitude,
 								longitude: this.longitude,

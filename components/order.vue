@@ -11,6 +11,7 @@
 			</view>
 			
 		</view>
+		<text class="text">{{location}}</text>
 		
 		<view class="view2">
 			<view class="priceview">
@@ -163,6 +164,12 @@
 		top:11upx;
 		right:5upx;
 
+	}
+	
+	.text{
+		margin-top: 10upx;
+		margin-left: 15upx;
+		opacity: 0.5;
 	}
 </style>
 
