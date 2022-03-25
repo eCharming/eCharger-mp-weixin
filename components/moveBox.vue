@@ -278,61 +278,17 @@
 			},
 			scrolltolower(){
 				if(this.isSelected1==true&&this.isFull==false){
-					var url='https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from='
-						+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&to=';
-					var orderCopy=[];
 					if(this.$store.state.orders.length-1-this.orderIndex<=5){     //下拉刷新一次数量小于等于五
 						for(var index=this.orderIndex+1;index<=this.$store.state.orders.length-1;index++){
-							orderCopy.push(this.$store.state.orders[index]);
-							if(index!=this.$store.state.orders.length-1){
-								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude+';';
-							}else{
-								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude;
-							}
+							this.orders.push(this.$store.state.orders[index]);
 						}
-						url+='&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73';
-						uni.request({
-							url:url,
-							method:'GET',
-							success: (res) => {
-								setTimeout(()=>{
-									var distance=res.data.result.rows[0].elements;
-									
-									for(var index in distance){
-										orderCopy[index].distance=distance[index].distance/1000;
-										this.orders.push(orderCopy[index]);
-									}
-								},500);
-							},
-						});	
 						this.orderIndex=this.$store.state.orders.length-1;
 						this.isFull=true;
 					}
-						
 					else{
 						for(var index=this.orderIndex+1;index<=this.orderIndex+5;index++){   //此次拉取数量大于五
-							orderCopy.push(this.$store.state.orders[index]);
-							if(index!=this.orderIndex+5){
-								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude+';';
-							}else{
-								url+=this.$store.state.orders[index].latitude+','+this.$store.state.orders[index].longitude;
-							}
+							this.orders.push(this.$store.state.orders[index]);
 						}
-						url+='&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73';
-						uni.request({
-							url:url,
-							method:'GET',
-							success: (res) => {
-								setTimeout(()=>{
-									var distance=res.data.result.rows[0].elements;
-									for(var index in distance){
-										orderCopy[index].distance=distance[index].distance/1000;
-										this.orders.push(orderCopy[index]);
-									}
-								} ,500)
-								
-							},
-						});	
 						this.orderIndex+=5;
 					}
 				}else{
@@ -363,9 +319,13 @@
 				this.isFull=false;
 				this.orders.splice(0);
 				if(this.$store.state.orders.length<=5){		//数量小于等于5
-					this.orders=this.$store.state.orders;
+					for(var index in this.$store.state.orders){
+						this.orders.push(this.$store.state.orders[index]);
+					}
 					this.orderIndex=this.$store.state.orders.length-1;
 					this.isFull=true;
+					this.icontext="暂无更多";
+					this.icontype="warn";
 				}
 					
 				else{

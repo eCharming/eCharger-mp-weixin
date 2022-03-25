@@ -90,9 +90,6 @@
 						this.covers.splice(0, this.covers.length);
 						
 						if (chargerList.length!=0) {
-							this.url='https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from=';
-							this.url+=this.latitude+','+this.longitude+'&to=';
-							var index=0;
 							for (let charger of chargerList) {
 								this.covers.push({
 									title: charger.location,
@@ -114,6 +111,7 @@
 										padding: 10,
 									}
 								});
+								var distance=(this.getFlatternDistance(this.latitude,this.longitude,charger.geoPoint.coordinates[1],charger.geoPoint.coordinates[0])/1000).toFixed(1);
 								this.ordersCopy.push({        //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
 									location: charger.location,
 									id: charger._id,
@@ -122,33 +120,11 @@
 									price:charger.price,
 									startTime:'08:00',
 									endTime:'18:00',
-									distance:'',
+									distance:distance,
 								});
-								if(index<=4){
-									if(index!=chargerList.length-1&&index!=4)
-										this.url+=charger.geoPoint.coordinates[1]+','+charger.geoPoint.coordinates[0]+';';
-									else this.url+=charger.geoPoint.coordinates[1]+','+charger.geoPoint.coordinates[0];
-								}
-								
-								index++;
 							}
-							this.url+='&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73';
-							console.log(this.url)
-							uni.request({
-								url:this.url,
-								method:'GET',
-								success: (res) => {
-									setTimeout(()=>{
-										this.distance=res.data.result.rows[0].elements;
-										for(var index in this.distance){
-											this.ordersCopy[index].distance=this.distance[index].distance/1000;
-										}
-										this.$store.commit('setOrders',this.ordersCopy);
-									},500);
-									
-								},
-							});	
 						}
+						this.$store.commit('setOrders',this.ordersCopy);
 						if (tle) {	//为了防止异步问题，所以放在这里
 							this.covers.push({
 								title: tle,
@@ -216,6 +192,43 @@
 						reject(err)
 					}
 				})
+			},
+			getFlatternDistance(lat1,lng1,lat2,lng2){
+				
+				var EARTH_RADIUS = 6378137.0; //单位M
+				var PI = Math.PI;
+
+
+				var getRad=function(d){
+					return d * PI / 180.0;
+				}
+				
+			    var f = getRad((lat1 + lat2)/2);
+			    var g = getRad((lat1 - lat2)/2);
+			    var l = getRad((lng1 - lng2)/2);
+			    
+			    var sg = Math.sin(g);
+			    var sl = Math.sin(l);
+			    var sf = Math.sin(f);
+			    
+			    var s,c,w,r,d,h1,h2;
+			    var a = EARTH_RADIUS;
+			    var fl = 1/298.257;
+			    
+			    sg = sg*sg;
+			    sl = sl*sl;
+			    sf = sf*sf;
+			    
+			    s = sg*(1-sl) + (1-sf)*sl;
+			    c = (1-sg)*(1-sl) + sf*sl;
+			    
+			    w = Math.atan(Math.sqrt(s/c));
+			    r = Math.sqrt(s*c)/w;
+			    d = 2*w*a;
+			    h1 = (3*r -1)/2/c;
+			    h2 = (3*r +1)/2/s;
+			    
+			    return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
 			}
 		},
 		watch: {
