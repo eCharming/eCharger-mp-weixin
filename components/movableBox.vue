@@ -1,7 +1,7 @@
 <template>
 	<movable-area class="movable-area" :style="{'top':boxHeight+'px'}" @touchmove.prevent.stop>
 		
-		<movable-view class="main" direction="vertical" :y="currentY"  @change="onchange($event)" @touchend="end()">
+		<movable-view class="main" direction="vertical" damping="30" out-of-bounds="true" :y="currentY"  @change="onchange($event)" @touchend="end()">
 			<view>
 				<view class="content">
 					<view :class="isLow?'animationBtn':'stillBtn'">
@@ -16,12 +16,12 @@
 					
 					
 					<card>
-						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()" >
+						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent" @tap="tapButton1()" >
 							<image class="image1" src="../static/image/car&charger_color.png"
 								:style="{'filter':'grayscale('+imageFilter1+')','opacity':imageOpacity1}"
 							></image>
 						</totalbutton>
-						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()" >
+						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" :percent="percent" @tap="tapButton2()" >
 							<image class="image2" src="../static/image/park.png"
 								:style="{'filter':'grayscale('+imageFilter2+')','opacity':imageOpacity2}"
 							></image>
@@ -90,7 +90,7 @@
 			return {
 				liveY:0,//实时movablebox的高度(实时位置)
 				currentY:0,//当前movablebox的高度(非实时)
-				percent:0,//movablebox移动到上下限的百分之多少
+				percent:1,//movablebox移动到上下限的百分之多少
 				boxHeight:300,//movablebox的最高高度
 				windowHeight: 0, //本机的高度 单位px
 				windowWidth: 0, //本机的宽度 单位px
@@ -263,7 +263,6 @@
 		position: fixed;
 		height:155vh;
 		width:750upx;
-		overflow: hidden;
 		pointer-events: none;
 	}
 	

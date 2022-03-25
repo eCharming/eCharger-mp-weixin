@@ -6,10 +6,10 @@
 		:style="{'border-color':bordercolor}"
 	>
 		<view class="view1">
-			<text class="text1">{{text1}}</text>
+			<text class="text1" :style="{'top':top+'px'}">{{text1}}</text>
 		</view>
 		<view class="view2">
-			<text class="text2">{{text2}}</text>
+			<text class="text2" :style="{'opacity':1-percent}">{{text2}}</text>
 		</view>
 		<view>
 			<slot></slot>
@@ -35,6 +35,14 @@
 			selected:{
 				type:Boolean,
 				default:false
+			},
+			percent:{
+				type:Number
+			}
+		},
+		computed:{
+			top(){
+				return uni.upx2px(15*this.percent+5);
 			}
 		},
 		watch:{
@@ -96,14 +104,16 @@
 	.text1{
 		position: relative;
 		right: 65upx;
-		top:5upx;
-
+		top:20upx;
+		transition-property: top;
+		transition-duration: .1s;
 	}
 	.text2{
 		position: relative;
 		right: 67upx;
 		bottom: 25upx;
-
+		transition-property: opacity;
+		transition-duration: .1s;
 		
 	}
 </style>
