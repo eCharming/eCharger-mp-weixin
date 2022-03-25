@@ -1,7 +1,7 @@
 <template>
 	<movable-area class="movable-area" :style="{'top':boxHeight+'px'}" @touchmove.prevent.stop>
 		
-		<movable-view class="main" direction="vertical" :y="currentY" @change="onchange($event)" @touchend="end">
+		<movable-view class="main" direction="vertical" :y="currentY"  @change="onchange($event)" @touchend="end()">
 			<view>
 				<view class="content">
 					<view :class="isLow?'animationBtn':'stillBtn'">
@@ -16,12 +16,12 @@
 					
 					
 					<card>
-						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()" @touchend.stop.prevent>
+						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()" >
 							<image class="image1" src="../static/image/car&charger_color.png"
 								:style="{'filter':'grayscale('+imageFilter1+')','opacity':imageOpacity1}"
 							></image>
 						</totalbutton>
-						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()" @touchend.stop.prevent>
+						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()" >
 							<image class="image2" src="../static/image/park.png"
 								:style="{'filter':'grayscale('+imageFilter2+')','opacity':imageOpacity2}"
 							></image>
@@ -136,25 +136,29 @@
 				// console.log(this.percent)
 			},
 			end(){
+				
 				if(this.isLow==true){	//初始在低位的情况
 					if((1-this.percent)>=0.25){	//上拉超过上下限的25%则移向高位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
 						this.isLow=false;
 						this.currentY=0;
 					}
 					else{	//上拉未超过上下限的25%则回到低位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTick
-					console.log(1)
-						this.currentY=this.liveY;
-						this.$nextTick(function(){
-							this.currentY=this.windowHeight*(this.maxHeight-this.minHeight);
-						})
+						if(Math.abs(this.liveY-this.windowHeight*(this.maxHeight-this.minHeight))>5){	//用于防止点击事件穿透触发touchend
+							this.currentY=this.liveY;
+							this.$nextTick(function(){
+								this.currentY=this.windowHeight*(this.maxHeight-this.minHeight);
+							})
+						}
+						
 					}
 				}else{	//初始在高位的情况
 					if(this.percent>=0.25){	//下拉超过上下限的25%则移向低位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
 						this.isLow=true;
+						
 						this.currentY=this.windowHeight*(this.maxHeight-this.minHeight);
 					}
 					else{	//下拉未超过上下限的25%则回到高位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTick
-						console.log(1)
+						
 						this.currentY=this.liveY;
 						this.$nextTick(function(){
 							this.currentY=0;
@@ -172,9 +176,7 @@
 				this.imageOpacity2=0.3;
 				this.chargerSelected=-1;
 				this.isLow=false;
-				console.log(this.currentY)
 				this.currentY=0;
-				console.log(this.currentY)
 			},
 			tapButton2() {
 				this.isSelected1 = false
@@ -185,9 +187,7 @@
 				this.imageOpacity2=1;
 				this.orderSelected=-1;
 				this.isLow=false;
-				console.log(this.currentY)
 				this.currentY=0;
-				console.log(this.currentY)
 			},
 			tapOrder(data){
 				this.orderSelected=data;
