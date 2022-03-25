@@ -1,68 +1,76 @@
 <template>
-	<view :class="isMove?'main':'animation'" :style="{'top':currentHeight+'px'}" @touchstart="start($event)"
-		@touchmove.stop.prevent='move($event)' @touchend="end">
-		<view>
-			<view class="content">
-				<view :class="isLow?'animationBtn':'stillBtn'">
-					<locationbutton :top="top"></locationbutton>
-				</view>
-
-				<view class="touchline">
-					<view class="line"></view>
-				</view>
-				
-				<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"
-					:text="destination" :color="color"
-				></destination>
-				
-				
-				<card :margintop="margin[1].margintop" :marginbottom="margin[1].marginbottom">
-					<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()">
-						<image class="image1" src="../static/image/car&charger_color.png"
-							:style="{'filter':'grayscale('+imageFilter1+')','opacity':image1Opacity}"
-						></image>
-					</totalbutton>
-					<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()">
-						<image class="image2" src="../static/image/park.png"
-							:style="{'filter':'grayscale('+imageFilter2+')','opacity':image2Opacity}"
-						></image>
-					</totalbutton>
-				</card>
-				
-				
-				<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom" @scrolltolower="scrolltolower()">
-					<order v-if="isSelected1" v-for="(order,index) in orders" 
-						:index="index" :key="index" 
-						:location="order.location"
-						:distance="order.distance"
-						:price="order.price"
-						:startTime="order.startTime"
-						:endTime="order.endTime"
-						:orderSelected="orderSelected" 
-						@emit="tapOrder()"
-					>
-					</order>
-					<charger v-if="isSelected2" v-for="(charger,index) in chargers"
-						:index="index" :key="index" 
-						:location="charger.location"
-						:state="charger.state"
-						:price="charger.price"
-						:startTime="charger.startTime"
-						:endTime="charger.endTime"
-						:chargerSelected="chargerSelected" 
-						@emit="tapCharger()"
-					>
-					</charger>
-					<view class="scrollerview">
-						<icon :type="icontype" color="rgb(102,205,170)"></icon>
-						<text>{{icontext}}</text>
+	<movable-area class="movable-area" :style="{'top':topHeight+'px'}" @touchmove.prevent.stop>
+		
+	
+		<movable-view class="main" direction="vertical"  @touchstart="start($event)"
+			@touchmove.stop.prevent='move($event)' @touchend="end($event)" @change="onchange($event)"
+			:y="topView"
+		>
+			<view>
+				<view class="content">
+					<view :class="isLow?'animationBtn':'stillBtn'">
+						<locationbutton :top="top"></locationbutton>
 					</view>
-				</scroller>
-
-
+		
+					<view class="touchline">
+						<view class="line"></view>
+					</view>
+					
+					<destination :margintop="margin[0].margintop" :marginbottom="margin[0].marginbottom"
+						:text="destination" :color="color"
+					></destination>
+					
+					
+					<card :margintop="margin[1].margintop" :marginbottom="margin[1].marginbottom">
+						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" @tap="tapButton1()">
+							<image class="image1" src="../static/image/car&charger_color.png"
+								:style="{'filter':'grayscale('+imageFilter1+')','opacity':image1Opacity}"
+							></image>
+						</totalbutton>
+						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" @tap="tapButton2()">
+							<image class="image2" src="../static/image/park.png"
+								:style="{'filter':'grayscale('+imageFilter2+')','opacity':image2Opacity}"
+							></image>
+						</totalbutton>
+					</card>
+					
+					
+					<scroller :margintop="margin[2].margintop" :marginbottom="margin[2].marginbottom" @scrolltolower="scrolltolower()">
+						<order v-if="isSelected1" v-for="(order,index) in orders" 
+							:index="index" :key="index" 
+							:location="order.location"
+							:distance="order.distance"
+							:price="order.price"
+							:startTime="order.startTime"
+							:endTime="order.endTime"
+							:orderSelected="orderSelected" 
+							@emit="tapOrder()"
+						>
+						</order>
+						<charger v-if="isSelected2" v-for="(charger,index) in chargers"
+							:index="index" :key="index" 
+							:location="charger.location"
+							:state="charger.state"
+							:price="charger.price"
+							:startTime="charger.startTime"
+							:endTime="charger.endTime"
+							:chargerSelected="chargerSelected" 
+							@emit="tapCharger()"
+						>
+						</charger>
+						<view class="scrollerview">
+							<icon :type="icontype" color="rgb(102,205,170)"></icon>
+							<text>{{icontext}}</text>
+						</view>
+					</scroller>
+		
+		
+				</view>
 			</view>
-		</view>
-	</view>
+		</movable-view>
+		
+	</movable-area>
+	
 </template>
 
 <script>
@@ -86,6 +94,9 @@
 		},
 		data() {
 			return {
+				oldY:0,
+				topView:0,
+				topHeight:300,
 				currentHeight: 200, //当前高度 单位px
 				lastHeight: 0,//手指最后触摸的高度 单位px
 				originHeight: 0, //滑动开始时的高度 单位px
@@ -177,7 +188,6 @@
 			},
 
 			move(event) {
-
 				this.lastHeight = this.currentHeight;
 				this.currentTouch = event.touches[0].clientY;
 				var mediaVariable = this.originHeight - this.originTouch + this.currentTouch; //运用中间变量
@@ -218,28 +228,45 @@
 					this.margin[2].marginbottom = uni.upx2px(0);
 					this.top = -100;
 				}
-
-
-				// console.log(this.currentHeight);
 			},
 
-			end() {
+			end(event) {
 				this.isMove = false;
-				var thisHeight = this.currentHeight; //因为动画滞后因而需要一个副本来记录currentHeight的值
+				console.log(event)
+				var thisHeight = this.currentHeight;
 				if (Math.abs(this.currentHeight - this.originHeight) >= 0.25 * (this.maxHeight - this.minHeight) * this
 					.windowHeight) { //当滑动结束时若移动距离超过上下界线的25%则直接移动到另一端
 					if (this.isLow) { //如果在低位则向高位移动
 						this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
+						console.log(this.topView)
+						this.topView=0;
 						this.isLow = false;
 					} else {
 						this.currentHeight = (1 - this.minHeight) * this.windowHeight;
+						console.log(this.topView)
+						this.topView=0.55*this.windowHeight;
+						
 						this.isLow = true;
 					}
 				} else {
-					if (this.isLow) //如果在低位则向低位移动
+					if (this.isLow){ 	//如果在低位则向低位移动
 						this.currentHeight = (1 - this.minHeight) * this.windowHeight;
-					else
+						this.topView=event.detail.y;
+						console.log(this.topView)
+						this.$nextTick(function() {
+						    this.topView=0.55*this.windowHeight;
+						})
+					}
+						
+					else{
 						this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
+						this.topView=event.detail.y;
+						console.log(this.topView)
+						this.$nextTick(function() {
+						    this.topView=0;
+						})
+					}
+						
 				}
 				this.margin[0].margintop = uni.upx2px(20);
 				this.margin[0].marginbottom = uni.upx2px(20);
@@ -253,7 +280,8 @@
 			tapButton1() {
 				this.isSelected1 = true;
 				this.isSelected2 = false;
-				this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
+				// this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
+				this.topView=0;
 				this.imageFilter1=0;
 				this.image1Opacity=1;
 				this.imageFilter2=1;
@@ -263,7 +291,8 @@
 			tapButton2() {
 				this.isSelected1 = false
 				this.isSelected2 = true;
-				this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
+				// this.currentHeight = (1 - this.maxHeight) * this.windowHeight;
+				this.topView=0;
 				this.imageFilter1=1;
 				this.image1Opacity=0.3;
 				this.imageFilter2=0;
@@ -295,6 +324,9 @@
 					this.icontext="暂无更多";
 					this.icontype="warn";
 				}
+			},
+			onchange(e){
+				
 			}
 		},
 		computed: {
@@ -305,6 +337,8 @@
 		mounted() {
 			this.windowHeight = uni.getSystemInfoSync().windowHeight;
 			this.windowWidth = uni.getSystemInfoSync().windowWidth;
+			this.topHeight=this.windowHeight*0.1;
+			this.topView=this.windowHeight*0.55;
 			this.currentHeight = (1 - this.minHeight) * this.windowHeight;
 			this.lastHeight = this.currentHeight;
 		},
@@ -340,6 +374,14 @@
 </script>
 
 <style lang="scss" scoped>
+	.movable-area{
+		position: fixed;
+		height:155vh;
+		width:750upx;
+		overflow: hidden;
+		pointer-events: none;
+	}
+	
 	.stillBtn {
 		opacity: 0;
 		transition-property: opacity;
@@ -354,25 +396,13 @@
 	}
 
 	.main {
-		height: 100%;
+		height: 100vh;
 		width: 750upx;
-		position: fixed;
 		background-color: rgb(240, 245, 240);
 		padding: 0 12px;
 		border-top-left-radius: 40upx;
 		border-top-right-radius: 40upx;
-	}
-
-	.animation {
-		height: 100%;
-		width: 750upx;
-		position: fixed;
-		background-color: rgb(240, 245, 240);
-		padding: 0 12px;
-		border-top-left-radius: 40upx;
-		border-top-right-radius: 40upx;
-		transition-property: top;
-		transition-duration: .5s;
+		pointer-events: auto;
 	}
 	
 	.scrollerview{

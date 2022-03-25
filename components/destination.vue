@@ -1,5 +1,5 @@
 <template>
-	<view class="card" :style="{'margin-top':margintop+'px','margin-bottom':marginbottom+'px'}">
+	<view class="card">
 		<view class="near">
 			<text class="text1">{{month}}月{{date}}日星期{{day}}</text>
 			
@@ -30,14 +30,6 @@
 		components:{
 		},
 		props:{
-			margintop:{
-				type:Number,
-				default:20
-			},
-			marginbottom:{
-				type:Number,
-				default:20
-			},
 			text:{
 				type:String,
 				default:'请输入你的目的地'
@@ -106,7 +98,6 @@
 		top:20upx;
 		width:60upx;
 		height:60upx;
-		
 	}
 	
 	.card{
@@ -119,9 +110,6 @@
 		flex-direction: column;
 		justify-content: center;
 		box-shadow:0px 6px 12px 4px #e5e5e5 ;
-		transition-property: margin;
-		transition-duration: .3s;
-		
 	} 
 	
 	.near{

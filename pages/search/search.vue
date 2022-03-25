@@ -307,9 +307,6 @@
 		border-radius: 10upx;
 		display: flex;
 		flex-direction: column;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 	
 	.view1{
@@ -318,6 +315,9 @@
 		font-size: 30upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	
 	.text2{

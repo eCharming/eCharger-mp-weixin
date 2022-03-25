@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view >
 		<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
 			:markers="covers" :setting="mapSetting" :circles="circles" :scale="scale">
 		</map>

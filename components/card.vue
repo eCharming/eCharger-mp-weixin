@@ -1,21 +1,12 @@
 <template>
-	<view class="card" :style="{'margin-top':margintop+'px','margin-bottom':marginbottom+'px'}">
+	<view class="card">
 		<slot></slot>
 	</view>
 </template>
 
 <script>
 	export default{
-		props:{
-			margintop:{
-				type:Number,
-				default:20
-			},
-			marginbottom:{
-				type:Number,
-				default:20
-			}
-		},
+
 	}
 </script>
 
@@ -23,13 +14,10 @@
 	.card{
 		margin:20upx;
 		padding: 15upx;
-		// background-color: #FFFFFF;
 		background-color: rgba(250,255,250,1);
 		border-radius: 40upx;
 		display: flex;
 		justify-content: center;
 		box-shadow:0px 6px 12px 4px #e5e5e5 ;
-		transition-property: margin;
-		transition-duration: .3s;
 	}
 </style>

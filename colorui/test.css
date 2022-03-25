@@ -11,6 +11,8 @@ button,
 input,
 textarea,
 label,
+movable-area,
+movable-view,
 image {
 	box-sizing: border-box;
 }

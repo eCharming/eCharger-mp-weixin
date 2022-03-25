@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="gps-view" :style="{'top':top+'px'}">
+		<view class="gps-view">
 			<image src="@/static/image/location.png" mode="widthFix" style="width: 80px;" @click="relocate"></image>
 		</view>
 	</view>
@@ -13,12 +13,6 @@
 			return {
 
 			};
-		},
-		props:{
-			top:{
-				type:Number,
-				default:-80
-			}
 		},
 		methods:{
 			relocate() {
