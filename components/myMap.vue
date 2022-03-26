@@ -1,7 +1,7 @@
 <template>
 	<view >
-		<map id="myMap" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
-			:markers="covers" :setting="mapSetting" :circles="circles" :scale="scale">
+		<map id="myMap" ref="map" style="width: 100%; height: 100vh;" :latitude="latitude" :longitude="longitude"
+			:markers="covers" :setting="mapSetting" :circles="circles" :scale="scale" @markertap="markertap($event)">
 		</map>
 	</view>
 </template>
@@ -31,6 +31,7 @@
 				ordersCopy:[],
 				url:'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from=',
 				distance:[],
+				markerSelected:-1,
 			}
 		},
 		mounted() {
@@ -88,7 +89,7 @@
 						let chargerList = res.result.data;
 						this.ordersCopy.splice(0);
 						this.covers.splice(0, this.covers.length);
-						
+						this.markerSelected=-1;
 						if (chargerList.length!=0) {
 							for (let charger of chargerList) {
 								this.covers.push({
@@ -229,10 +230,24 @@
 			    h2 = (3*r +1)/2/s;
 			    
 			    return d*(1 + fl*(h1*sf*(1-sg) - h2*(1-sf)*sg));
+			},
+			markertap(e){	//用于告知组件按下的marker编号
+				var number;
+				for(var index in this.covers){
+					if(this.covers[index].id==e.detail.markerId){
+						number=index;
+					}
+				}
+				
+				if(this.markerSelected==number){	//第二次点击再生效
+					this.$store.commit('setMarkerSelected',number);
+					this.MoveLocation(this.covers[number].latitude, this.covers[number].longitude);
+				}
+				this.markerSelected=number;
 			}
 		},
 		watch: {
-			'$store.state.destination'() {
+			'$store.state.destination'() {//监听destination变化 变化就在地图上加入标记点并且移动到该位置
 				if(this.$store.state.destination!=null){//按下locationbutton重置回到自己位置，destination置为空
 					this.$store.state.relocate=false;
 					wx.stopLocationUpdate();
@@ -246,6 +261,11 @@
 			'$store.state.relocate'(){
 				if(this.$store.state.relocate==true)
 					this.openLocation();
+			},
+			'$store.state.orderSelected'(){ //当选中一个order后在地图上移动到该标记点
+				var latitude=this.covers[this.$store.state.orderSelected].latitude;
+				var longitude=this.covers[this.$store.state.orderSelected].longitude;
+				this.MoveLocation(latitude,longitude);
 			}
 		}
 	}

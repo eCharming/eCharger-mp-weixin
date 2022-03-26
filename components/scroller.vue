@@ -2,6 +2,7 @@
 	<view class="card">
 		<scroll-view 
 			scroll-y="true" 
+			:scroll-top="scrollTop"
 			:style="{'height':height+'px'}"
 			@scrolltolower="emit"
 		>
@@ -17,6 +18,11 @@
 			return{
 				height:0,
 			}
+		},
+		props:{
+			scrollTop:{
+				type:Number
+			},
 		},
 		methods:{
 			emit(){

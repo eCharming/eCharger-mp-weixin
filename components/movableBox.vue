@@ -33,7 +33,7 @@
 					</card>
 
 
-					<scroller @scrolltolower="scrolltolower()">
+					<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
 						<order  v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index"
 							:location="order.location" :distance="order.distance" :price="order.price"
 							:startTime="order.startTime" :endTime="order.endTime"
@@ -91,6 +91,7 @@
 				windowHeight: 0, //本机的高度 单位px
 				windowWidth: 0, //本机的宽度 单位px
 				isLow: true, //滑动开始前上拉框处在低位则为真，在高位则为假
+				scrollTop:0,
 
 				imageFilter1: 0,
 				imageOpacity1: 1,
@@ -128,14 +129,12 @@
 			onchange(e) {
 				this.liveY = e.detail.y;
 				this.percent = this.liveY / (this.windowHeight * (this.maxHeight - this.minHeight));
-				// console.log(this.percent)
 			},
 			end() {
 
 				if (this.isLow == true) { //初始在低位的情况
 					if ((1 - this.percent) >= 0.25) { //上拉超过上下限的25%则移向高位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
-						this.isLow = false;
-						this.currentY = 0;
+						this.toHigh();
 					} else { //上拉未超过上下限的25%则回到低位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTick
 						if (Math.abs(this.liveY - this.windowHeight * (this.maxHeight - this.minHeight)) >
 							5) { //用于防止点击事件穿透触发touchend
@@ -144,15 +143,11 @@
 								this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
 							})
 						}
-
 					}
 				} else { //初始在高位的情况
 					if (this.percent >= 0.25) { //下拉超过上下限的25%则移向低位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
-						this.isLow = true;
-
-						this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
+						this.toLow();
 					} else { //下拉未超过上下限的25%则回到高位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTick
-
 						this.currentY = this.liveY;
 						this.$nextTick(function() {
 							this.currentY = 0;
@@ -169,10 +164,9 @@
 				this.imageFilter2 = 1;
 				this.imageOpacity2 = 0.3;
 				this.chargerSelected = -1;
-				this.isLow = false;
-				this.currentY = 0;
+				this.toHigh();
 			},
-			tapButton2() {
+			tapButton2() {  
 				this.isSelected1 = false
 				this.isSelected2 = true;
 				this.imageFilter1 = 1;
@@ -180,20 +174,22 @@
 				this.imageFilter2 = 0;
 				this.imageOpacity2 = 1;
 				this.orderSelected = -1;
-				this.isLow = false;
-				this.currentY = 0;
+				this.toHigh();
 			},
-			tapOrder(index) {
-				if(this.preOrder!=this.orderSelected){
+			tapOrder(index) {  //用于触发点击order的事件
+				if(index!=this.orderSelected){			//因为还没更新数值 index代表该次点击的序号 orderselected代表上一次点击的序号 前一次点击和这一次点击不同则更新界面
 					this.preOrder=this.orderSelected;
 					this.orderSelected = index;
 					if(this.preOrder!=-1)
 						this.$refs[`orderRef${this.preOrder}`][0].untap();
 					this.$refs[`orderRef${index}`][0].tap();
+				}else{		//前一次点击和这一次点击相同 则进入订单详情页 movablebox下拉置为低位 向vuex传递参数
+					this.toLow();
+					this.$store.commit('setOrderSelected',index);
 				}
 				
 			},
-			tapCharger(index) {
+			tapCharger(index) {  //用于触发点击charger的事件
 				if(this.preCharger!=this.chargerSelected){
 					this.preCharger=this.chargerSelected;
 					this.chargerSelected = index;
@@ -202,7 +198,7 @@
 					this.$refs[`chargerRef${index}`][0].tap();
 				}
 			},
-			scrolltolower() {
+			scrolltolower() { //用于下拉刷新加载order
 				if (this.isSelected1 == true && this.isFull == false) {
 					if (this.$store.state.orders.length - 1 - this.orderIndex <= 5) { //下拉刷新一次数量小于等于五
 						for (var index = this.orderIndex + 1; index <= this.$store.state.orders.length - 1; index++) {
@@ -221,6 +217,14 @@
 					this.icontype = "warn";
 				}
 			},
+			toLow(){
+				this.isLow=true;
+				this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
+			},
+			toHigh(){
+				this.isLow=false;
+				this.currentY = 0;
+			}
 		},
 		mounted() {
 			this.windowHeight = uni.getSystemInfoSync().windowHeight;
@@ -229,11 +233,16 @@
 			this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
 		},
 		watch: {
-			'$store.state.orders'() {
+			'$store.state.orders'() { //用于加载order
 				this.icontext = "上拉加载更多";
 				this.icontype = "download";
 				this.isFull = false;
 				this.orders.splice(0);
+				if(this.orderSelected!=-1){
+					this.$refs[`orderRef${this.orderSelected}`][0].untap();//由于在更新dom时是延时更新，因此order样式并不会变 需要手动调回
+				}
+				this.orderSelected=-1;
+				this.preOrder=-2;
 				if (this.$store.state.orders.length <= 5) { //数量小于等于5
 					for (var index in this.$store.state.orders) {
 						this.orders.push(this.$store.state.orders[index]);
@@ -248,6 +257,25 @@
 					}
 					this.orderIndex = 4;
 				}
+			},
+			'$store.state.markerSelected'(){//当在地图上选中标点时movablebox弹出并且选中标点对应的order
+				for(;this.orderIndex<this.$store.state.markerSelected;){
+					this.scrolltolower();
+				};
+				if(this.orderSelected!=this.$store.state.markerSelected){
+					this.$nextTick(function(){
+						this.tapOrder(this.$store.state.markerSelected);
+					});
+				};
+				this.$nextTick(function(){
+					this.scrollTop=uni.upx2px(this.$store.state.markerSelected*320);
+				})
+				console.log(this.scrollTop)
+				this.toHigh();
+				
+			},
+			'$store.state.isLow'(){  //用于从search页面回到主页面时将movablebox移向低位
+				this.toLow();
 			}
 		}
 	}

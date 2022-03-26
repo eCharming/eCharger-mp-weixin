@@ -57,6 +57,7 @@
 		},
 		methods:{
 			tap(){
+				console.log(1)
 				this.borderleft="6px solid rgba(102,205,170,1)";
 				this.borderright="6px solid rgba(102,205,170,1)";
 				this.boxshadow="0px 33px 15px -30px rgba(102,205,170,0.5)";

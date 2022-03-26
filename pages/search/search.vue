@@ -143,6 +143,7 @@
 				});
 				
 				uni.navigateBack();
+				this.$store.commit('addIsLow');
 			},
 			tapStorage(title,location){
 				uni.request({
@@ -158,6 +159,7 @@
 					}
 				});
 				uni.navigateBack();
+				this.$store.commit('addIsLow');
 			},
 			clear(){
 				uni.clearStorageSync();
