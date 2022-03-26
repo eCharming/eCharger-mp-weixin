@@ -107,6 +107,7 @@
 		top:20upx;
 		transition-property: top;
 		transition-duration: .1s;
+		transition-timing-function: linear;
 	}
 	.text2{
 		position: relative;
@@ -114,6 +115,7 @@
 		bottom: 25upx;
 		transition-property: opacity;
 		transition-duration: .1s;
+		transition-timing-function: linear;
 		
 	}
 </style>

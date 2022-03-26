@@ -129,13 +129,34 @@
 				if(keys.length>=10){
 					uni.removeStorageSync(keys[0]);
 				}
-				this.$store.commit('setDestination',title);
-				this.$store.commit('setDestinationLocation',location);
+				uni.request({
+					url:'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from='
+					+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&to='
+					+location.lat+','+location.lng+'&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73',
+					success: (res) => {
+						this.$store.commit('setDestination',{
+							title:title,
+							location:location,
+							distance:(res.data.result.rows[0].elements[0].distance/1000).toFixed(1),
+						});
+					}
+				});
+				
 				uni.navigateBack();
 			},
 			tapStorage(title,location){
-				this.$store.commit('setDestination',title);
-				this.$store.commit('setDestinationLocation',location);
+				uni.request({
+					url:'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from='
+					+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&to='
+					+location.lat+','+location.lng+'&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73',
+					success: (res) => {
+						this.$store.commit('setDestination',{
+							title:title,
+							location:location,
+							distance:(res.data.result.rows[0].elements[0].distance/1000).toFixed(1),
+						});
+					}
+				});
 				uni.navigateBack();
 			},
 			clear(){

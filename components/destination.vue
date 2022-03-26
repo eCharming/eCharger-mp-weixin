@@ -19,7 +19,7 @@
 		<view class="destination"
 			@tap="navigate()">
 			<image class="image1" src="../static/image/lightning_green.png"></image>
-			<text class="text2" :style="{'color':color}">{{text}}</text>
+			<text class="text2" :style="{'color':color}">{{destination}}</text>
 			
 		</view>
 	</view>
@@ -28,15 +28,6 @@
 <script>
 	export default{
 		components:{
-		},
-		props:{
-			text:{
-				type:String,
-				default:'请输入你的目的地'
-			},
-			color:{
-				type:String
-			}
 		},
 		data(){
 			return{
@@ -53,6 +44,8 @@
 				text2:"结束时间",
 				opacity1:0.5,
 				opacity2:0.5,
+				destination:"请输入你的目的地",
+				color:"rgb(0,0,0)",
 			}
 		},
 		methods:{
@@ -88,6 +81,12 @@
 			else if(this.day===4) this.day="四";
 			else if(this.day===5) this.day="五";
 			else if(this.day===6) this.day="六";
+		},
+		watch:{
+			'$store.state.destination'() {
+				this.destination = this.$store.state.destination.title;
+				this.color = "rgb(102,205,170)"
+			},
 		}
 	}
 </script>

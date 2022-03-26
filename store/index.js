@@ -8,10 +8,10 @@ export default new Vuex.Store({
     state: {
 		currentLocation:null,
         locationres:null,
-		destination:'请输入你的目的地',
-		destinationLocation:null,
+		destination:{},
 		relocate:true,
 		orders:[],
+		
     },
     mutations: {
 		setCurrentLocation(state,currentLocation){
@@ -22,9 +22,6 @@ export default new Vuex.Store({
         },
 		setDestination(state,destination){
 			state.destination=destination;
-		},
-		setDestinationLocation(state,destinationLocation){
-			state.destinationLocation=destinationLocation;
 		},
 		setRelocate(state,relocate){
 			state.relocate=relocate;

@@ -168,8 +168,8 @@
 							this.latitude = res.latitude;
 							this.longitude = res.longitude;
 							this.$store.commit('setCurrentLocation',{
-								latitude:res.latitude,
-								longitude:res.longitude
+								latitude:this.latitude,
+								longitude:this.longitude
 							});
 							this.circles.splice(0, 1, {
 								latitude: this.latitude,
@@ -232,12 +232,12 @@
 			}
 		},
 		watch: {
-			'$store.state.destinationLocation'() {
+			'$store.state.destination'() {
 				this.$store.state.relocate=false;
 				wx.stopLocationUpdate();
-				var title = this.$store.state.destination;
-				var latitude = this.$store.state.destinationLocation.lat;
-				var longitude = this.$store.state.destinationLocation.lng;
+				var title = this.$store.state.destination.title;
+				var latitude = this.$store.state.destination.location.lat;
+				var longitude = this.$store.state.destination.location.lng;
 				this.getChargerLocation(longitude, latitude, title);
 				this.MoveLocation(latitude, longitude)
 			},

@@ -5,6 +5,7 @@
 			@change="onchange($event)" @touchend="end()">
 			<view>
 				<view class="content">
+					
 					<view class="fixed-view">
 						<view :class="[isLow?'animationBtn':'stillBtn','flex-img']">
 							<infobutton></infobutton>
@@ -16,8 +17,8 @@
 						<view class="line"></view>
 					</view>
 
-					<destination :text="destination" :color="color"></destination>
-
+					<destination></destination>
+					<hiddencard :percent="percent"></hiddencard>
 					<card>
 						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent"
 							@tap="tapButton1()">
@@ -67,6 +68,7 @@
 	import order from './order.vue'
 	import charger from './myCharger.vue'
 	import infobutton from './infoButton.vue'
+	import hiddencard from './hiddenCard.vue'
 
 	export default {
 		components: {
@@ -77,7 +79,8 @@
 			scroller,
 			order,
 			charger,
-			infobutton
+			infobutton,
+			hiddencard
 		},
 		data() {
 			return {
@@ -93,9 +96,6 @@
 				imageOpacity1: 1,
 				imageFilter2: 1,
 				imageOpacity2: 0.3,
-
-				destination: this.$store.state.destination, //目的地组件文字
-				color: "rgb(0,0,0)",
 
 				icontype: "warn",
 				icontext: "暂无更多",
@@ -207,11 +207,6 @@
 				}
 			},
 		},
-		computed: {
-			reloationHeight() {
-				return this.$store.state.moveBoxCurrentHeight - 80;
-			}
-		},
 		mounted() {
 			this.windowHeight = uni.getSystemInfoSync().windowHeight;
 			this.windowWidth = uni.getSystemInfoSync().windowWidth;
@@ -219,10 +214,6 @@
 			this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
 		},
 		watch: {
-			'$store.state.destination'() {
-				this.destination = this.$store.state.destination;
-				this.color = "rgb(102,205,170)"
-			},
 			'$store.state.orders'() {
 				this.icontext = "上拉加载更多";
 				this.icontype = "download";
@@ -284,6 +275,7 @@
 	}
 
 	.content {
+		position: relative;
 		height: 100%;
 
 	}
