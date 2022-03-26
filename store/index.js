@@ -8,7 +8,7 @@ export default new Vuex.Store({
     state: {
 		currentLocation:null,
         locationres:null,
-		destination:{},
+		destination:null,
 		relocate:true,
 		orders:[],
 		

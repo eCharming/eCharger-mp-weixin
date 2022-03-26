@@ -29,8 +29,14 @@
 		},
 		watch:{
 			'$store.state.destination'() {
-				this.text1='距离目的地';
-				this.text2='车程约'+this.$store.state.destination.distance+'km';
+				if(this.$store.state.destination!=null){
+					this.text1='距离目的地';
+					this.text2='车程约'+this.$store.state.destination.distance+'km';
+				}else{ //按下locationbutton重置回到自己位置，destination置为空
+					this.text1="在附近搜索电桩";
+					this.text2='';
+				}
+				
 			},
 		}
 	}

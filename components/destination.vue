@@ -84,8 +84,14 @@
 		},
 		watch:{
 			'$store.state.destination'() {
-				this.destination = this.$store.state.destination.title;
-				this.color = "rgb(102,205,170)"
+				if(this.$store.state.destination!=null){ //按下locationbutton重置回到自己位置，destination置为空
+					this.destination = this.$store.state.destination.title;
+					this.color = "rgb(102,205,170)";
+				}else{
+					this.destination = "请输入你的目的地";
+					this.color = "rgb(0,0,0)";
+				}
+				
 			},
 		}
 	}

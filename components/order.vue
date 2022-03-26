@@ -97,14 +97,9 @@
 		margin-bottom: 40upx;;
 		padding: 15upx;
 		background-color: rgba(253,255,253,1);
-		// background-color: #FFFFFF;
 		border-radius: 40upx;
 		display: flex;
 		flex-direction: column;
-		// justify-content: center;
-		// border-left:3px solid rgba(102,205,170,0.5);
-		// border-right:3px solid rgba(102,205,170,0.5);
-		// box-shadow:0px 61px 20px -60px rgba(102,205,170,0.5) ;
 		transition-property: box-shadow,border;
 		transition-duration: .5s;
 	}
@@ -128,7 +123,6 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		// border: 2px solid red;
 		width:350upx;
 	}
 	

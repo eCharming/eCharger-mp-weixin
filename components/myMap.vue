@@ -233,16 +233,17 @@
 		},
 		watch: {
 			'$store.state.destination'() {
-				this.$store.state.relocate=false;
-				wx.stopLocationUpdate();
-				var title = this.$store.state.destination.title;
-				var latitude = this.$store.state.destination.location.lat;
-				var longitude = this.$store.state.destination.location.lng;
-				this.getChargerLocation(longitude, latitude, title);
-				this.MoveLocation(latitude, longitude)
+				if(this.$store.state.destination!=null){//按下locationbutton重置回到自己位置，destination置为空
+					this.$store.state.relocate=false;
+					wx.stopLocationUpdate();
+					var title = this.$store.state.destination.title;
+					var latitude = this.$store.state.destination.location.lat;
+					var longitude = this.$store.state.destination.location.lng;
+					this.getChargerLocation(longitude, latitude, title);
+					this.MoveLocation(latitude, longitude);
+				};
 			},
 			'$store.state.relocate'(){
-				console.log(1)
 				if(this.$store.state.relocate==true)
 					this.openLocation();
 			}
