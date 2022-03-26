@@ -91,7 +91,7 @@
 	}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 	.image1{
 		position: absolute;
 		top:20upx;

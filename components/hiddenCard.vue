@@ -36,7 +36,7 @@
 	}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 	.card{
 		position: absolute;
 		margin:20upx;

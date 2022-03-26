@@ -14,6 +14,6 @@
 
 <style>
 	/*每个页面公共css */
-	@import "colorui/test.css";
+	@import "@/static/css/global.css";
 	
 </style>

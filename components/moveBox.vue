@@ -373,7 +373,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 	.movable-area{
 		position: fixed;
 		height:155vh;

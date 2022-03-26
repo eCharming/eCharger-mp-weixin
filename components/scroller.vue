@@ -29,7 +29,7 @@
 	}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 	.card{
 		margin:20upx;
 		padding: 15upx;

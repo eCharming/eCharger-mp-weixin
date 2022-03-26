@@ -87,7 +87,7 @@
 	}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 	.card{
 		margin:20upx;
 		margin-bottom: 40upx;;

@@ -14,7 +14,7 @@
 		</view>
 		
 		<scroll-view
-			scroll-y="true" 
+			scroll-y="true"  
 			:style="{'height': height+'px'}"
 		>
 			<view class="storageview" v-if="!isInput">

@@ -67,7 +67,7 @@
 	}
 </script>
 
-<style scoped lang="scss">
+<style scoped>
 	.btn{
 		height: 120upx;
 		width : 280upx;
