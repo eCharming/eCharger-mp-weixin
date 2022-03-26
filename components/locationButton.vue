@@ -33,7 +33,6 @@
 
 <style scoped>
 	.gps-view {
-		border: 2px solid red;
 		position: absolute;
 		top: calc(-80px);
 		left: calc(80%);

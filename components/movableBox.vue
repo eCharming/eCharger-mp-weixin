@@ -7,6 +7,9 @@
 					<view :class="isLow?'animationBtn':'stillBtn'">
 						<locationbutton></locationbutton>
 					</view>
+					<view :class="isLow?'animationBtn':'stillBtn'">
+						<infobutton></infobutton>
+					</view>
 		
 					<view class="touchline">
 						<view class="line"></view>
@@ -75,6 +78,7 @@
 	import scroller from './scroller.vue'
 	import order from './order.vue'
 	import charger from './myCharger.vue'
+	import infobutton from './infoButton.vue'
 
 	export default {
 		components: {
@@ -84,7 +88,8 @@
 			locationbutton,
 			scroller,
 			order,
-			charger
+			charger,
+			infobutton
 		},
 		data() {
 			return {
