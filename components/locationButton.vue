@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="gps-view">
+		<view>
 			<image src="@/static/image/location.png" mode="widthFix" style="width: 80px;" @click="relocate"></image>
 		</view>
 	</view>
@@ -32,11 +32,4 @@
 </script>
 
 <style scoped>
-	.gps-view {
-		position: absolute;
-		top: calc(-80px);
-		left: calc(80%);
-		transition-property:top;
-		transition-duration: .5s;
-	}
 </style>
