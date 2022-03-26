@@ -111,7 +111,7 @@
 										padding: 10,
 									}
 								});
-								var distance=(this.getFlatternDistance(this.latitude,this.longitude,charger.geoPoint.coordinates[1],charger.geoPoint.coordinates[0])/1000).toFixed(1);
+								var distance=(this.getFlatternDistance(lat,lon,charger.geoPoint.coordinates[1],charger.geoPoint.coordinates[0])/1000).toFixed(1);
 								this.ordersCopy.push({        //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
 									location: charger.location,
 									id: charger._id,
