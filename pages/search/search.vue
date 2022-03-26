@@ -240,7 +240,7 @@
 	.textarea{
 		background-color: rgb(255,255,255);
 		margin: 30upx;
-		padding-top:27upx;
+		padding-top:21upx;
 		padding-left:80upx;
 		width:700upx;
 		height:90upx;
