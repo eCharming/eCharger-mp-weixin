@@ -34,15 +34,15 @@
 
 
 					<scroller @scrolltolower="scrolltolower()">
-						<order v-if="isSelected1" v-for="(order,index) in orders" :index="index" :key="index"
+						<order  v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index"
 							:location="order.location" :distance="order.distance" :price="order.price"
-							:startTime="order.startTime" :endTime="order.endTime" :orderSelected="orderSelected"
-							@emit="tapOrder()">
+							:startTime="order.startTime" :endTime="order.endTime"
+							@tap="tapOrder(index)">
 						</order>
-						<charger v-if="isSelected2" v-for="(charger,index) in chargers" :index="index" :key="index"
+						<charger v-if="isSelected2" v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 							:location="charger.location" :state="charger.state" :price="charger.price"
-							:startTime="charger.startTime" :endTime="charger.endTime" :chargerSelected="chargerSelected"
-							@emit="tapCharger()">
+							:startTime="charger.startTime" :endTime="charger.endTime"
+							@tap="tapCharger(index)">
 						</charger>
 						<view class="scrollerview">
 							<icon :type="icontype" color="rgb(102,205,170)"></icon>
@@ -102,11 +102,13 @@
 
 				orders: [],
 				orderSelected: -1,
+				preOrder:-2,
 				orderIndex: 0, //记录scroller刷新到哪个order
 				isFull: false, //是否拿满
 
 				chargers: [],
 				chargerSelected: -1,
+				preCharger:-2,
 
 				isSelected1: true,
 				isSelected2: false,
@@ -181,11 +183,24 @@
 				this.isLow = false;
 				this.currentY = 0;
 			},
-			tapOrder(data) {
-				this.orderSelected = data;
+			tapOrder(index) {
+				if(this.preOrder!=this.orderSelected){
+					this.preOrder=this.orderSelected;
+					this.orderSelected = index;
+					if(this.preOrder!=-1)
+						this.$refs[`orderRef${this.preOrder}`][0].untap();
+					this.$refs[`orderRef${index}`][0].tap();
+				}
+				
 			},
-			tapCharger(data) {
-				this.chargerSelected = data;
+			tapCharger(index) {
+				if(this.preCharger!=this.chargerSelected){
+					this.preCharger=this.chargerSelected;
+					this.chargerSelected = index;
+					if(this.preCharger!=-1)
+						this.$refs[`chargerRef${this.preCharger}`][0].untap();
+					this.$refs[`chargerRef${index}`][0].tap();
+				}
 			},
 			scrolltolower() {
 				if (this.isSelected1 == true && this.isFull == false) {

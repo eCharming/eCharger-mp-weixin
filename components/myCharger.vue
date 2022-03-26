@@ -1,8 +1,7 @@
 <template>
 	<view class="card" 
 		:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow}"
-		@tap="emit"
-		>
+	>
 		<view class="view1">
 			<text class="location">{{location}}</text>
 			<text class="state1" v-if="state">空闲中</text>
@@ -28,13 +27,6 @@
 <script>
 	export default{
 		props:{
-			index:{
-				type:Number
-			},
-			chargerSelected:{
-				type:Number,
-				default:-1
-			},
 			location:{
 				type:String
 			},
@@ -57,32 +49,19 @@
 				borderleft:"5px solid rgba(102,205,170,0.6)",
 				borderright:"5px solid rgba(102,205,170,0.6)",
 				boxshadow:"",
-				
-			}
-		},
-		watch:{
-			chargerSelected(){
-				if(this.chargerSelected===this.index)
-					this.tap();
-				else this.untap();
 			}
 		},
 		methods:{
 			tap(){
 				this.borderleft="6px solid rgba(102,205,170,1)";
 				this.borderright="6px solid rgba(102,205,170,1)";
-				// this.boxshadow="0px 12px 20px -10px rgba(102,205,170,1)";
 				this.boxshadow="0px 33px 15px -30px rgba(102,205,170,0.5)";
 			},
 			untap(){
 				this.borderleft="5px solid rgba(102,205,170,0.6)";
 				this.borderright="5px solid rgba(102,205,170,0.6)";
-				// this.boxshadow="0px 12px 20px -10px rgba(102,205,170,1)";
 				this.boxshadow="";
 			},
-			emit(){
-				this.$emit('emit',this.index);
-			}
 		}
 	}
 </script>

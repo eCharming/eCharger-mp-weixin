@@ -55,7 +55,7 @@
 		width: 550upx;
 		height: 90upx;
 		top:-30upx;
-		left:55upx;
+		left:70upx;
 		
 		font-size: 32upx;
 		letter-spacing: 2upx;
