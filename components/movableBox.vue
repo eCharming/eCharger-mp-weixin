@@ -186,8 +186,11 @@
 						this.$refs[`orderRef${this.preOrder}`][0].untap();
 					this.$refs[`orderRef${index}`][0].tap();
 				}else{		//前一次点击和这一次点击相同 则进入订单详情页 movablebox下拉置为低位 向vuex传递参数
-					this.toLow();
 					this.$store.commit('setOrderSelected',index);
+					this.$nextTick(function(){
+						this.toLow();
+					})
+					
 				}
 				
 			},

@@ -183,6 +183,7 @@
 							if (firstFlag || (oldlatitude && oldlongtitude && Math.abs(
 									oldlatitude - this.latitude) + Math.abs(oldlongtitude - this
 									.longtitude) > 0.005)) { //两次定位距离过近时不调用云函数以减小负载
+									console.log(5)
 								this.getChargerLocation(this.longitude, this.latitude, null);
 							}
 							firstFlag = false;
