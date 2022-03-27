@@ -45,8 +45,10 @@
 							@tap="tapCharger(index)">
 						</charger>
 						<view class="scrollerview">
-							<icon :type="icontype" color="rgb(102,205,170)"></icon>
-							<text>{{icontext}}</text>
+							<!-- <icon :type="icontype" color="rgb(102,205,170)"></icon> -->
+							<image src="@/static/image/uparrow.png" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
+							<image src="@/static/image/warning.png" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
+							<text>{{icontext}}</text>  
 						</view>
 					</scroller>
 
