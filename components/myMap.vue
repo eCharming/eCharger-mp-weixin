@@ -122,6 +122,7 @@
 									startTime:'08:00',
 									endTime:'18:00',
 									distance:distance,
+									detail:false,
 								});
 							}
 						}
@@ -164,6 +165,7 @@
 						let oldlongtitude = null;
 						let firstFlag = true;
 						wx.onLocationChange((res) => { //调用实时获取定位
+							console.log(res)
 							oldlatitude = this.latitude;
 							oldlongtitude = this.longitude;
 							this.latitude = res.latitude;

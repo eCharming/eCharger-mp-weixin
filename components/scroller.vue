@@ -2,6 +2,7 @@
 	<view class="card">
 		<scroll-view 
 			scroll-y="true" 
+			scroll-with-animation=true
 			:scroll-top="scrollTop"
 			:style="{'height':height+'px'}"
 			@scrolltolower="emit"

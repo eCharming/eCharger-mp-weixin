@@ -19,6 +19,8 @@
 
 					<destination></destination>
 					<hiddencard :percent="percent"></hiddencard>
+					<hiddendetail v-if="hiddenDetail" :percent="percent" @tap="detail"></hiddendetail>
+					
 					<card>
 						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent"
 							@tap="tapButton1()">
@@ -34,10 +36,10 @@
 
 
 					<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
-						<order  v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index"
+						<order v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index"
 							:location="order.location" :distance="order.distance" :price="order.price"
-							:startTime="order.startTime" :endTime="order.endTime"
-							@tap="tapOrder(index)">
+							:startTime="order.startTime" :endTime="order.endTime" :detail="order.detail"
+							@tap="tapOrder(index)" @emit="detail()">
 						</order>
 						<charger v-if="isSelected2" v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 							:location="charger.location" :state="charger.state" :price="charger.price"
@@ -50,6 +52,9 @@
 							<image src="@/static/image/warning.png" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
 							<text>{{icontext}}</text>  
 						</view>
+							
+						
+						
 					</scroller>
 
 
@@ -71,6 +76,7 @@
 	import charger from './myCharger.vue'
 	import infobutton from './infoButton.vue'
 	import hiddencard from './hiddenCard.vue'
+	import hiddendetail from './hiddenDetail.vue'
 
 	export default {
 		components: {
@@ -82,7 +88,8 @@
 			order,
 			charger,
 			infobutton,
-			hiddencard
+			hiddencard,
+			hiddendetail,
 		},
 		data() {
 			return {
@@ -106,6 +113,7 @@
 				orders: [],
 				orderSelected: -1,
 				preOrder:-2,
+				hiddenDetail:false,//记录是否显示订单详情
 				orderIndex: 0, //记录scroller刷新到哪个order
 				isFull: false, //是否拿满
 
@@ -166,31 +174,36 @@
 				this.imageFilter2 = 1;
 				this.imageOpacity2 = 0.3;
 				this.chargerSelected = -1;
+				this.orderOpacity=1;
 				this.toHigh();
 			},
 			tapButton2() {  
-				this.isSelected1 = false
+				this.isSelected1 = false;
 				this.isSelected2 = true;
 				this.imageFilter1 = 1;
 				this.imageOpacity1 = 0.3;
 				this.imageFilter2 = 0;
 				this.imageOpacity2 = 1;
 				this.orderSelected = -1;
+				this.orderOpacity=0;
 				this.toHigh();
 			},
 			tapOrder(index) {  //用于触发点击order的事件
 				if(index!=this.orderSelected){			//因为还没更新数值 index代表该次点击的序号 orderselected代表上一次点击的序号 前一次点击和这一次点击不同则更新界面
 					this.preOrder=this.orderSelected;
 					this.orderSelected = index;
-					if(this.preOrder!=-1)
+					if(this.preOrder!=-1){
+						this.orders[this.preOrder].detail=false;
 						this.$refs[`orderRef${this.preOrder}`][0].untap();
+					}
+						
 					this.$refs[`orderRef${index}`][0].tap();
 				}else{		//前一次点击和这一次点击相同 则进入订单详情页 movablebox下拉置为低位 向vuex传递参数
 					this.$store.commit('setOrderSelected',index);
 					this.$nextTick(function(){
 						this.toLow();
+						this.hiddenDetail=true;
 					})
-					
 				}
 				
 			},
@@ -222,12 +235,29 @@
 					this.icontype = "warn";
 				}
 			},
+			detail(){
+				this.orders[this.orderSelected].detail=true;
+				this.$nextTick(function(){
+					this.scrollTop=uni.upx2px(this.orderSelected*340);
+				})
+				
+				this.toHigh();
+			},
+			undetail(){
+				this.orders[this.orderSelected].detail=false;
+				this.$nextTick(function(){
+					this.scrollTop=uni.upx2px(this.orderSelected*340);
+				})
+				
+
+			},
 			toLow(){
 				this.isLow=true;
 				this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
 			},
 			toHigh(){
 				this.isLow=false;
+				this.hiddenDetail=false;
 				this.currentY = 0;
 			}
 		},
@@ -264,20 +294,22 @@
 				}
 			},
 			'$store.state.markerSelected'(){//当在地图上选中标点时movablebox弹出并且选中标点对应的order
-				for(;this.orderIndex<this.$store.state.markerSelected;){
-					this.scrolltolower();
-				};
-				if(this.orderSelected!=this.$store.state.markerSelected){
+				if(this.isSelected1==true){
+					for(;this.orderIndex<this.$store.state.markerSelected;){
+						this.scrolltolower();
+					};
+					if(this.orderSelected!=this.$store.state.markerSelected){
+						this.$nextTick(function(){
+							this.tapOrder(this.$store.state.markerSelected);
+						});
+					};
 					this.$nextTick(function(){
-						this.tapOrder(this.$store.state.markerSelected);
-					});
-				};
-				this.$nextTick(function(){
-					this.scrollTop=uni.upx2px(this.$store.state.markerSelected*320);
-				})
-				console.log(this.scrollTop)
-				this.toHigh();
-				
+						this.scrollTop=uni.upx2px(this.$store.state.markerSelected*340);
+						this.toHigh();
+					})
+					console.log(this.scrollTop)
+					
+				}
 			},
 			'$store.state.isLow'(){  //用于从search页面回到主页面时将movablebox移向低位
 				this.toLow();
