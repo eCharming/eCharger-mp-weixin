@@ -19,12 +19,26 @@
 			
 		</view>
 		
-		
+		<view class="button" v-if="detail" :style="{'top':bottom,'opacity':opacity}">
+			<view style="display: flex;flex-direction: column;justify-content: center;">
+				<image src="../static/image/order.png" style="height: 125upx;width: 125upx;"></image>
+				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">预约</text>
+			</view>
+			<view style="display: flex;flex-direction: column;justify-content: center;">
+				<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
+				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">联系</text>
+			</view>
+			<view style="display: flex;flex-direction: column;justify-content: center;">
+				<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
+				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">导航</text>
+			</view>
+			<view style="display: flex;flex-direction: column;justify-content: center;">
+				<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"></image>
+				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">详情</text>
+			</view>
+		</view>
 			
-				<view class="connection" v-if="detail" :style="{'top':bottom,'opacity':opacity}">
-					<image src="../static/image/connection.png" style="height: 150upx;width: 150upx;"></image>
-					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 25upx;position: relative;bottom: 10upx;">联系桩主</text>
-				</view>
+			
 			
 			<view class="view2">
 				<view class="priceview">
@@ -119,7 +133,7 @@
 						this.checkOpacity=0;
 						this.checkRight=uni.upx2px(100)+'px';
 						this.opacity=1;
-						this.bottom=uni.upx2px(390)+'px';
+						this.bottom=uni.upx2px(400)+'px';
 					})
 					
 				}
@@ -226,12 +240,12 @@
 		-webkit-box-orient: vertical;
 	}
 	
-	.connection{
+	.button{
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
+		justify-content: space-around;
 		position: absolute;
 		/* bottom: 150upx; */
+		width: 550upx;
 		transition: all .5s;
 	}
 </style>

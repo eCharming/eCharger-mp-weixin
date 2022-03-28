@@ -88,8 +88,8 @@
 										padding: 10,
 									}
 								});
-								var distance = (this.getFlatternDistance(lat, lon, charger.geoPoint.coordinates[1],
-									charger.geoPoint.coordinates[0]) / 1000).toFixed(1);
+								console.log(charger)
+								var distance =(charger.Distance/ 1000).toFixed(1);
 								this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
 									location: charger.location,
 									id: charger._id,
@@ -175,43 +175,6 @@
 						reject(err)
 					}
 				})
-			},
-			getFlatternDistance(lat1, lng1, lat2, lng2) {
-
-				var EARTH_RADIUS = 6378137.0; //单位M
-				var PI = Math.PI;
-
-
-				var getRad = function(d) {
-					return d * PI / 180.0;
-				}
-
-				var f = getRad((lat1 + lat2) / 2);
-				var g = getRad((lat1 - lat2) / 2);
-				var l = getRad((lng1 - lng2) / 2);
-
-				var sg = Math.sin(g);
-				var sl = Math.sin(l);
-				var sf = Math.sin(f);
-
-				var s, c, w, r, d, h1, h2;
-				var a = EARTH_RADIUS;
-				var fl = 1 / 298.257; 
-
-				sg = sg * sg;
-				sl = sl * sl;
-				sf = sf * sf;
-
-				s = sg * (1 - sl) + (1 - sf) * sl;
-				c = (1 - sg) * (1 - sl) + sf * sl;
-
-				w = Math.atan(Math.sqrt(s / c));
-				r = Math.sqrt(s * c) / w;
-				d = 2 * w * a;
-				h1 = (3 * r - 1) / 2 / c;
-				h2 = (3 * r + 1) / 2 / s;
-
-				return d * (1 + fl * (h1 * sf * (1 - sg) - h2 * (1 - sf) * sg));
 			},
 			markertap(e) { //用于告知组件按下的marker编号
 				var number;
