@@ -13,7 +13,7 @@
 			</view>
 			<view style="display: flex;justify-content: space-between;">
 				<text class="text">{{location}}</text>
-				<text v-if="check" @click.native.stop.prevent="checkDetail">查看详情</text>
+				<image class="image1" :style="{'opacity':opacity}" src='../static/image/checkdetail.png' v-if="check" @click.native.stop.prevent="checkDetail"></image>
 			</view>
 			
 		</view>
@@ -65,6 +65,7 @@
 				boxshadow:"",
 				height:"",
 				check:false,
+				opacity:0,
 			}
 		},
 		methods:{
@@ -73,12 +74,16 @@
 				this.borderright="6px solid rgba(102,205,170,1)";
 				this.boxshadow="0px 33px 15px -30px rgba(102,205,170,0.5)";
 				this.check=true;
+				this.$nextTick(function(){
+					this.opacity=1;
+				});
 			},
 			untap(){
 				this.borderleft="5px solid rgba(102,205,170,0.6)";
 				this.borderright="5px solid rgba(102,205,170,0.6)";
 				this.boxshadow="";
 				this.check=false;
+				this.opacity=0;
 			},
 			checkDetail(){
 				this.$emit('emit');
@@ -89,12 +94,16 @@
 			'detail'(){
 				if(this.detail==false){
 					this.$nextTick(function(){
+						
 						this.height=uni.upx2px(300)+'px';
 					})
 					
 				}else if(this.detail==true){
 					this.$nextTick(function(){
+						
 						this.height=uni.upx2px(680)+'px';
+						this.check=false;
+						this.opacity=0;
 					})
 					
 				}
@@ -175,11 +184,26 @@
 
 	}
 	
+	.image1{
+		width: 80upx;
+		height: 80upx;
+		margin-right: 5upx;
+		transition: all .5s;
+		/* border: 2px solid red; */
+	}
+	
 	.text{
 		margin-top: 10upx;
 		margin-left: 15upx;
 		opacity: 0.5;
 		width: 450upx;
+		/* border: 2px solid red; */
+		/* white-space: nowrap; */
+		overflow: hidden;
+		-webkit-line-clamp: 3;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-box-orient: vertical;
 	}
 </style>
 

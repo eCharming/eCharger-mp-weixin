@@ -113,7 +113,7 @@
 				orders: [],
 				orderSelected: -1,
 				preOrder:-2,
-				hiddenDetail:false,//记录是否显示订单详情
+				hiddenDetail:false,//记录是否显示订单详情气泡
 				orderIndex: 0, //记录scroller刷新到哪个order
 				isFull: false, //是否拿满
 
@@ -174,7 +174,6 @@
 				this.imageFilter2 = 1;
 				this.imageOpacity2 = 0.3;
 				this.chargerSelected = -1;
-				this.orderOpacity=1;
 				this.toHigh();
 			},
 			tapButton2() {  
@@ -184,8 +183,11 @@
 				this.imageOpacity1 = 0.3;
 				this.imageFilter2 = 0;
 				this.imageOpacity2 = 1;
-				this.orderSelected = -1;
-				this.orderOpacity=0;
+				if(this.orderSelected!=-1){
+					this.orders[this.orderSelected].detail=false;
+					this.orderSelected = -1;
+				}
+				
 				this.toHigh();
 			},
 			tapOrder(index) {  //用于触发点击order的事件
@@ -238,7 +240,7 @@
 			detail(){
 				this.orders[this.orderSelected].detail=true;
 				this.$nextTick(function(){
-					this.scrollTop=uni.upx2px(this.orderSelected*340);
+					this.scrollTop=uni.upx2px(this.orderSelected*338);
 				})
 				
 				this.toHigh();
@@ -246,7 +248,7 @@
 			undetail(){
 				this.orders[this.orderSelected].detail=false;
 				this.$nextTick(function(){
-					this.scrollTop=uni.upx2px(this.orderSelected*340);
+					this.scrollTop=uni.upx2px(this.orderSelected*338);
 				})
 				
 
@@ -304,7 +306,7 @@
 						});
 					};
 					this.$nextTick(function(){
-						this.scrollTop=uni.upx2px(this.$store.state.markerSelected*340);
+						this.scrollTop=uni.upx2px(this.$store.state.markerSelected*338);
 						this.toHigh();
 					})
 					console.log(this.scrollTop)

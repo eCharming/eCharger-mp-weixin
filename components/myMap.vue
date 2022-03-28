@@ -139,8 +139,10 @@
 						let oldlatitude = null;
 						let oldlongtitude = null;
 						let firstFlag = true;
+						console.log(res);
+						res.provider="gps";
 						wx.onLocationChange((res) => { //调用实时获取定位
-							console.log(res)
+							console.log(res);
 							oldlatitude = this.latitude;
 							oldlongtitude = this.longitude;
 							this.latitude = res.latitude;
