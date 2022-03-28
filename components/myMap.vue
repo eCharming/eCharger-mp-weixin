@@ -38,31 +38,6 @@
 			this.mapContext = uni.createMapContext('myMap', this);
 			this.openLocation();
 		},
-		computed: {
-			getRelocationRes() {
-				let res = this.$store.state.locationres;
-				if (res && res != {} && res.errMsg == "getLocation:ok") {
-					this.latitude = res.latitude;
-					this.longitude = res.longitude;
-					this.circles.splice(0, 1, {
-						latitude: this.latitude,
-						longitude: this.longitude,
-						fillColor: "#4162996A",
-						color: "#b0daff",
-						radius: 300,
-						strokeWidth: 1,
-					})
-				}
-				if (this.mapContext) {
-					this.mapContext.moveToLocation({
-						latitude: this.latitude,
-						longitude: this.longitude
-					})
-				}
-				this.getChargerLocation(this.longitude, this.latitude, null);
-				this.$store.commit('setLocationRes', null);
-			}
-		},
 		methods: {
 			MoveLocation(lat, lon) {
 				let _this = this
@@ -185,7 +160,6 @@
 							if (firstFlag || (oldlatitude && oldlongtitude && Math.abs(
 									oldlatitude - this.latitude) + Math.abs(oldlongtitude - this
 									.longtitude) > 0.005)) { //两次定位距离过近时不调用云函数以减小负载
-									console.log(5)
 								this.getChargerLocation(this.longitude, this.latitude, null);
 							}
 							firstFlag = false;
@@ -269,6 +243,29 @@
 				var latitude=this.covers[this.$store.state.orderSelected].latitude;
 				var longitude=this.covers[this.$store.state.orderSelected].longitude;
 				this.MoveLocation(latitude,longitude);
+			},
+			'$store.state.locationres'() {
+				let res = this.$store.state.locationres;
+				if (res && res != {} && res.errMsg == "getLocation:ok") {
+					this.latitude = res.latitude;
+					this.longitude = res.longitude;
+					this.circles.splice(0, 1, {
+						latitude: this.latitude,
+						longitude: this.longitude,
+						fillColor: "#4162996A",
+						color: "#b0daff",
+						radius: 300,
+						strokeWidth: 1,
+					})
+				}
+				if (this.mapContext) {
+					this.mapContext.moveToLocation({
+						latitude: this.latitude,
+						longitude: this.longitude
+					})
+				}
+				this.getChargerLocation(this.longitude, this.latitude, null);
+				this.$store.commit('setLocationRes', null);
 			}
 		}
 	}
