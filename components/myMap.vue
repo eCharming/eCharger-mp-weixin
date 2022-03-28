@@ -139,10 +139,7 @@
 						let oldlatitude = null;
 						let oldlongtitude = null;
 						let firstFlag = true;
-						console.log(res);
-						res.provider="gps";
 						wx.onLocationChange((res) => { //调用实时获取定位
-							console.log(res);
 							oldlatitude = this.latitude;
 							oldlongtitude = this.longitude;
 							this.latitude = res.latitude;
@@ -161,7 +158,7 @@
 							})
 							if (firstFlag || (oldlatitude && oldlongtitude && Math.abs(
 									oldlatitude - this.latitude) + Math.abs(oldlongtitude - this
-									.longtitude) > 0.005)) { //两次定位距离过近时不调用云函数以减小负载
+									.longitude) > 0.005)) { //两次定位距离过近时不调用云函数以减小负载
 								this.getChargerLocation(this.longitude, this.latitude, null);
 							}
 							firstFlag = false;

@@ -11,27 +11,34 @@
 				</view>
 				
 			</view>
-			<view style="display: flex;justify-content: space-between;">
+			<view style="display: flex;justify-content: space-between;position: relative;">
 				<text class="text">{{location}}</text>
-				<image class="image1" :style="{'opacity':opacity}" src='../static/image/checkdetail.png' v-if="check" @click.native.stop.prevent="checkDetail"></image>
+				<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight}" src='../static/image/checkdetail.png' v-if="check" 
+				@click.native.stop.prevent="checkDetail"></image>
 			</view>
 			
 		</view>
 		
 		
-		
-		<view class="view2">
-			<view class="priceview">
-				<text>价格</text>
-				<text class="yuan">￥</text>
-				<text class="price">{{price}}</text>
-			</view>
-			<view class="timeview">
-				<text>可用时间：</text>
-				<text class="time">{{startTime}}-{{endTime}}</text>
-			</view>
 			
-		</view>
+				<view class="connection" v-if="detail" :style="{'top':bottom,'opacity':opacity}">
+					<image src="../static/image/connection.png" style="height: 150upx;width: 150upx;"></image>
+					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 25upx;position: relative;bottom: 10upx;">联系桩主</text>
+				</view>
+			
+			<view class="view2">
+				<view class="priceview">
+					<text>价格</text>
+					<text class="yuan">￥</text>
+					<text class="price">{{price}}</text>
+				</view>
+				<view class="timeview">
+					<text>可用时间：</text>
+					<text class="time">{{startTime}}-{{endTime}}</text>
+				</view>
+				
+			</view>
+		
 		
 	</view>
 </template>
@@ -65,7 +72,10 @@
 				boxshadow:"",
 				height:"",
 				check:false,
+				checkOpacity:0,
+				checkRight:0,
 				opacity:0,
+				bottom:0,
 			}
 		},
 		methods:{
@@ -75,7 +85,8 @@
 				this.boxshadow="0px 33px 15px -30px rgba(102,205,170,0.5)";
 				this.check=true;
 				this.$nextTick(function(){
-					this.opacity=1;
+					this.checkOpacity=1;
+					this.checkRight=uni.upx2px(10)+'px';
 				});
 			},
 			untap(){
@@ -83,7 +94,8 @@
 				this.borderright="5px solid rgba(102,205,170,0.6)";
 				this.boxshadow="";
 				this.check=false;
-				this.opacity=0;
+				this.checkOpacity=0;
+				this.checkRight=uni.upx2px(100)+'px';
 			},
 			checkDetail(){
 				this.$emit('emit');
@@ -94,8 +106,9 @@
 			'detail'(){
 				if(this.detail==false){
 					this.$nextTick(function(){
-						
 						this.height=uni.upx2px(300)+'px';
+						this.opacity=0;
+						this.bottom=uni.upx2px(200)+'px';
 					})
 					
 				}else if(this.detail==true){
@@ -103,7 +116,10 @@
 						
 						this.height=uni.upx2px(680)+'px';
 						this.check=false;
-						this.opacity=0;
+						this.checkOpacity=0;
+						this.checkRight=uni.upx2px(100)+'px';
+						this.opacity=1;
+						this.bottom=uni.upx2px(390)+'px';
 					})
 					
 				}
@@ -111,12 +127,15 @@
 		},
 		mounted(){
 			this.height=uni.upx2px(300)+'px';
+			this.bottom=uni.upx2px(200)+'px';
+			this.checkRight=uni.upx2px(100)+'px';
 		}
 	}
 </script>
 
 <style scoped>
 	.card{
+		position: relative;
 		margin:20upx;
 		margin-bottom: 40upx; 
 		padding: 15upx;
@@ -185,9 +204,10 @@
 	}
 	
 	.image1{
+		position: absolute;
 		width: 80upx;
 		height: 80upx;
-		margin-right: 5upx;
+		/* margin-right: 5upx; */
 		transition: all .5s;
 		/* border: 2px solid red; */
 	}
@@ -204,6 +224,15 @@
 		text-overflow: ellipsis;
 		display: -webkit-box;
 		-webkit-box-orient: vertical;
+	}
+	
+	.connection{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		position: absolute;
+		/* bottom: 150upx; */
+		transition: all .5s;
 	}
 </style>
 
