@@ -28,7 +28,7 @@
 				<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
 				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">联系</text>
 			</view>
-			<view style="display: flex;flex-direction: column;justify-content: center;">
+			<view style="display: flex;flex-direction: column;justify-content: center;" @click.native.stop.prevent="navigate">
 				<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
 				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">导航</text>
 			</view>
@@ -60,6 +60,9 @@
 <script>
 	export default{
 		props:{
+			index:{
+				type:Number
+			},
 			location:{
 				type:String
 			},
@@ -114,6 +117,10 @@
 			checkDetail(){
 				this.$emit('emit');
 				this.check=false;
+			},
+			navigate(){
+				this.$store.commit('setNavigateSelected',this.index);
+				console.log(this.index)
 			}
 		},
 		watch:{

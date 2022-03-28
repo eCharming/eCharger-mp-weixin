@@ -36,7 +36,7 @@
 
 
 					<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
-						<order v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index"
+						<order v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
 							:location="order.location" :distance="order.distance" :price="order.price"
 							:startTime="order.startTime" :endTime="order.endTime" :detail="order.detail"
 							@tap="tapOrder(index)" @emit="detail()">

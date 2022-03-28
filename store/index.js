@@ -13,6 +13,7 @@ export default new Vuex.Store({
 		orders:[],			//用于从mymap组件中拉取order的信息给movablebox
 		orderSelected:null,	//用于向mymap组件传递movablebox中选择的order编号
 		markerSelected:null, //用于向movablebox组件传递mymap中选择的marker编号
+		navigateSelected:null,//用于向mymap组件传递需要导航的marker编号
 		isLow:0,	//用于从search页面返回时收起movablebox至低位
     },
     mutations: {
@@ -36,6 +37,9 @@ export default new Vuex.Store({
 		},
 		setMarkerSelected(state,markerSelected){
 			state.markerSelected=markerSelected;
+		},
+		setNavigateSelected(state,navigateSelected){
+			state.navigateSelected=navigateSelected;
 		},
 		addIsLow(state){
 			state.isLow++;

@@ -85,7 +85,7 @@
 			request(){
 				this.isInput=true;
 				uni.request({
-					url:'https://apis.map.qq.com/ws/place/v1/suggestion?keyword='+this.position+'&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73',
+					url:'https://apis.map.qq.com/ws/place/v1/suggestion?keyword='+this.position+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
 					method:'GET',
 					success: (res) => {
 						if(res.data.status =='0'){
@@ -132,7 +132,7 @@
 				uni.request({
 					url:'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from='
 					+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&to='
-					+location.lat+','+location.lng+'&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73',
+					+location.lat+','+location.lng+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
 					success: (res) => {
 						this.$store.commit('setDestination',{
 							title:title,
@@ -149,7 +149,7 @@
 				uni.request({
 					url:'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from='
 					+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&to='
-					+location.lat+','+location.lng+'&key=HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73',
+					+location.lat+','+location.lng+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
 					success: (res) => {
 						this.$store.commit('setDestination',{
 							title:title,

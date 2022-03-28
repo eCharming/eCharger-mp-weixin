@@ -1,7 +1,7 @@
 <template>
 	<view>
-		<map id="myMap" ref="map" style="width: 100%; height: 100vh;" :latitude="center_latitude"
-			:longitude="center_longitude" :markers="covers" :setting="mapSetting" :circles="circles" :scale="scale"
+		<map id="myMap" ref="map" style="width: 100%; height: 100vh;" layer-style="1" :latitude="center_latitude"
+			:longitude="center_longitude" :markers="covers" :setting="mapSetting" :circles="circles" :scale="scale" :polyline="polyline"
 			@markertap="markertap($event)">
 		</map>
 	</view>
@@ -25,9 +25,10 @@
 					"enableScroll": true,
 					"enableRotate": true,
 					"showLocation": true,
-					"subkey": "HVTBZ-KOFW6-JDUSX-ESY54-6WWQK-LEF73"
+					"subkey": "ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL"
 				},
 				covers: [],
+				polyline:[],
 				circles: [],
 				mapContext: null,
 				scale: 16,
@@ -189,6 +190,41 @@
 					this.MoveLocation(this.covers[number].latitude, this.covers[number].longitude);
 				}
 				this.markerSelected = number;
+			},
+			navigate(index){
+				var url="https://apis.map.qq.com/ws/direction/v1/driving/?from="
+				+this.latitude+","+this.longitude+"&to="+this.covers[index].latitude+","+this.covers[index].longitude+"&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL";
+				console.log(url)
+				uni.request({
+					url:url,
+					success: (res) => {
+						if(res.data.status=="0"){
+							this.polyline.push({
+								points:[],
+								width:3,
+								color:"#66CDAA"
+							});
+							var polyline=res.data.result.routes[0].polyline;
+							this.polyline[0].points.push({
+								latitude:polyline[0],
+								longitude:polyline[1]
+							})
+							console.log(polyline)
+							for (var i = 2; i < polyline.length ; i++){
+								polyline[i] = polyline[i-2] + polyline[i]/1000000;
+								if(i%2==1){
+									this.polyline[0].points.push({
+										latitude:polyline[i-1],
+										longitude:polyline[i]
+									});
+									console.log(i)
+								}
+							};
+							console.log(this.polyline)
+						}
+						
+					}
+				})
 			}
 		},
 		watch: {
@@ -208,9 +244,15 @@
 					this.openLocation();
 			},
 			'$store.state.orderSelected'() { //当选中一个order后在地图上移动到该标记点
-				var latitude = this.covers[this.$store.state.orderSelected].latitude;
-				var longitude = this.covers[this.$store.state.orderSelected].longitude;
-				this.MoveLocation(latitude, longitude);
+				if(this.$store.state.orderSelected!=null){
+					var latitude = this.covers[this.$store.state.orderSelected].latitude;
+					var longitude = this.covers[this.$store.state.orderSelected].longitude;
+					this.MoveLocation(latitude, longitude);
+					this.$nextTick(function(){
+						this.$store.commit('setOrderSelected',null);
+					})
+				}
+				
 			},
 			'$store.state.locationres'() {
 				let res = this.$store.state.locationres;
@@ -234,6 +276,15 @@
 				}
 				this.getChargerLocation(this.longitude, this.latitude, null);
 				this.$store.commit('setLocationRes', null);
+			},
+			'$store.state.navigateSelected'(){
+				if(this.$store.state.navigateSelected!=null){
+					this.navigate(this.$store.state.navigateSelected);
+					this.$nextTick(function(){
+						this.$store.commit('setNavigateSelected',null);
+					})
+					
+				}
 			}
 		}
 	}
