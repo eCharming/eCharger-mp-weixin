@@ -3,7 +3,6 @@
 		<view class="textareaview">
 			<textarea class="textarea" 
 				placeholder="输入目的地"
-				auto-focus="true"
 				v-model="position"
 				@input="request()"
 			>
@@ -30,43 +29,14 @@
 					</view>
 				</view>
 				
-				<view class="clear" @tap="clear">清空历史记录</view>
+				<view style="display: flex;position: relative;transition: all .1s;" :style="{'left':buttonLeft+'px'}">
+					<view class="clear" :style="{'opacity':buttonOpacity1 , 'scale':buttonScale1}" @tap="clear">清空历史记录</view>
+					<view class="clear" :style="{'opacity':buttonOpacity2 , 'scale':buttonScale2}">添加常用地点</view>
+				</view> 
+				
 			</view>
 			
 			<swiper :style="{'height': (storageHeight+20)+'px'}" @animationfinish="animationfinish($event)" @transition="transition($event)">
-				<swiper-item>
-						<scroll-view
-							scroll-y="true"
-							style="margin: 30upx;background-color: #FFFFFF;border-radius: 40upx;width:690upx"
-							:style="{'height': storageHeight+'px'}"
-						>
-							<view v-for="(storage,index) in storages" :key="index" style="display: flex;flex-direction: column;">
-								<view
-									class="storage"
-									@tap="tapStorage(storage.title,storage.location)"
-								>
-								
-									<view class="view5">
-										<image src="../../static/image/search.png" class="image3"></image>
-										<text class="text3">{{storage.title}}</text>
-									</view>
-									
-									<view class="view4" @tap.stop.prevent="del(index)">
-										<icon type="cancel" color="rgba(102,205,170,1)" style="margin-top: 5upx;"></icon>
-									</view>
-								</view>
-								<view class="view6">
-									<text class="text6">{{storage.category}}</text>
-								</view>
-								<view style="display: flex;justify-content: center;margin-top: 20upx;">
-									<view style="border-bottom: 1px solid rgba(0,0,0,0.1);width: 500upx;"></view>
-								</view>
-								
-							</view>
-						
-						
-						</scroll-view>
-				</swiper-item>
 				<swiper-item>
 					<scroll-view
 						scroll-y="true"
@@ -78,6 +48,7 @@
 								class="storage"
 								@tap="tapStorage(storage.title,storage.location)"
 							>
+							
 								<view class="view5">
 									<image src="../../static/image/search.png" class="image3"></image>
 									<text class="text3">{{storage.title}}</text>
@@ -87,13 +58,31 @@
 									<icon type="cancel" color="rgba(102,205,170,1)" style="margin-top: 5upx;"></icon>
 								</view>
 							</view>
-							<view style="display: flex;justify-content: center;">
+							<view class="view6">
+								<text class="text6">{{storage.category}}</text>
+							</view>
+							<view style="display: flex;justify-content: center;margin-top: 20upx;">
 								<view style="border-bottom: 1px solid rgba(0,0,0,0.1);width: 500upx;"></view>
 							</view>
 							
 						</view>
 					
 					
+					</scroll-view>
+			</swiper-item>
+				<swiper-item>
+					<view style="display: flex;justify-content: space-between;margin: 30upx;">
+						<view style="width: 230upx;display: flex;justify-content: center;">回家</view>
+						<view style="width: 230upx;display: flex;justify-content: center;
+						border-left:1px solid rgba(0,0,0,0.1);border-right:1px solid rgba(0,0,0,0.1);">公司</view>
+						<view style="width: 230upx;display: flex;justify-content: center;">学校</view>
+					</view>
+					<scroll-view
+						scroll-y="true"
+						style="margin: 30upx;background-color: #FFFFFF;border-radius: 40upx;width:690upx"
+						:style="{'height': (storageHeight-50)+'px'}"
+					>
+						
 					</scroll-view>
 				</swiper-item>
 			</swiper>
@@ -157,6 +146,11 @@
 				windowWidth:0,
 				justifyContent:"flex-start",
 				currentPage:0,
+				buttonLeft:0,
+				buttonOpacity1:1,
+				buttonOpacity2:1,
+				buttonScale1:0.5,
+				buttonScale2:0.5
 			}
 		},
 		methods:{
@@ -287,6 +281,11 @@
 						// this.modelHeight=uni.upx2px(7+8*(percent-0.5)*2);
 						// console.log(this.modelWidth)
 					}
+					this.buttonLeft=uni.upx2px(185-185*percent);
+					this.buttonOpacity1=1-percent;
+					this.buttonOpacity2=percent;
+					this.buttonScale1=1-0.5*percent;
+					this.buttonScale2=0.5+0.5*percent;
 				}else{
 					if(percent<=0.5){
 						this.$nextTick(function(){
@@ -304,6 +303,12 @@
 						// this.modelHeight=uni.upx2px(7+8*(percent-0.5)*2);
 						// 
 					}
+					this.buttonLeft=uni.upx2px(185*percent);
+					this.buttonOpacity1=percent;
+					this.buttonOpacity2=1-percent;
+					
+					this.buttonScale1=0.5+0.5*percent;
+					this.buttonScale2=1-0.5*percent;
 				}
 			}
 		}, 
@@ -314,6 +319,8 @@
 				for(var index in keys){
 					if(uni.getStorageSync(keys[index]).title!=null){
 						this.storages.push(uni.getStorageSync(keys[index]));
+					}else{
+						uni.removeStorageSync(keys[index]);
 					}
 				}
 			}
@@ -322,6 +329,8 @@
 			this.suggestionHeight=uni.getSystemInfoSync().windowHeight*0.85;
 			this.modelHeight=uni.upx2px(15);
 			this.modelWidth=uni.upx2px(120);
+			this.buttonLeft=uni.upx2px(185);
+			this.buttonOpacity2=0;
 			
 		}
 	}
@@ -435,6 +444,8 @@
 		padding: 10upx;
 		font-size: 23upx;
 		font-weight: 700;
+		border-radius: 10upx;
+		transition: all .1s;
 	}
 	
 	.storage{
