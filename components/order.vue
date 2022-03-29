@@ -120,7 +120,7 @@
 			},
 			navigate(){
 				this.$store.commit('setNavigateSelected',this.index);
-				console.log(this.index)
+				this.$emit('toLow');
 			}
 		},
 		watch:{

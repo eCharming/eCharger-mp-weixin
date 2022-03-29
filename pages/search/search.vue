@@ -13,40 +13,85 @@
 			<image src="../../static/image/lightning_green.png" class="image1"></image>
 		</view>
 		
-		<scroll-view
-			scroll-y="true"  
-			:style="{'height': height+'px'}"
-		>
-			<view class="storageview" v-if="!isInput">
-				<view class="history">
-					<view class="historyview">
-						
-						<text>历史记录</text>
+		<view class="storageview" v-if="!isInput">
+			<view class="history">
+				<view>
+					<view style="display: flex;">
+						<view class="historyview">
+							<text>历史记录</text>
+						</view>
+						<view class="commonview">
+							
+							<text>常用地点</text>
+						</view>
 					</view>
-					<view class="clear" @tap="clear">清空历史记录</view>
+					<view style="margin-left: 30upx;width: 290upx;height: 17upx;display: flex;" :style="{'justify-content':justifyContent}">
+						<view class="modelSelected" :style="{'height':modelHeight+'px','width':modelWidth+'px'}"></view>
+					</view>
 				</view>
 				
-				<view
-					class="storage"
-					v-for="(storage,index) in storages"
-					:key="index"
-					@tap="tapStorage(storage.title,storage.location)"
-				>
-					<view class="view5">
-						<image src="../../static/image/search.png" class="image3"></image>
-						<text class="text3">{{storage.title}}</text>
-					</view>
-					
-					<view class="view4" @tap.stop.prevent="del(index)">
-						<icon type="cancel" color="rgba(102,205,170,1)"></icon>
-					</view>
-				</view>
+				<view class="clear" @tap="clear">清空历史记录</view>
 			</view>
 			
+			<swiper :style="{'height': height+'px'}" @animationfinish="animationfinish($event)" @transition="transition($event)">
+				<swiper-item>
+					<scroll-view
+						scroll-y="true"
+						style="margin-top: 20upx;"
+						:style="{'height': height+'px'}"
+					>
+						<view
+							class="storage"
+							v-for="(storage,index) in storages"
+							:key="index"
+							@tap="tapStorage(storage.title,storage.location)"
+						>
+							<view class="view5">
+								<image src="../../static/image/search.png" class="image3"></image>
+								<text class="text3">{{storage.title}}</text>
+							</view>
+							
+							<view class="view4" @tap.stop.prevent="del(index)">
+								<icon type="cancel" color="rgba(102,205,170,1)" style="margin-top: 10upx;"></icon>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+				<swiper-item>
+					<scroll-view
+						scroll-y="true"
+						style="margin-top: 20upx;"
+						:style="{'height': height+'px'}"
+					>
+						<view
+							class="storage"
+							v-for="(storage,index) in storages"
+							:key="index"
+							@tap="tapStorage(storage.title,storage.location)"
+						>
+							<view class="view5">
+								<image src="../../static/image/search.png" class="image3"></image>
+								<text class="text3">{{storage.title}}</text>
+							</view>
+							
+							<view class="view4" @tap.stop.prevent="del(index)">
+								<icon type="cancel" color="rgba(102,205,170,1)" style="margin-top: 10upx;"></icon>
+							</view>
+						</view>
+					</scroll-view>
+				</swiper-item>
+			</swiper>
 			
 			
+		</view>
+		
+		<scroll-view
+			v-if="isInput"
+			scroll-y="true"  
+			:style="{'height': height+'px'}"
+		>		
 			<view class="suggestion" 
-				v-if="isInput"
+				
 				v-for="(suggestion,index) in suggestions" 
 				:key="index"
 				@tap="tap(suggestion.id,suggestion.title,suggestion.location)"
@@ -78,7 +123,12 @@
 				height:0,
 				index:0,
 				storages:[],
-				isInput:false
+				isInput:false,
+				modelWidth:0,
+				modelHeight:0,
+				windowWidth:0,
+				justifyContent:"flex-start",
+				currentPage:0,
 			}
 		},
 		methods:{
@@ -101,21 +151,7 @@
 								});
 							}
 						} 
-						// else {
-						// 	this.suggestions.splice(0);
-						// 	uni.showToast({
-						// 		icon:'loading',
-						// 		title:'网络请求失败'
-						// 	})
-						// }
 					},
-					// fail() { //失败
-					// 	this.suggestions.splice(0);
-					// 	uni.showToast({
-					// 		icon:'loading',
-					// 		title:'网络请求失败'
-					// 	})
-					// },
 				})
 			},
 			tap(id,title,location){
@@ -180,6 +216,51 @@
 						}
 					}
 				}
+			},
+			animationfinish(e){
+				console.log(e)
+				this.currentPage=e.detail.current;
+				console.log(this.currentPage)
+			},
+			transition(e){
+				
+				var dx=e.detail.dx;
+				var percent=Math.abs(dx)/this.windowWidth;
+				if(this.currentPage==0){//向右翻页
+					if(percent<=0.5){
+						this.$nextTick(function(){
+							this.justifyContent="flex-start";
+						})
+						
+						this.modelWidth=uni.upx2px(120+280*percent*2);
+						this.modelHeight=uni.upx2px(15-8*percent*2);
+					}else{
+						this.$nextTick(function(){
+							this.justifyContent="flex-end";
+						})
+						
+						this.modelWidth=uni.upx2px(400-280*(percent-0.5)*2);
+						this.modelHeight=uni.upx2px(7+8*(percent-0.5)*2);
+						// console.log(this.modelWidth)
+					}
+				}else{
+					if(percent<=0.5){
+						this.$nextTick(function(){
+							this.justifyContent="flex-end";
+						})
+						
+						this.modelWidth=uni.upx2px(120+280*percent*2);
+						this.modelHeight=uni.upx2px(15-8*percent*2);
+					}else{
+						this.$nextTick(function(){
+							this.justifyContent="flex-start";
+						})
+						
+						this.modelWidth=uni.upx2px(400-280*(percent-0.5)*2);
+						this.modelHeight=uni.upx2px(7+8*(percent-0.5)*2);
+						// 
+					}
+				}
 			}
 		}, 
 		mounted(){
@@ -189,13 +270,14 @@
 				for(var index in keys){
 					if(uni.getStorageSync(keys[index]).title!=null){
 						this.storages.push(uni.getStorageSync(keys[index]));
-						// console.log(keys.length-1-index)
-						// console.log(keys[keys.length-1-index])  keys.length-1-
 					}
-						
 				}
 			}
-			this.height=uni.getSystemInfoSync().windowHeight*0.9;
+			this.windowWidth=uni.getSystemInfoSync().windowWidth;
+			this.height=uni.getSystemInfoSync().windowHeight*0.85;
+			this.modelHeight=uni.upx2px(15);
+			this.modelWidth=uni.upx2px(120);
+			
 		}
 	}
 	
@@ -272,10 +354,31 @@
 		margin-left: 30upx;
 		border-radius: 8upx;
 		/* box-shadow:0px 5px 5px -3px rgba(102,205,170,1) ; */
-		border-bottom: 3px solid rgba(102,205,170,1);
+		/* border-bottom: 3px solid rgba(102,205,170,1); */
 		font-size: 30upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
+	}
+	
+	.commonview{
+		
+		margin-left: 50upx;
+		border-radius: 8upx;
+		/* box-shadow:0px 5px 5px -3px rgba(102,205,170,1) ; */
+		/* border-bottom: 3px solid rgba(102,205,170,1); */
+		font-size: 30upx;
+		font-weight: 700;
+		letter-spacing: 1upx;
+	}
+	
+	.modelSelected{
+		/* margin-left: 30upx; */
+		border-radius: 10upx;
+		/* height: 15upx;
+		width: 120upx; */
+		/* width: 300upx; */
+		background-color:rgba(102,205,170,1) ;
+		transition: all .1s;
 	}
 	
 	.clear{
@@ -307,13 +410,14 @@
 	
 	.text3{
 		margin: 15upx;
+		margin-top: 18upx;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+		width: 500upx;
 		font-size: 29upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
-		/* border: 2px solid red; */
 	}
 	
 	.view4{

@@ -100,7 +100,7 @@
 <style scoped>
 	.image1{
 		position: absolute;
-		top:20upx;
+		top:15upx;
 		width:60upx;
 		height:60upx;
 	}
@@ -135,14 +135,12 @@
 		margin-left: 25upx;
 		margin-right: 25upx;
 		padding: 23upx;
+		padding-bottom: 15upx;
 		background-color: rgb(230,230,230);
 		position: relative;
 		font-weight: 700;
 		letter-spacing: 2upx;
 		font-size: 35upx;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 	
 	.text1{
@@ -150,8 +148,14 @@
 	}
 	
 	.text2{
-		position: relative;
-		left:60upx;
+		display: inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		/* border: 2px solid red; */
+		/* position: relative; */
+		margin-left:60upx;
+		width: 450upx;
 	}
 	
 	.time1{

@@ -67,6 +67,7 @@
 					res => {
 						let chargerList = res.result.data;
 						this.ordersCopy.splice(0);
+						this.polyline.splice(0);
 						this.covers.splice(0, this.covers.length);
 						this.markerSelected = -1;
 						if (chargerList.length != 0) {
@@ -89,7 +90,7 @@
 										padding: 10,
 									}
 								});
-								console.log(charger)
+								
 								var distance =(charger.Distance/ 1000).toFixed(1);
 								this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
 									location: charger.location,
@@ -194,14 +195,14 @@
 			navigate(index){
 				var url="https://apis.map.qq.com/ws/direction/v1/driving/?from="
 				+this.latitude+","+this.longitude+"&to="+this.covers[index].latitude+","+this.covers[index].longitude+"&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL";
-				console.log(url)
 				uni.request({
 					url:url,
 					success: (res) => {
 						if(res.data.status=="0"){
+							this.polyline.splice(0);
 							this.polyline.push({
 								points:[],
-								width:3,
+								width:5,
 								color:"#66CDAA"
 							});
 							var polyline=res.data.result.routes[0].polyline;
@@ -209,7 +210,7 @@
 								latitude:polyline[0],
 								longitude:polyline[1]
 							})
-							console.log(polyline)
+							
 							for (var i = 2; i < polyline.length ; i++){
 								polyline[i] = polyline[i-2] + polyline[i]/1000000;
 								if(i%2==1){
@@ -217,14 +218,15 @@
 										latitude:polyline[i-1],
 										longitude:polyline[i]
 									});
-									console.log(i)
+								
 								}
 							};
-							console.log(this.polyline)
+							
 						}
 						
 					}
-				})
+				});
+				this.MoveLocation(this.covers[index].latitude,this.covers[index].longitude);
 			}
 		},
 		watch: {
