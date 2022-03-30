@@ -1,5 +1,6 @@
 <template>
 	<view>
+		<navigator></navigator>
 		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
 			<image src="/static/image/logo.gif" class="img-class"></image>
 		</view>
@@ -9,10 +10,12 @@
 </template>
 
 <script>
+	import navigator from '../../components/navigator.vue'
 	import movablebox from '@/components/movableBox.vue'
 	import mymap from '../../components/myMap.vue'
 	export default {
 		components: {
+			navigator,
 			movablebox,
 			mymap,
 		},
@@ -24,6 +27,8 @@
 		},
 		methods: {},
 		onLoad() {
+			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;
+			this.$store.commit('setWindowHeight',windowHeight);
 			setTimeout(() => {
 				this.isLaunch = false;
 			}, 1500)

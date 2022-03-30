@@ -264,7 +264,7 @@
 			}
 		},
 		mounted() {
-			this.windowHeight = uni.getSystemInfoSync().windowHeight;
+			this.windowHeight = this.$store.state.windowHeight;
 			this.windowWidth = uni.getSystemInfoSync().windowWidth;
 			this.boxHeight = this.windowHeight * (1 - this.maxHeight);
 			this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
@@ -322,7 +322,7 @@
 
 <style scoped>
 	.movable-area {
-		position: fixed;
+		position: relative;
 		height: 155vh;
 		width: 750upx;
 		pointer-events: none;

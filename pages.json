@@ -17,11 +17,11 @@
 		}
 	],
 	"globalStyle": {
-		"navigationBarTextStyle": "white",
-		"navigationBarTitleText": "易插eCharger",
-		"navigationBarBackgroundColor": "#66CDAA",
+		// "navigationBarTextStyle": "white",
+		// "navigationBarTitleText": "易插eCharger",
+		// "navigationBarBackgroundColor": "#66CDAA",
 		// "navigationBarBackgroundColor": "#3787e6",
-			
+		"navigationStyle":"custom",
 		"backgroundColor": "#FFFFFF"
 	}
 }

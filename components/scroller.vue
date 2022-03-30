@@ -31,7 +31,7 @@
 			}
 		},
 		mounted() {
-			this.height=uni.getSystemInfoSync().windowHeight*0.9-uni.upx2px(590);
+			this.height=this.$store.state.windowHeight*0.9-uni.upx2px(590);
 		}
 	}
 </script>
