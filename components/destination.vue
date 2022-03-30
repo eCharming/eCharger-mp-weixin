@@ -1,7 +1,7 @@
 <template>
 	<view class="card">
 		<view class="near">
-			<text class="text1">{{month}}月{{date}}日星期{{day}}</text>
+			<text class="text1" :style="{'color':dayColor}">{{month}}月{{date}}日星期{{day}}</text>
 			
 			<view class="time1" >
 				<picker mode="time" :start="minTime1" :end="maxTime1" @change="changetime1">
@@ -45,7 +45,8 @@
 				opacity1:0.5,
 				opacity2:0.5,
 				destination:"请输入你的目的地",
-				color:"rgb(0,0,0)",
+				color:"rgba(0,0,0,0.5)",
+				dayColor:"rgb(102,205,170)",
 			}
 		},
 		methods:{
@@ -86,13 +87,27 @@
 			'$store.state.destination'() {
 				if(this.$store.state.destination!=null){ //按下locationbutton重置回到自己位置，destination置为空
 					this.destination = this.$store.state.destination.title;
-					this.color = "rgb(102,205,170)";
+					if(this.$store.state.buttonSelected==1)
+						this.color = "rgb(102,205,170)";
+					else this.color="rgb(55,135,230)";
 				}else{
 					this.destination = "请输入你的目的地";
-					this.color = "rgb(0,0,0)";
+					this.color = "rgba(0,0,0,0.5)";
 				}
 				
 			},
+			'$store.state.buttonSelected'(){
+				if(this.$store.state.buttonSelected==1){
+					this.dayColor = "rgb(102,205,170)";
+				}	
+				else this.dayColor="rgb(55,135,230)";
+				if(this.color != "rgba(0,0,0,0.5)"){
+					if(this.$store.state.buttonSelected==1){
+						this.color = "rgb(102,205,170)";
+					}	
+					else this.color="rgb(55,135,230)";
+				}
+			}
 		}
 	}
 </script>
@@ -144,10 +159,13 @@
 	}
 	
 	.text1{
-		color:rgb(102,205,170) ;
+		transition: all .3s;
+		position: relative;
+		top:5upx;
 	}
 	
 	.text2{
+		transition: all .3s;
 		display: inline-block;
 		white-space: nowrap;
 		overflow: hidden;

@@ -22,12 +22,12 @@
 					<hiddendetail v-if="hiddenDetail" :percent="percent" @tap="detail"></hiddendetail>
 					
 					<card>
-						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent"
+						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent" :type="1"
 							@tap="tapButton1()">
 							<image class="image1" src="../static/image/car&charger_color.png"
 								:style="{'filter':'grayscale('+imageFilter1+')','opacity':imageOpacity1}"></image>
 						</totalbutton>
-						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" :percent="percent"
+						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" :percent="percent" :type="2"
 							@tap="tapButton2()">
 							<image class="image2" src="../static/image/park.png"
 								:style="{'filter':'grayscale('+imageFilter2+')','opacity':imageOpacity2}"></image>
@@ -174,7 +174,11 @@
 				this.imageFilter2 = 1;
 				this.imageOpacity2 = 0.3;
 				this.chargerSelected = -1;
-				this.toHigh();
+				
+				this.$store.commit('setButtonSelected',1);
+				this.$nextTick(function(){
+					this.toHigh();
+				})
 			},
 			tapButton2() {  
 				this.isSelected1 = false;
@@ -187,8 +191,12 @@
 					this.orders[this.orderSelected].detail=false;
 					this.orderSelected = -1;
 				}
+				this.$store.commit('setButtonSelected',2);
+				this.$nextTick(function(){
+					this.toHigh();
+				})
 				
-				this.toHigh();
+				
 			},
 			tapOrder(index) {  //用于触发点击order的事件
 				if(index!=this.orderSelected){			//因为还没更新数值 index代表该次点击的序号 orderselected代表上一次点击的序号 前一次点击和这一次点击不同则更新界面

@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<navigator :color="color"></navigator>
+		<navigator :color="color" :isBinded="true"></navigator>
 		<view class="searchbox">
 			<view class="textareaview">
 				<textarea class="textarea" 

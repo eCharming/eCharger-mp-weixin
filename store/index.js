@@ -16,6 +16,8 @@ export default new Vuex.Store({
 		navigateSelected:null,//用于向mymap组件传递需要导航的marker编号
 		isLow:0,	//用于从search页面返回时收起movablebox至低位
 		windowHeight:null,
+		buttonSelected:1,
+		
     },
     mutations: {
 		setCurrentLocation(state,currentLocation){
@@ -47,6 +49,9 @@ export default new Vuex.Store({
 		},
 		setWindowHeight(state,windowHeight){
 			state.windowHeight=windowHeight;
+		},
+		setButtonSelected(state,buttonSelected){
+			state.buttonSelected=buttonSelected;
 		}
     },
     actions: {},

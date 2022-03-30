@@ -26,6 +26,9 @@
 			}
 		},
 		props:{
+			type:{
+				type:Number,
+			},
 			text1:{
 				type:String
 			},
@@ -58,7 +61,9 @@
 		},
 		methods:{
 			activate(){
-				this.bordercolor="rgba(102,205,170,1)";
+				if(this.type==1)
+					this.bordercolor="rgba(102,205,170,1)";
+				else this.bordercolor='rgba(55,135,230,1)';
 			},
 			inactivate(){
 				this.bordercolor="rgba(0,0,0,0.1)";
