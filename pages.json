@@ -6,7 +6,8 @@
 		{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "易插eCharger"
+				"navigationBarTitleText": "易插eCharger",
+				"disableScroll":true
 			}
 		},
 		{
@@ -22,6 +23,8 @@
 		// "navigationBarBackgroundColor": "#66CDAA",
 		// "navigationBarBackgroundColor": "#3787e6",
 		"navigationStyle":"custom",
-		"backgroundColor": "#FFFFFF"
+		"backgroundColor": "#FFFFFF",
+		"enablePullDownRefresh":false
+		
 	}
 }

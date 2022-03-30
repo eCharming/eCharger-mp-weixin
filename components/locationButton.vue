@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view>
-			<image src="@/static/image/location.png" mode="widthFix" style="width: 80px;" @click="relocate"></image>
+			<image :src="src" mode="widthFix" style="width: 80px;" @click="relocate"></image>
 		</view>
 	</view>
 </template>
@@ -11,7 +11,7 @@
 		name: "locationButton",
 		data() {
 			return {
-
+				src:"../static/image/location.png"
 			};
 		},
 		methods:{
@@ -27,6 +27,16 @@
 					},
 				});
 				this.$store.state.relocate=true;
+			}
+		},
+		watch:{
+			'$store.state.buttonSelected'(){
+				if(this.$store.state.buttonSelected==1){
+					this.src="../static/image/location.png";
+				}	
+				else{
+					this.src="../static/image/location_blue.png";
+				} 
 			}
 		}
 	}

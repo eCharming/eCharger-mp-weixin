@@ -18,7 +18,7 @@
 		
 		<view class="destination"
 			@tap="navigate()">
-			<image class="image1" src="../static/image/lightning_green.png"></image>
+			<image class="image1" :src="src"></image>
 			<text class="text2" :style="{'color':color}">{{destination}}</text>
 			
 		</view>
@@ -47,6 +47,7 @@
 				destination:"请输入你的目的地",
 				color:"rgba(0,0,0,0.5)",
 				dayColor:"rgb(102,205,170)",
+				src:"../static/image/lightning_green.png"
 			}
 		},
 		methods:{
@@ -99,8 +100,12 @@
 			'$store.state.buttonSelected'(){
 				if(this.$store.state.buttonSelected==1){
 					this.dayColor = "rgb(102,205,170)";
+					this.src="../static/image/lightning_green.png";
 				}	
-				else this.dayColor="rgb(55,135,230)";
+				else{
+					this.dayColor="rgb(55,135,230)";
+					this.src="../static/image/lightning_blue.png"
+				} 
 				if(this.color != "rgba(0,0,0,0.5)"){
 					if(this.$store.state.buttonSelected==1){
 						this.color = "rgb(102,205,170)";
@@ -125,6 +130,7 @@
 		padding: 15upx;
 
 		background-color: rgba(250,255,250,1);
+		/* background-color: rgba(102,205,170,0.2); */
 		border-radius: 40upx;
 		display: flex;
 		flex-direction: column;

@@ -12,7 +12,7 @@
 					
 				</textarea>
 				<text class="searchtext" :style="{'color':color}">搜索</text>
-				<image src="../../static/image/lightning_green.png" class="image1"></image>
+				<image :src="src1" class="image1"></image>
 			</view>
 			
 			<view class="storageview" v-if="!isInput">
@@ -158,7 +158,8 @@
 				buttonLeft:0,
 				buttonOpacity1:1,
 				buttonOpacity2:1,
-				color:'rgba(102,205,170,1)'
+				color:'rgba(102,205,170,1)',
+				src1:"../../static/image/lightning_green.png"
 			}
 		},
 		methods:{
@@ -266,30 +267,12 @@
 				}
 			},
 			change(e){
-				// var currentPage=e.detail.current;
-				// // console.log(currentPage)
-				// if(currentPage==0){
-				// 	console.log(currentPage)
-				// 	uni.setNavigationBarColor({
-				// 		frontColor:'#ffffff',
-				// 		backgroundColor:'#66cdaa',
-				// 		animation:{
-				// 			duration:300,
-				// 			timingFunc:'easeInOut'
-				// 		}
-				// 	});
-				// }else{
-				// 	console.log(currentPage)
-				// 	uni.setNavigationBarColor({
-				// 		frontColor:'#ffffff',
-				// 		backgroundColor:'#3787e6',
-				// 		animation:{
-				// 			duration:300,
-				// 			timingFunc:'easeInOut'
-				// 		}
-				// 	});
-				// }
-				
+				var currentPage=e.detail.current;
+				if(currentPage==0){
+					this.src1="../../static/image/lightning_green.png";
+				}else{
+					this.src1="../../static/image/lightning_blue.png";
+				}
 			},
 			animationfinish(e){
 				this.currentPage=e.detail.current;

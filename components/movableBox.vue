@@ -353,6 +353,7 @@
 		height: 100vh;
 		width: 750upx;
 		background-color: rgb(240, 245, 240);
+		/* background-color: #FFFFFF; */
 		padding: 0 12px;
 		border-top-left-radius: 40upx;
 		border-top-right-radius: 40upx;

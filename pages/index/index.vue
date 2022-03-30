@@ -1,10 +1,12 @@
 <template>
 	<view>
 		<navigator></navigator>
+		<mymap v-show='!isLaunch'></mymap>
+		
 		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
 			<image src="/static/image/logo.gif" class="img-class"></image>
 		</view>
-		<mymap v-show='!isLaunch'></mymap>
+		
 		<movablebox v-show='!isShown'></movablebox>
 	</view>
 </template>
