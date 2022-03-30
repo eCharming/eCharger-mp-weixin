@@ -5,10 +5,11 @@
 				placeholder="输入目的地"
 				v-model="position"
 				@input="request()"
+				:style="{'border-color':color}"
 			>
 				
 			</textarea>
-			<text class="searchtext">搜索</text>
+			<text class="searchtext" :style="{'color':color}">搜索</text>
 			<image src="../../static/image/lightning_green.png" class="image1"></image>
 		</view>
 		
@@ -25,13 +26,13 @@
 						</view>
 					</view>
 					<view style="margin-left: 30upx;width: 290upx;height: 17upx;display: flex;" :style="{'justify-content':justifyContent}">
-						<view class="modelSelected" :style="{'height':modelHeight+'px','width':modelWidth+'px'}"></view>
+						<view class="modelSelected" :style="{'height':modelHeight+'px','width':modelWidth+'px','background-color':color}"></view>
 					</view>
 				</view>
 				
 				<view style="display: flex;position: relative;transition: all .1s;" :style="{'left':buttonLeft+'px'}">
 					<view class="clear" :style="{'opacity':buttonOpacity1 , 'scale':buttonScale1}" @tap="clear">清空历史记录</view>
-					<view class="clear" :style="{'opacity':buttonOpacity2 , 'scale':buttonScale2}">添加常用地点</view>
+					<view class="add" :style="{'opacity':buttonOpacity2 , 'scale':buttonScale2}">添加常用地点</view>
 				</view> 
 				
 			</view>
@@ -149,8 +150,9 @@
 				buttonLeft:0,
 				buttonOpacity1:1,
 				buttonOpacity2:1,
-				buttonScale1:0.5,
-				buttonScale2:0.5
+				buttonScale1:1,
+				buttonScale2:0.5,
+				color:'rgba(102,205,170,1)'
 			}
 		},
 		methods:{
@@ -261,7 +263,8 @@
 				this.currentPage=e.detail.current;
 			},
 			transition(e){
-				
+				// 55,135,230 蓝
+				// 102,205,170 绿
 				var dx=e.detail.dx;
 				var percent=Math.abs(dx)/this.windowWidth;
 				if(this.currentPage==0){//向右翻页
@@ -286,6 +289,7 @@
 					this.buttonOpacity2=percent;
 					this.buttonScale1=1-0.5*percent;
 					this.buttonScale2=0.5+0.5*percent;
+					this.color="rgba("+(102-47*percent)+","+(205-70*percent)+","+(170+60*percent)+",1)";
 				}else{
 					if(percent<=0.5){
 						this.$nextTick(function(){
@@ -306,9 +310,9 @@
 					this.buttonLeft=uni.upx2px(185*percent);
 					this.buttonOpacity1=percent;
 					this.buttonOpacity2=1-percent;
-					
 					this.buttonScale1=0.5+0.5*percent;
 					this.buttonScale2=1-0.5*percent;
+					this.color="rgba("+(55+47*percent)+","+(135+70*percent)+","+(230-60*percent)+",1)";
 				}
 			}
 		}, 
@@ -385,7 +389,8 @@
 		font-size: 32upx;
 		letter-spacing: 1upx;
 		border-radius: 20upx;
-		border: 3px outset rgba(102,205,170,0.5);
+		border: 3px outset;
+		/* border: 3px outset rgba(55,135,230,0.5); */
 	}
 	
 	.searchtext{
@@ -394,10 +399,10 @@
 		bottom:7upx;
 		font-size: 32upx;
 		color: rgba(102,205,170,1);
+		/* color: rgb(55,135,230); */
 		font-weight: 700;
 		padding: 20upx;
 		padding-left: 25upx;
-		/* border-left: 3px solid rgba(102,205,170,0.5); */
 	}
 	
 	.history{
@@ -409,8 +414,6 @@
 		
 		margin-left: 30upx;
 		border-radius: 8upx;
-		/* box-shadow:0px 5px 5px -3px rgba(102,205,170,1) ; */
-		/* border-bottom: 3px solid rgba(102,205,170,1); */
 		font-size: 30upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
@@ -420,8 +423,6 @@
 		
 		margin-left: 50upx;
 		border-radius: 8upx;
-		/* box-shadow:0px 5px 5px -3px rgba(102,205,170,1) ; */
-		/* border-bottom: 3px solid rgba(102,205,170,1); */
 		font-size: 30upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
@@ -433,13 +434,25 @@
 		/* height: 15upx;
 		width: 120upx; */
 		/* width: 300upx; */
-		background-color:rgba(102,205,170,1) ;
+		/* background-color:rgba(102,205,170,1) ; */
+		/* background-color: rgb(55,135,230); */
 		transition: all .1s;
 	}
 	
 	.clear{
 		background-color:rgba(102,205,170,0.2) ;
 		color: rgba(102,205,170,1);
+		margin-right: 30upx;
+		padding: 10upx;
+		font-size: 23upx;
+		font-weight: 700;
+		border-radius: 10upx;
+		transition: all .1s;
+	}
+	
+	.add{
+		background-color: rgba(55,135,230,0.2);
+		color: rgb(55,135,230);
 		margin-right: 30upx;
 		padding: 10upx;
 		font-size: 23upx;
@@ -519,6 +532,8 @@
 	.text2{
 		background-color:rgba(102,205,170,0.2) ;
 		color: rgba(102,205,170,1);
+		/* background-color: rgba(55,135,230,0.2);
+		color: rgb(55,135,230); */
 		margin-left: 80upx;
 		padding: 10upx;
 		font-size: 20upx;
@@ -533,6 +548,8 @@
 	.text6{
 		background-color:rgba(102,205,170,0.2) ;
 		color: rgba(102,205,170,1);
+		/* background-color: rgba(55,135,230,0.2);
+		color: rgb(55,135,230); */
 		margin-left: 100upx;
 		margin-bottom: 20upx;
 		padding: 10upx;

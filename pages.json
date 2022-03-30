@@ -20,6 +20,8 @@
 		"navigationBarTextStyle": "white",
 		"navigationBarTitleText": "易插eCharger",
 		"navigationBarBackgroundColor": "#66CDAA",
+		// "navigationBarBackgroundColor": "#3787e6",
+			
 		"backgroundColor": "#FFFFFF"
 	}
 }
