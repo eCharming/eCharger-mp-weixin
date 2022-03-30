@@ -1,7 +1,10 @@
 <template>
 	<view>
-		<mymap></mymap>
-		<movablebox></movablebox>
+		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
+			<image src="/static/image/logo.gif" class="img-class"></image>
+		</view>
+		<mymap v-show='!isLaunch'></mymap>
+		<movablebox v-show='!isShown'></movablebox>
 	</view>
 </template>
 
@@ -15,55 +18,49 @@
 		},
 		data() {
 			return {
+				isLaunch: true,
+				isShown:true,
 			}
 		},
-		methods: {
+		methods: {},
+		onLoad() {
+			setTimeout(() => {
+				this.isLaunch = false;
+			}, 1500)
+			setTimeout(() => {
+				this.isShown = false;
+			}, 2500)
 		}
 	}
 </script>
 
 <style scoped>
-</style>
-
-<!-- <template>
-	<view class="content">
-		<page-head :title="title"></page-head>
-		<view class="uni-padding-wrap">
-			<view class="uni-title uni-common-mt">
-				数组类型
-				<text>\nnodes属性为Array</text>
-			</view>
-			<view class="uni-common-mt" style="background:#FFF; padding:20rpx;">
-				<rich-text :nodes="nodes"></rich-text>
-			</view>
-			<view class="uni-title uni-common-mt">
-				字符串类型
-				<text>\nnodes属性为String</text>
-			</view>
-			<view class="uni-common-mt" style="background:#FFF; padding:20rpx;">
-				<rich-text :nodes="strings"></rich-text>
-			</view>
-		</view>
-	</view>
-</template>
-
-<script>
-	export default {
-	    data() {
-	        return {
-	            nodes: [{
-	                name: 'div',
-	                attrs: {
-	                    class: 'div-class',
-	                    style: 'line-height: 60px; color: red; text-align:center;'
-	                },
-	                children: [{
-	                    type: 'text',
-	                    text: 'Hello&nbsp;uni-app!'
-	                }]
-	            }],
-	            strings: '<div style="text-align:center;"><img src="https://bjetxgzv.cdn.bspapp.com/VKCEYUGU-uni-app-doc/d8590190-4f28-11eb-b680-7980c8a877b8.png"/></div>'
-	        }
-	    }
+	.img-class {
+		width: 640upx;
+		height: 480upx;
 	}
-</script> -->
+
+	.bg-class {
+		background-color: #66CDAA;
+		height: 100vh;
+		width: 100vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		opacity: 1;
+		
+	}
+
+	.bg-class-none {
+		background-color: #66CDAA;
+		height: 100vh;
+		width: 100vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		opacity: 0;
+		transform: translate(0, -100%);
+		transition: opacity 1s,top 1s,transform 1s;
+		transition-timing-function: ease-in;
+	}
+</style>

@@ -39,8 +39,11 @@
 			}
 		},
 		mounted() { 
-			this.mapContext = uni.createMapContext('myMap', this);
-			this.openLocation();
+			setTimeout(()=>{
+				this.mapContext = uni.createMapContext('myMap', this);
+				this.openLocation();
+			},1500)
+			
 		},
 		methods: {
 			MoveLocation(lat, lon) {

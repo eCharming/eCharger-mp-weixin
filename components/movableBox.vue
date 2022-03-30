@@ -380,7 +380,6 @@
 	}
 
 	.image1 {
-		// border: 2px solid red;
 		height: 180upx;
 		width: 180upx;
 		position: relative;
@@ -391,7 +390,6 @@
 	}
 
 	.image2 {
-		// border: 2px solid red;
 		height: 150upx;
 		width: 150upx;
 		position: relative;
