@@ -285,7 +285,7 @@
 				var dx=e.detail.dx;
 				var percent=Math.abs(dx)/this.windowWidth;
 				if(this.currentPage==0){//向右翻页
-					if(percent<=0.5){
+					if(percent<=0.6){
 						this.$nextTick(function(){
 							this.justifyContent="flex-start";
 						})
@@ -307,7 +307,7 @@
 					this.color="rgba("+(102-52*percent)+","+(205-5*percent)+","+(170+40*percent)+",1)";
 					this.doubleColor="linear-gradient(to right bottom,rgb(102,205,170) 0% "+(1-percent)*100+"%,"+this.$store.state.color+")";
 				}else{
-					if(percent<=0.5){
+					if(percent<=0.6){
 						this.$nextTick(function(){
 							this.justifyContent="flex-end";
 						})
