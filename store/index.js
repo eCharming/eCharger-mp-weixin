@@ -17,6 +17,7 @@ export default new Vuex.Store({
 		isLow:0,	//用于从search页面返回时收起movablebox至低位
 		windowHeight:null,
 		buttonSelected:1,
+		color:"rgb(50,200,210)",
 		
     },
     mutations: {
@@ -52,6 +53,9 @@ export default new Vuex.Store({
 		},
 		setButtonSelected(state,buttonSelected){
 			state.buttonSelected=buttonSelected;
+		},
+		setColor(state,color){
+			state.color=color
 		}
     },
     actions: {},

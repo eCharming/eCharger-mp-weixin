@@ -51,7 +51,6 @@
 		transition-duration: .1s;
 		transition-property: opacity;
 		transition-duration: .1s;
-		
 	}
 	.text1{
 		margin: 20upx;

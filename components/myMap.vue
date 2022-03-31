@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<map id="myMap" ref="map" style="width: 100%; height: 80vh;position: absolute;" layer-style="1" :latitude="center_latitude"
+		<map id="myMap" ref="map" style="width: 100%; height: 100vh;position: absolute;top: 0;" layer-style="1" :latitude="center_latitude"
 			:longitude="center_longitude" :markers="covers" :setting="mapSetting" :circles="circles" :scale="scale" :polyline="polyline"
 			@markertap="markertap($event)">
 		</map>

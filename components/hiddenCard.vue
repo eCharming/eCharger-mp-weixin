@@ -34,7 +34,7 @@
 					this.text1='距离目的地';
 					if(this.$store.state.buttonSelected==1)
 						this.color='rgb(102,205,170)';
-					else this.color='rgb(55,135,230)';
+					else this.color=this.$store.state.color;
 					this.text2='车程约'+this.$store.state.destination.distance+'km';
 				}else{ //按下locationbutton重置回到自己位置，destination置为空
 					this.text1="在附近搜索电桩";
@@ -45,7 +45,7 @@
 				if(this.$store.state.buttonSelected==1){
 					this.color = "rgb(102,205,170)";
 				}	
-				else this.color="rgb(55,135,230)";
+				else this.color=this.$store.state.color;
 			}
 		}
 	}
@@ -58,6 +58,7 @@
 		padding: 15upx;
 		padding-top: 20upx;
 		background-color: rgba(250,255,250,1);
+		/* background-color: rgb(102,205,170); */
 		border-radius: 55upx;
 		display: flex;
 		justify-content: center;
@@ -81,6 +82,7 @@
 		margin-top: 10upx;
 		margin-right: 10upx;
 		// border: 2px solid red;
+		/* color: #FFFFFF; */
 	}
 	.text2{
 		// border: 2px solid red;

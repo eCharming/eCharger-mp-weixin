@@ -1,69 +1,75 @@
 <template>
-	<movable-area class="movable-area" :style="{'top':boxHeight+'px'}" @touchmove.prevent.stop>
-
-		<movable-view class="main" direction="vertical" damping="30" out-of-bounds="true" :y="currentY"
-			@change="onchange($event)" @touchend="end()">
-			<view>
-				<view class="content">
-					
-					<view class="fixed-view">
-						<view :class="[isLow?'animationBtn':'stillBtn','flex-img']">
-							<infobutton></infobutton>
-							<locationbutton></locationbutton>
+	<view>
+		<navigator :isLow="isLow"></navigator>
+		<movable-area class="movable-area" :style="{'top':boxHeight+'px','height':areaLength+'px'}" @touchmove.prevent.stop>
+		
+			<movable-view class="main" :style="{'height':windowHeight+'px'}" direction="vertical" damping="30" out-of-bounds="true" :y="currentY"
+				@change="onchange($event)" @touchend="end()">
+				<view>
+					<view class="content">
+						
+						<view class="fixed-view">
+							<view :class="[isLow?'animationBtn':'stillBtn','flex-img']">
+								<infobutton></infobutton>
+								<locationbutton></locationbutton>
+							</view>
 						</view>
-					</view>
-					
-					<view class="touchline">
-						<view class="line"></view>
-					</view>
-
-					<destination></destination>
-					<hiddencard :percent="percent"></hiddencard>
-					<hiddendetail v-if="hiddenDetail" :percent="percent" @tap="detail"></hiddendetail>
-					
-					<card>
-						<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent" :type="1"
-							@tap="tapButton1()">
-							<image class="image1" src="../static/image/car&charger_color.png"
-								:style="{'filter':'grayscale('+imageFilter1+')','opacity':imageOpacity1}"></image>
-						</totalbutton>
-						<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" :percent="percent" :type="2"
-							@tap="tapButton2()">
-							<image class="image2" src="../static/image/park.png"
-								:style="{'filter':'grayscale('+imageFilter2+')','opacity':imageOpacity2}"></image>
-						</totalbutton>
-					</card>
-
-
-					<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
-						<order v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
-							:location="order.location" :distance="order.distance" :price="order.price"
-							:startTime="order.startTime" :endTime="order.endTime" :detail="order.detail"
-							@tap="tapOrder(index)" @emit="detail()" @toLow="toLow">
-						</order>
-						<charger v-if="isSelected2" v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
-							:location="charger.location" :state="charger.state" :price="charger.price"
-							:startTime="charger.startTime" :endTime="charger.endTime"
-							@tap="tapCharger(index)">
-						</charger>
-						<view class="scrollerview">
-							<!-- <icon :type="icontype" color="rgb(102,205,170)"></icon> -->
-							<image src="@/static/image/uparrow.png" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
-							<image src="@/static/image/warning.png" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
-							<text>{{icontext}}</text>  
+						
+						<view class="touchline">
+							<view class="line"></view>
 						</view>
+		
+						
+						<hiddencard :percent="percent"></hiddencard>
+						<hiddendetail v-if="hiddenDetail" :percent="percent" @tap="detail"></hiddendetail>
+						
+						<!-- <view style="height: 250upx;position: absolute;border: 2px solid red;top:-20upx"></view> -->
+						<card>
+							<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent" :type="1"
+								@tap="tapButton1()">
+								<image class="image1" src="../static/image/car&charger_color.png"
+									:style="{'filter':'grayscale('+imageFilter1+')','opacity':imageOpacity1}"></image>
+							</totalbutton>
+							<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" :percent="percent" :type="2"
+								@tap="tapButton2()">
+								<image class="image2" src="../static/image/park.png"
+									:style="{'filter':'grayscale('+imageFilter2+')','opacity':imageOpacity2}"></image>
+							</totalbutton>
+						</card>
+						<!-- <view style="height: 200upx;position: absolute;border: 2px solid red;"></view> -->
+						<destination></destination>
+		
+						<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
+							<order v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
+								:location="order.location" :distance="order.distance" :price="order.price"
+								:startTime="order.startTime" :endTime="order.endTime" :detail="order.detail"
+								@tap="tapOrder(index)" @emit="detail()" @toLow="toLow">
+							</order>
+							<charger v-if="isSelected2" v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
+								:location="charger.location" :state="charger.state" :price="charger.price"
+								:startTime="charger.startTime" :endTime="charger.endTime"
+								@tap="tapCharger(index)">
+							</charger>
+							<view class="scrollerview">
+								<!-- <icon :type="icontype" color="rgb(102,205,170)"></icon> -->
+								<image src="@/static/image/uparrow.png" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
+								<image src="@/static/image/warning.png" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
+								<text>{{icontext}}</text>  
+							</view>
+								
 							
-						
-						
-					</scroller>
-
-
+							
+						</scroller>
+		
+		
+					</view>
 				</view>
-			</view>
-		</movable-view>
-
-	</movable-area>
-
+			</movable-view>
+		
+		</movable-area>
+		
+	</view>
+	
 </template>
 
 <script>
@@ -77,6 +83,7 @@
 	import infobutton from './infoButton.vue'
 	import hiddencard from './hiddenCard.vue'
 	import hiddendetail from './hiddenDetail.vue'
+	import navigator from './navigator.vue'
 
 	export default {
 		components: {
@@ -90,6 +97,7 @@
 			infobutton,
 			hiddencard,
 			hiddendetail,
+			navigator
 		},
 		data() {
 			return {
@@ -97,10 +105,13 @@
 				currentY: 0, //当前movablebox的高度(非实时)
 				percent: 1, //movablebox移动到上下限的百分之多少
 				boxHeight: 300, //movablebox的最高高度
-				windowHeight: 0, //本机的高度 单位px
+				windowHeight: 300, //本机的高度 单位px
 				windowWidth: 0, //本机的宽度 单位px
 				isLow: true, //滑动开始前上拉框处在低位则为真，在高位则为假
 				scrollTop:0,
+				areaLength:500,
+				minHeight:0.33,
+				maxHeight:0.9,
 
 				imageFilter1: 0,
 				imageOpacity1: 1,
@@ -124,16 +135,6 @@
 				isSelected1: true,
 				isSelected2: false,
 			}
-		},
-		props: {
-			minHeight: {
-				type: Number,
-				default: 0.35
-			},
-			maxHeight: {
-				type: Number,
-				default: 0.9
-			},
 		},
 		methods: {
 			onchange(e) {
@@ -273,8 +274,11 @@
 		},
 		mounted() {
 			this.windowHeight = this.$store.state.windowHeight;
+			this.minHeight=uni.upx2px(250)/this.windowHeight;
+			console.log((1+(this.maxHeight-this.minHeight)))
 			this.windowWidth = uni.getSystemInfoSync().windowWidth;
 			this.boxHeight = this.windowHeight * (1 - this.maxHeight);
+			this.areaLength=(1+(this.maxHeight-this.minHeight))*this.windowHeight;
 			this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
 		},
 		watch: {
@@ -331,8 +335,7 @@
 <style scoped>
 	.movable-area {
 		position: relative;
-		height: 155vh;
-		width: 750upx;
+		width: 100%;
 		pointer-events: none;
 	}
 
@@ -350,7 +353,6 @@
 	}
 
 	.main {
-		height: 100vh;
 		width: 750upx;
 		background-color: rgb(240, 245, 240);
 		/* background-color: #FFFFFF; */

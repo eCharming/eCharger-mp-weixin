@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<navigator :color="color" :isBinded="true"></navigator>
+		<view :style="{'height':statusHeight+'px','background':doubleColor}"></view>
 		<view class="searchbox">
 			<view class="textareaview">
 				<textarea class="textarea" 
@@ -143,6 +143,7 @@
 		},
 		data(){
 			return{
+				statusHeight:0,
 				position:"",
 				suggestions:[],
 				storageHeight:0,
@@ -159,7 +160,8 @@
 				buttonOpacity1:1,
 				buttonOpacity2:1,
 				color:'rgba(102,205,170,1)',
-				src1:"../../static/image/lightning_green.png"
+				doubleColor:"linear-gradient(to right bottom,rgb(102,205,170) 0% 100%,rgb(50,200,210))",
+				src1:"../../static/image/lightning_green.png",
 			}
 		},
 		methods:{
@@ -278,7 +280,7 @@
 				this.currentPage=e.detail.current;
 			},
 			transition(e){
-				// 55,135,230 蓝
+				// 50,200,210 蓝
 				// 102,205,170 绿
 				var dx=e.detail.dx;
 				var percent=Math.abs(dx)/this.windowWidth;
@@ -302,8 +304,8 @@
 					this.buttonLeft=uni.upx2px(185-185*percent);
 					this.buttonOpacity1=1-percent;
 					this.buttonOpacity2=percent;
-					this.color="rgba("+(102-47*percent)+","+(205-70*percent)+","+(170+60*percent)+",1)";
-					
+					this.color="rgba("+(102-52*percent)+","+(205-5*percent)+","+(170+40*percent)+",1)";
+					this.doubleColor="linear-gradient(to right bottom,rgb(102,205,170) 0% "+(1-percent)*100+"%,"+this.$store.state.color+")";
 				}else{
 					if(percent<=0.5){
 						this.$nextTick(function(){
@@ -324,11 +326,13 @@
 					this.buttonLeft=uni.upx2px(185*percent);
 					this.buttonOpacity1=percent;
 					this.buttonOpacity2=1-percent;
-					this.color="rgba("+(55+47*percent)+","+(135+70*percent)+","+(230-60*percent)+",1)";
+					this.color="rgba("+(50+52*percent)+","+(200+5*percent)+","+(210-40*percent)+",1)";
+					this.doubleColor="linear-gradient(to right bottom,rgb(102,205,170) 0% "+percent*100+"%,"+this.$store.state.color+")";
 				}
 			}
 		}, 
 		mounted(){
+			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			var keys=uni.getStorageInfoSync().keys;
 			if(keys!=null){
 				
@@ -463,8 +467,8 @@
 	}
 	
 	.add{
-		background-color: rgba(55,135,230,0.2);
-		color: rgb(55,135,230);
+		background-color: rgba(50,200,210,0.2);
+		color: rgb(50,200,210);
 		margin-right: 30upx;
 		padding: 10upx;
 		font-size: 23upx;

@@ -63,7 +63,7 @@
 			activate(){
 				if(this.type==1)
 					this.bordercolor="rgba(102,205,170,1)";
-				else this.bordercolor='rgba(55,135,230,1)';
+				else this.bordercolor=this.$store.state.color;
 			},
 			inactivate(){
 				this.bordercolor="rgba(0,0,0,0.1)";

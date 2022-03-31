@@ -90,7 +90,7 @@
 					this.destination = this.$store.state.destination.title;
 					if(this.$store.state.buttonSelected==1)
 						this.color = "rgb(102,205,170)";
-					else this.color="rgb(55,135,230)";
+					else this.color=this.$store.state.color;
 				}else{
 					this.destination = "请输入你的目的地";
 					this.color = "rgba(0,0,0,0.5)";
@@ -103,14 +103,14 @@
 					this.src="../static/image/lightning_green.png";
 				}	
 				else{
-					this.dayColor="rgb(55,135,230)";
+					this.dayColor=this.$store.state.color;
 					this.src="../static/image/lightning_blue.png"
 				} 
 				if(this.color != "rgba(0,0,0,0.5)"){
 					if(this.$store.state.buttonSelected==1){
 						this.color = "rgb(102,205,170)";
 					}	
-					else this.color="rgb(55,135,230)";
+					else this.color=this.$store.state.color;
 				}
 			}
 		}
