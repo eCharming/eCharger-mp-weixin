@@ -1,7 +1,7 @@
 <template>
 	<view class="card">
 		<view class="near">
-			<text class="text1" :style="{'color':dayColor}">{{month}}月{{date}}日星期{{day}}</text>
+			<text class="text1" :style="{'color':dayColor,'transition':'color 0.5s'}">{{month}}月{{date}}日星期{{day}}</text>
 			
 			<view class="time1" >
 				<picker mode="time" :start="minTime1" :end="maxTime1" @change="changetime1">
@@ -18,6 +18,8 @@
 		
 		<view class="destination"
 			@tap="navigate()">
+			<image :src="src1" :class="changeImg==0?'image1':'image1_none'"></image>
+			<image :src="src2" :class="changeImg==0?'image1_none':'image1'"></image>
 			<image class="image1" :src="src"></image>
 			<text class="text2" :style="{'color':color}">{{destination}}</text>
 			
@@ -47,7 +49,9 @@
 				destination:"请输入你的目的地",
 				color:"rgba(0,0,0,0.5)",
 				dayColor:"rgb(102,205,170)",
-				src:"../static/image/lightning_green.png"
+				src1:"../static/image/lightning_green.png",
+				src2:"../static/image/lightning_blue.png",
+				changeImg:0,
 			}
 		},
 		methods:{
@@ -100,11 +104,11 @@
 			'$store.state.buttonSelected'(){
 				if(this.$store.state.buttonSelected==1){
 					this.dayColor = "rgb(102,205,170)";
-					this.src="../static/image/lightning_green.png";
+					this.changeImg = 0;
 				}	
 				else{
 					this.dayColor=this.$store.state.color;
-					this.src="../static/image/lightning_blue.png"
+					this.changeImg = 1;
 				} 
 				if(this.color != "rgba(0,0,0,0.5)"){
 					if(this.$store.state.buttonSelected==1){
@@ -123,6 +127,17 @@
 		top:15upx;
 		width:60upx;
 		height:60upx;
+		opacity:1;
+		transition: opacity 0.5s;
+	}
+	
+	.image1_none{
+		position: absolute;
+		top:15upx;
+		width:60upx;
+		height:60upx;
+		opacity:0;
+		transition: opacity 0.5s;
 	}
 	
 	.card{

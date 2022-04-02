@@ -12,7 +12,8 @@
 					
 				</textarea>
 				<text class="searchtext" :style="{'color':color}">搜索</text>
-				<image :src="src1" class="image1"></image>
+				<image :src="src1" :class="changeImg==0?'image1':'image1_none'"></image>
+				<image :src="src2" :class="changeImg==0?'image1_none':'image1'"></image>
 			</view>
 			
 			<view class="storageview" v-if="!isInput">
@@ -156,12 +157,14 @@
 				windowWidth:0,
 				justifyContent:"flex-start",
 				currentPage:0,
+				changeImg:0,
 				buttonLeft:0,
 				buttonOpacity1:1,
 				buttonOpacity2:1,
 				color:'rgba(102,205,170,1)',
 				doubleColor:"linear-gradient(to right bottom,rgb(102,205,170) 0% 100%,rgb(50,200,210))",
 				src1:"../../static/image/lightning_green.png",
+				src2:"../../static/image/lightning_blue.png",
 			}
 		},
 		methods:{
@@ -269,12 +272,7 @@
 				}
 			},
 			change(e){
-				var currentPage=e.detail.current;
-				if(currentPage==0){
-					this.src1="../../static/image/lightning_green.png";
-				}else{
-					this.src1="../../static/image/lightning_blue.png";
-				}
+				this.changeImg=e.detail.current;
 			},
 			animationfinish(e){
 				this.currentPage=e.detail.current;
@@ -364,6 +362,18 @@
 		width: 70upx;
 		left:45upx;
 		bottom: 10upx;
+		opacity:1;
+		transition: opacity 0.5s;
+	}
+	
+	.image1_none{
+		position: absolute;
+		height: 70upx;
+		width: 70upx;
+		left:45upx;
+		bottom: 10upx;
+		opacity: 0;
+		transition: opacity 0.5s;
 	}
 	
 	.image2{

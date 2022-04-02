@@ -51,9 +51,8 @@
 								@tap="tapCharger(index)">
 							</charger>
 							<view class="scrollerview">
-								<!-- <icon :type="icontype" color="rgb(102,205,170)"></icon> -->
-								<image src="@/static/image/uparrow.png" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
-								<image src="@/static/image/warning.png" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
+								<image :src="src1" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
+								<image :src="src2" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
 								<text>{{icontext}}</text>  
 							</view>
 								
@@ -134,6 +133,9 @@
 
 				isSelected1: true,
 				isSelected2: false,
+				
+				src1:"/static/image/uparrow.png",
+				src2:"/static/image/warning.png",
 			}
 		},
 		methods: {
@@ -176,6 +178,9 @@
 				this.imageOpacity2 = 0.3;
 				this.chargerSelected = -1;
 				
+				this.src1="/static/image/uparrow.png";
+				this.src2="/static/image/warning.png";
+				
 				this.$store.commit('setButtonSelected',1);
 				this.$nextTick(function(){
 					this.toHigh();
@@ -188,6 +193,10 @@
 				this.imageOpacity1 = 0.3;
 				this.imageFilter2 = 0;
 				this.imageOpacity2 = 1;
+				
+				this.src1="/static/image/uparrow_blue.png";
+				this.src2="/static/image/warning_blue.png";
+				
 				if(this.orderSelected!=-1){
 					this.orders[this.orderSelected].detail=false;
 					this.orderSelected = -1;
