@@ -4,7 +4,7 @@
 		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
 			<image src="/static/image/logo.gif" class="img-class"></image>
 		</view>
-		<mymap v-show='!isLaunch'></mymap>
+		<mymap v-show='!isShown'></mymap>
 		<movablebox v-show='!isShown'></movablebox>
 	</view>
 </template>
@@ -21,7 +21,6 @@
 			return {
 				isLaunch: true,
 				isShown:true,
-				// isShown:false
 			}
 		},
 		methods: {},
@@ -40,8 +39,8 @@
 
 <style scoped>
 	.img-class {
-		width: 640upx;
-		height: 480upx;
+		width: 444upx;
+		height: 333upx;
 	}
 
 	.bg-class {
