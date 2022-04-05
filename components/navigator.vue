@@ -1,6 +1,6 @@
 <template>
 	<view style="transition: all .1s;position: relative;">
-		<view :style="{'height':statusHeight+'px','background-color':backColor}"></view>
+		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
 		<view style="height: 50px;display: flex;position: relative;" :style="{'background-color':backColor}">
 				<view style="color:#FFFFFF ;margin-left: 15upx;margin-top: 25upx;">成都</view>
 				<view style="color: rgba(0,0,0,0.6);margin: 15upx;height: 35px;background-color: #FFFFFF;border-radius: 20upx;

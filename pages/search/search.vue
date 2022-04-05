@@ -76,10 +76,19 @@
 				</swiper-item>
 					<swiper-item>
 						<view style="display: flex;justify-content: space-between;margin: 30upx;">
-							<view style="width: 230upx;display: flex;justify-content: center;">回家</view>
+							<view style="width: 230upx;display: flex;justify-content:center; align-items:center;">
+							<image src="../../static/image/home.png" style="height:20px;width:20px;margin-right:20upx;"></image>
+								回家
+							</view>
 							<view style="width: 230upx;display: flex;justify-content: center;
-							border-left:1px solid rgba(0,0,0,0.1);border-right:1px solid rgba(0,0,0,0.1);">公司</view>
-							<view style="width: 230upx;display: flex;justify-content: center;">学校</view>
+							border-left:1px solid rgba(0,0,0,0.1);border-right:1px solid rgba(0,0,0,0.1);align-items:center;">
+							<image src="../../static/image/work.png" style="height:20px;width:20px;margin-right:20upx;"></image>
+							 公司
+							</view>
+							<view style="width: 230upx;display: flex;justify-content: center;align-items:center;">
+							<image src="../../static/image/school.png" style="height:20px;width:20px;margin-right:20upx;"></image>
+							 学校
+							</view>
 						</view>
 						<scroll-view
 							scroll-y="true"
@@ -109,7 +118,7 @@
 					<view style="display: flex;justify-content: space-between;">
 						<view class="view1">
 							<image class="image2" src="../../static/image/landmark.png"></image>
-							<rich-text :nodes="suggestion.strings"></rich-text>
+							<rich-text :nodes="suggestion.strings" class="richtext"></rich-text>
 						</view>
 						<view style="position: absolute;right: 40upx;top: 5upx;display: flex;flex-direction: column;justify-content: center;">
 							<image src='../../static/image/distance.png' style="width: 80upx;height: 80upx;"></image>
@@ -169,31 +178,35 @@
 		},
 		methods:{
 			request(){
-				this.isInput=true;
-				var url='https://apis.map.qq.com/ws/place/v1/suggestion?keyword='+this.position+'&location='
-					+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&address_format=short'
-					+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL';
-				uni.request({
-					url:url,
-					method:'GET',
-					success: (res) => {
-						console.log(url)
-						if(res.data.status =='0'){
-							this.suggestions.splice(0);
-							for(var index in res.data.data){
-								this.suggestions.push({
-									id:res.data.data[index].id,
-									title: res.data.data[index].title,
-									address: res.data.data[index].address,
-									category: res.data.data[index].category,
-									location: res.data.data[index].location,
-									distance: (res.data.data[index]._distance/1000).toFixed(1),
-									strings: this.keyword(res.data.data[index].title,this.position),
-								});
-							};
-						} 
-					},
-				})
+				if(this.position=="") {
+					this.isInput=false;
+				} else {
+					this.isInput=true;
+					var url='https://apis.map.qq.com/ws/place/v1/suggestion?keyword='+this.position+'&location='
+						+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&address_format=short'
+						+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL';
+					uni.request({
+						url:url,
+						method:'GET',
+						success: (res) => {
+							if(res.data.status =='0'){
+								this.suggestions.splice(0);
+								for(var index in res.data.data){
+									this.suggestions.push({
+										id:res.data.data[index].id,
+										title: res.data.data[index].title,
+										address: res.data.data[index].address,
+										category: res.data.data[index].category,
+										location: res.data.data[index].location,
+										distance: (res.data.data[index]._distance/1000).toFixed(1),
+										strings: this.keyword(res.data.data[index].title,this.position),
+										strings: "<div style='width: 100%;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>"+this.keyword(res.data.data[index].title,this.position)+"<div>",
+									});
+								};
+							} 
+						},
+					})
+				}
 			},
 			keyword(title,position){
 				if(title.includes(position)){
@@ -542,17 +555,16 @@
 	}
 	
 	.view1{
+		display: flex;
 		margin: 20upx;
-		/* margin-top: 20upx; */
 		margin-bottom: 10upx;
 		margin-left: 30upx;
 		font-size: 30upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
-		white-space: nowrap;
+/* 		white-space: nowrap;
 		overflow: hidden;
-		text-overflow: ellipsis;
-		display: flex;
+		text-overflow: ellipsis; */
 	}
 	
 	.text2{
@@ -581,5 +593,16 @@
 		padding: 10upx;
 		font-size: 20upx;
 		
+	}
+	.text1 {
+		border:1px red solid;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width:350upx;
+	}
+	
+	.richtext {
+		width: 450upx;
 	}
 </style>
