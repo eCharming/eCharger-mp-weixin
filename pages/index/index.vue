@@ -1,11 +1,11 @@
 <template>
 	<view>
 		
-		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
+		<!-- <view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
 			<image src="/static/image/logo.gif" class="img-class"></image>
 		</view>
 		<mymap v-show='!isShown'></mymap>
-		<movablebox v-show='!isShown'></movablebox>
+		<movablebox v-show='!isShown'></movablebox> -->
 	</view>
 </template>
 
@@ -25,6 +25,18 @@
 		},
 		methods: {},
 		onLoad() {
+			wx.cloud.callFunction({   //uid获取
+				name:'wxlogin',
+				data:{
+					username:"gxnsos",
+					userphone:"1919810"
+				}
+			}).then(
+				res=>{
+					this.$store.commit('setUid',res.result);
+				}
+			)
+			
 			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;
 			this.$store.commit('setWindowHeight',windowHeight);
 			setTimeout(() => {

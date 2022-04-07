@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+		uid:null,//用户id
 		currentLocation:null, //用于记录自身的经纬度坐标
         locationres:null,
 		destination:null,	//用于记录目的地的名字、地址、经纬度坐标以及和现在位置的距离
@@ -21,6 +22,9 @@ export default new Vuex.Store({
 		
     },
     mutations: {
+		setUid(state,uid){
+			state.uid=uid;
+		},
 		setCurrentLocation(state,currentLocation){
 			state.currentLocation=currentLocation;
 		},
