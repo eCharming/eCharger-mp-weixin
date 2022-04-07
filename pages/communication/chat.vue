@@ -11,13 +11,13 @@
 				:style="{'height':scrollHeight+'px'}"
 			>
 				<view v-for="text,index in texts" :key="index" :id="'index'+index" :class="text.fromMe?'myTextView':'otherTextView'">
-					<text :class="text.fromMe?'myText':'otherText'">{{text.message}}</text>
+					<text :class="text.fromMe?'myText':'otherText'" selectable="true" space="nbsp">{{text.message}}</text>
 				</view>
 			</scroll-view>
 		</view>
 		<view class="typeView">
 			<view style="display: flex;">
-				<textarea class="type" v-model="message"></textarea>
+				<textarea class="type" v-model="message" maxlength="140"></textarea>
 				<view class="send" @click="send">发送</view>
 			</view>
 			
@@ -181,7 +181,7 @@
 	
 	.myTextView{
 		display:flex;
-		justify-content: flex-end
+		justify-content: flex-end;
 	}
 	
 	.otherTextView{
@@ -193,15 +193,21 @@
 		color: #FFFFFF;
 		margin: 20upx;
 		padding: 30upx;
-		border-radius: 40upx;
+		border-radius: 30upx;
+		border-top-right-radius: 0upx;
 		font-size: 30upx;
+		word-break:break-all;
+		word-wrap:break-word; 
 	}
 	
 	.otherText{
 		background-color: rgba(255,255,255,1);
 		margin: 20upx;
 		padding: 30upx;
-		border-radius: 40upx;
+		border-radius: 30upx;
+		border-top-left-radius: 0upx;
 		font-size: 30upx;
+		word-break:break-all;
+		word-wrap:break-word; 
 	}
 </style>
