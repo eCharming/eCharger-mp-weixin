@@ -1,11 +1,11 @@
 <template>
 	<view>
 		
-		<!-- <view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
+		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
 			<image src="/static/image/logo.gif" class="img-class"></image>
 		</view>
 		<mymap v-show='!isShown'></mymap>
-		<movablebox v-show='!isShown'></movablebox> -->
+		<movablebox v-show='!isShown'></movablebox>
 	</view>
 </template>
 

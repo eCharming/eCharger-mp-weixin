@@ -15,7 +15,7 @@
 				<image src="../static/image/scan.png" class="image1"  :style="{'margin-bottom':margin2+'px'}"></image>
 				<text class="text1" :style="{'opacity':opacity,'bottom':textBottom+'px'}">扫一扫</text>
 			</view>
-			<view class="view1" :style="{'margin-bottom':margin1+'px'}">
+			<view class="view1" :style="{'margin-bottom':margin1+'px'}" @click="connection()">
 				<image src="../static/image/connection2.png" class="image1" :style="{'margin-bottom':margin2+'px'}"></image>
 				<text class="text1" style="margin-left: 12upx;" :style="{'opacity':opacity,'bottom':textBottom+'px'}">联系</text>
 			</view>
@@ -51,6 +51,15 @@
 			},
 			buttonSelected:{
 				type:Number,
+			}
+		},
+		methods:{
+			connection(){
+				uni.navigateTo({
+					url: '../communication/friends',
+					animationType: 'slide-in-bottom',
+					animationDuration: 200
+				});
 			}
 		},
 		mounted() {
