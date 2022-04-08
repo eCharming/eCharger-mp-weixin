@@ -9,6 +9,9 @@
 			:style="{'height':scrollHeight+'px'}"
 		>
 			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(friend.name,friend.uid)">
+				<view class="avatarView">
+					<image class="avatar" src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epC7z1MOibsdn9Z8P5kl2oNOMaJufQy7luCAlzmBVlY8ERytGHgOvw4CD9xUoxPhiciaBrJIJTPM1dcQ/132"></image>
+				</view>
 				<text class="name">{{friend.name}}</text>
 				<text class="lastWord">{{friend.lastWord}}</text>
 				<text class="lastTime">{{friend.lastTime}}</text>
@@ -153,6 +156,22 @@
 		height: 150upx;
 		/* border: 2px red solid; */
 		position: relative;
+	}
+	
+	.avatarView{
+		position: absolute;
+		height: 100upx;
+		width: 100upx;
+		border-radius: 50%;
+		top:25upx;
+		left: 25upx;
+		overflow: hidden;
+	}
+	
+	.avatar{
+		position: absolute;
+		height: 100upx;
+		width: 100upx;
 	}
 	
 	.name{
