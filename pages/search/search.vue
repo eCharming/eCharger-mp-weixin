@@ -220,18 +220,42 @@
 					return title;
 				}
 			},
-			tap(id,title,location,category){
-				var keys=uni.getStorageInfoSync().keys;
-				uni.setStorageSync(id,
-					{
+			setStorage(id,title,location,category){
+				var searchHistory= uni.getStorageSync('searchHistory');
+				console.log(searchHistory)
+				if(searchHistory!=''){
+					console.log(1111)
+					searchHistory=JSON.parse(searchHistory);
+					for(var index in searchHistory){
+						if(searchHistory[index].id==id){
+							searchHistory.splice(index,1);
+							break;
+						}
+					}
+					if(searchHistory.length>=10){
+						searchHistory.splice(0,1);
+					}
+					searchHistory.push({
+						id:id,
 						title:title,
 						location:location,
 						category:category
-					}
-				);
-				if(keys.length>=10){
-					uni.removeStorageSync(keys[0]);
+					});
+					uni.setStorageSync('searchHistory',JSON.stringify(searchHistory));
+				}else{
+					console.log(2222)
+					searchHistory=[];
+					searchHistory.push({
+						id:id,
+						title:title,
+						location:location,
+						category:category
+					});
+					uni.setStorageSync('searchHistory',JSON.stringify(searchHistory));
 				}
+			},
+			tap(id,title,location,category){
+				this.setStorage(id,title,location,category);
 				uni.request({
 					url:'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from='
 					+this.$store.state.currentLocation.latitude+','+this.$store.state.currentLocation.longitude+'&to='
@@ -265,24 +289,19 @@
 				this.$store.commit('addIsLow');
 			},
 			clear(){
-				uni.clearStorageSync();
+				uni.removeStorageSync('searchHistory');
 				this.storages.splice(0);
 			},
 			del(index){
 				this.storages.splice(index,1);
-				var keys=uni.getStorageInfoSync().keys;
-				if(keys!=null){
-					var k=0;
-					for(var i in keys){
-						if(uni.getStorageSync(keys[i]).title!=null){
-							if(k==index){
-								uni.removeStorageSync(keys[i]);
-								break;
-							}
-							k++;
-						}
-					}
-				}
+				var searchHistory= JSON.parse(uni.getStorageSync('searchHistory'));
+				
+				if(searchHistory.length!=1){
+					var historyIndex=searchHistory.length-1-index;
+					searchHistory.splice(historyIndex,1);
+					uni.setStorageSync('searchHistory',JSON.stringify(searchHistory));
+				}else uni.removeStorageSync('searchHistory');
+				
 			},
 			change(e){
 				this.changeImg=e.detail.current;
@@ -332,7 +351,6 @@
 						
 						this.modelWidth=uni.upx2px(400-280*(percent-0.5)*2);
 						// this.modelHeight=uni.upx2px(7+8*(percent-0.5)*2);
-						// 
 					}
 					this.buttonLeft=uni.upx2px(185*percent);
 					this.buttonOpacity1=percent;
@@ -343,16 +361,14 @@
 			}
 		}, 
 		mounted(){
+			console.log(uni.getStorageSync('searchHistory'))
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
-			var keys=uni.getStorageInfoSync().keys;
-			if(keys!=null){
-				
-				for(var index in keys){
-					if(uni.getStorageSync(keys[index]).title!=null){
-						this.storages.push(uni.getStorageSync(keys[index]));
-					}else{
-						uni.removeStorageSync(keys[index]);
-					}
+			var searchHistory=uni.getStorageSync('searchHistory');
+			if(searchHistory){
+				searchHistory=JSON.parse(searchHistory);
+				var length=searchHistory.length;
+				for(var index in searchHistory){
+					this.storages.push(searchHistory[length-1-index]);
 				}
 			}
 			this.windowWidth=uni.getSystemInfoSync().windowWidth;
