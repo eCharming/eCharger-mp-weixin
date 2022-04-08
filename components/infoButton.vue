@@ -17,6 +17,12 @@
 		methods:{
 			info() {
 				//TODO
+				wx.getUserProfile({
+					desc:'获取微信头像以及昵称',
+					success: (res) => {
+						console.log(res)
+					}
+				})
 			}
 		},
 		watch:{

@@ -68,23 +68,29 @@
 			},
 			connect(){
 				this.socketTask=uni.connectSocket({		//打开链接
-					url:'wss://ws.healtool.cn/websocketapi/'+this.uid+'/'+this.toUid,
-					// url:'ws://127.0.0.1:8080/websocketapi/'+this.uid+'/'+this.toUid,
+					url:'wss://ws.healtool.cn/websocketapi/Chat/'+this.uid+'/'+this.toUid,
+					// url:'ws://127.0.0.1:8080/websocketapi/Chat/'+this.uid+'/'+this.toUid,
 					success: () => {
-						uni.onSocketMessage((res)=>{
-							console.log(res)
-							var data=JSON.parse(res.data);
-							var message=data.message;
-							this.texts.push({
-								fromMe:false,//是否是我发出的
-								message:message,
-							})
-						});
-						uni.onSocketClose(function(res){
-							console.log(res)
-						})
+						console.log(11111)
 					}
 				});
+				this.socketTask.onMessage((res)=>{
+					console.log(res)
+					var data=JSON.parse(res.data);
+					var messages=data.message;
+					console.log(messages)
+					for(var index in messages){
+						var text=JSON.parse(messages[index])
+						this.texts.push({
+							fromMe:false,//是否是我发出的
+							message:text.message,
+						})
+					}
+					
+				});
+				this.socketTask.onClose((res)=>{
+					console.log(res)
+				})
 			}
 		},
 		onLoad(option) {

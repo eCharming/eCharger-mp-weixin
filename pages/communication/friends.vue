@@ -12,6 +12,9 @@
 				<text class="name">{{friend.name}}</text>
 				<text class="lastWord">{{friend.lastWord}}</text>
 				<text class="lastTime">{{friend.lastTime}}</text>
+				<view v-if="friend.hasNew" class="newMessage">
+					<text>{{friend.newMessageNum}}</text>
+				</view>
 			</view>
 		</scroll-view>
 		
@@ -26,7 +29,8 @@
 				contacterBottom:0,
 				statusHeight:0,
 				scrollHeight:0,
-				friends:[]
+				friends:[],
+				uid:-1,
 			}
 		},
 		methods:{
@@ -36,33 +40,99 @@
 					animationType: 'slide-in-bottom',
 					animationDuration: 200
 				});
+			},
+			connect(){
+				this.socketTask=uni.connectSocket({		//打开链接
+					url:'wss://ws.healtool.cn/websocketapi/Reminder/'+this.uid,
+					// url:'ws://127.0.0.1:8080/websocketapi/Reminder/'+this.uid,
+					success: () => {
+						
+					}
+				});
+				this.socketTask.onMessage((res)=>{
+					console.log(res)
+					var reminders=JSON.parse(res.data);
+					console.log(reminders)
+					for(var index in reminders){
+						var fromUid=reminders[index].fromUid;
+						var text=JSON.parse(reminders[index].latestText);
+						var num=reminders[index].num;
+						for(var i in this.friends){
+							if(fromUid==this.friends[i].uid){
+								this.friends[i].lastWord=text.message;
+								this.friends[i].newMessageNum=num;
+								this.friends[i].hasNew=true;
+								var time=new Date(text.time);
+								var hour=time.getHours();
+								var minute=time.getMinutes();
+								this.friends[i].lastTime=hour+':'+minute;
+							}
+						}
+					}
+				});
+				this.socketTask.onClose((res)=>{
+					console.log(res)
+				});
 			}
 		},
-		mounted() {
+		onLoad() {
+			this.uid=this.$store.state.uid;
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			this.contacterBottom=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight;
 			this.friends.push({
 				uid:1,
 				name:'solaking',
-				lastWord:'114514',
-				lastTime:'11:45'
+				lastWord:'',
+				lastTime:'',
+				newMessageNum:0,//新消息数量
+				hasNew:false//是否有新消息
 			},{
 				uid:2,
 				name:'gxnsos',
-				lastWord:'1919810',
-				lastTime:'19:19'
+				lastWord:'',
+				lastTime:'',
+				newMessageNum:0,//新消息数量
+				hasNew:false//是否有新消息
 			},{
 				uid:3,
 				name:'d-sketon',
-				lastWord:'1919810',
-				lastTime:'19:19'
+				lastWord:'',
+				lastTime:'',
+				newMessageNum:0,//新消息数量
+				hasNew:false//是否有新消息
 			},{
 				uid:4,
 				name:'lecter',
-				lastWord:'1919810',
-				lastTime:'19:19'
-			})
+				lastWord:'',
+				lastTime:'',
+				newMessageNum:0,//新消息数量
+				hasNew:false//是否有新消息
+			});
+	
+		},
+		onUnload() {
+			if(this.socketTask!=null){
+				this.socketTask.close({
+					success: () => {
+						this.socketTask=null;
+					}
+				});
+			}
+		},
+		onShow() {
+			if(this.socketTask==null){
+				this.connect();
+			}
+		},
+		onHide() {
+			if(this.socketTask!=null){
+				this.socketTask.close({
+					success: () => {
+						this.socketTask=null;
+					}
+				});
+			}
 		}
 	}
 </script>
@@ -102,10 +172,25 @@
 	}
 	
 	.lastTime{
+		font-size: 25upx;
 		letter-spacing: 1upx;
 		position: absolute;
 		top:35upx;
 		right: 30upx;
 		color: rgba(0,0,0,0.5);
+	}
+	
+	.newMessage{
+		background-color: rgba(102,205,170,1);
+		color: #FFFFFF;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-radius: 50%;
+		height: 40upx;
+		width: 40upx;
+		position: absolute;
+		top:80upx;
+		right: 30upx;
 	}
 </style>

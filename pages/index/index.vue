@@ -25,17 +25,19 @@
 		},
 		methods: {},
 		onLoad() {
-			wx.cloud.callFunction({   //uid获取
-				name:'wxlogin',
-				data:{
-					username:"gxnsos",
-					userphone:"1919810"
-				}
-			}).then(
-				res=>{
-					this.$store.commit('setUid',res.result);
-				}
-			)
+			
+			// wx.cloud.callFunction({   //uid获取
+			// 	name:'wxlogin',
+			// 	data:{
+			// 		username:"gxnsos",
+			// 		userphone:"1919810"
+			// 	}
+			// }).then(
+			// 	res=>{
+			// 		this.$store.commit('setUid',res.result);
+			// 	}
+			// )
+			this.$store.commit('setUid',2);
 			
 			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;
 			this.$store.commit('setWindowHeight',windowHeight);
