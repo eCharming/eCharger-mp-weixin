@@ -202,8 +202,12 @@
 				text: ["起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间",
 					"起始时间", "结束时间"
 				],
-				minTime: ['00:00', '00:00', '00:00', '00:00', '00:00', '00:00', '00:00','00:00', '00:00', '00:00', '00:00', '00:00', '00:00', '00:00'],
-				maxTime: ['24:00', '24:00', '24:00', '24:00', '24:00', '24:00', '24:00','24:00', '24:00', '24:00', '24:00', '24:00', '24:00', '24:00'],
+				minTime: ['00:00', '00:00', '00:00', '00:00', '00:00', '00:00', '00:00', '00:00', '00:00', '00:00',
+					'00:00', '00:00', '00:00', '00:00'
+				],
+				maxTime: ['24:00', '24:00', '24:00', '24:00', '24:00', '24:00', '24:00', '24:00', '24:00', '24:00',
+					'24:00', '24:00', '24:00', '24:00'
+				],
 				opacity: [0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7],
 				remarks: "",
 				avatarUrl: [],
@@ -243,15 +247,15 @@
 			},
 			changetime1(e, index) {
 				var time = e.detail.value;
-				this.text.splice(index,1,time)
-				this.minTime.splice(index+1,1,time)
-				this.opacity.splice(index,1,1);
+				this.text.splice(index, 1, time)
+				this.minTime.splice(index + 1, 1, time)
+				this.opacity.splice(index, 1, 1);
 			},
 			changetime2(e, index) {
 				var time = e.detail.value;
-				this.text.splice(index,1,time)
-				this.maxTime.splice(index-1,1,time)
-				this.opacity.splice(index,1,1);
+				this.text.splice(index, 1, time)
+				this.maxTime.splice(index - 1, 1, time)
+				this.opacity.splice(index, 1, 1);
 			},
 			uploadPic() {
 				if (this.avatarUrl.length >= 6) {
@@ -337,13 +341,21 @@
 					})
 					return;
 				}
-				//云函数上传
 				var time = new Array();
 				for (var i = 0; i < 14; i += 2) {
 					if (this.text[i] == "起始时间" || this.text[i + 1] == "结束时间") {
 						time.push("")
 					} else {
 						time.push(this.text[i] + "-" + this.text[i + 1])
+					}
+				}
+				var timestamp = new Array();
+				for (var i = 0; i < 14; i++) {
+					if (this.text[i] == "起始时间" || this.text[i] == "结束时间") {
+						timestamp.push(-1)
+					} else {
+						var sp = this.text[i].split(":")
+						timestamp.push(Number(sp[0]) * 60 + Number(sp[1]))
 					}
 				}
 				wx.cloud.callFunction({ //uid获取
@@ -357,41 +369,65 @@
 							coordinates: [this.geopoint.longitude, this.geopoint.latitude],
 							type: "Point",
 						},
+						timeStamp: timestamp,
 						time: time,
 						price: this.price,
 						remarks: this.remarks,
 					}
 				}).then(
 					res => {
-						console.log("云函数"+res.data);
+						var id = res.result._id;
+						for (var i = 0; i < this.avatarUrl.length; i++) {
+							wx.uploadFile({
+								url: "https://ws.healtool.cn/uploadPic/" + id,
+								filePath: this.avatarUrl[i],
+								name: 'file',
+								success: res => {
+									var res = JSON.parse(res.data)
+									if (res.code != 200) {
+										wx.showToast({
+											title: "图片上传失败！",
+											icon: 'none',
+										})
+										wx.cloud.callFunction({
+											name: 'chargerDelete',
+											data: {
+												_id: id
+											},
+										}).then(
+											result => {
+												console.log(res)
+											}
+										)
+										return;
+									}
+								},
+								fail: res => {
+									console.log("fail")
+									wx.showToast({
+										title: "图片上传失败！",
+										icon: 'none',
+									})
+									wx.cloud.callFunction({
+										name: 'chargerDelete',
+										data: {
+											_id: id
+										},
+									}).then(
+										result => {
+											console.log(res)
+										}
+									)
+									return;
+								}
+							})
+						}
+						wx.showToast({
+							title: "提交成功！",
+							icon: 'none',
+						})
 					}
 				)
-				for (var i = 0; i < this.avatarUrl.length; i++) {
-					wx.uploadFile({
-						url: "https://ws.healtool.cn/uploadPic/001",
-						filePath: this.avatarUrl[i],
-						name: 'file',
-						success: res => {
-							console.log(res.data)
-							if (res.data.code != 200) {
-								wx.showToast({
-									title: "图片上传失败！",
-									icon: 'none',
-								})
-								//回滚todo
-								return;
-							}
-						},
-						fail: res => {
-							wx.showToast({
-								title: "图片上传失败！",
-								icon: 'none',
-							})
-							//回滚todo
-							return;
-						}
-					})
-				}
 			},
 			showPic(item) {
 				wx.previewImage({
@@ -404,8 +440,6 @@
 			}
 		},
 		mounted() {
-			console.log(this.$store.state.currentLocation.latitude);
-			console.log(this.$store.state.currentLocation.longitude);
 		}
 	}
 </script>
