@@ -25,12 +25,12 @@
 						
 						<!-- <view style="height: 250upx;position: absolute;border: 2px solid red;top:-20upx"></view> -->
 						<card>
-							<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :percent="percent" :type="1"
+							<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :isLow="isLow" :type="1"
 								@tap="tapButton1()">
 								<image class="image1" src="../static/image/car&charger_color.png"
 									:style="{'filter':'grayscale('+imageFilter1+')','opacity':imageOpacity1}"></image>
 							</totalbutton>
-							<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" :percent="percent" :type="2"
+							<totalbutton :text1="'借电桩'" :text2="'出租电桩'" :selected="isSelected2" :isLow="isLow" :type="2"
 								@tap="tapButton2()">
 								<image class="image2" src="../static/image/park.png"
 									:style="{'filter':'grayscale('+imageFilter2+')','opacity':imageOpacity2}"></image>
@@ -362,14 +362,14 @@
 	.stillBtn {
 		opacity: 0;
 		transition-property: opacity;
-		transition-duration: .5s;
+		transition-duration: .3s;
 
 	}
 
 	.animationBtn {
 		opacity: 1;
 		transition-property: opacity;
-		transition-duration: .5s;
+		transition-duration: .3s;
 	}
 
 	.main {

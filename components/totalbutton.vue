@@ -9,7 +9,7 @@
 			<text class="text1" :style="{'top':top+'px'}">{{text1}}</text>
 		</view>
 		<view class="view2">
-			<text class="text2" :style="{'opacity':1-percent}">{{text2}}</text>
+			<text class="text2" :style="{'opacity':opacity}">{{text2}}</text>
 		</view>
 		<view>
 			<slot></slot>
@@ -23,6 +23,8 @@
 		data(){
 			return {
 				bordercolor:"rgba(0,0,0,0.3)",
+				opacity:0,
+				top:uni.upx2px(20),
 			}
 		},
 		props:{
@@ -39,13 +41,8 @@
 				type:Boolean,
 				default:false
 			},
-			percent:{
-				type:Number
-			}
-		},
-		computed:{
-			top(){
-				return uni.upx2px(15*this.percent+5);
+			isLow:{
+				type:Boolean
 			}
 		},
 		watch:{
@@ -56,8 +53,16 @@
 						this.activate();
 					else this.inactivate();
 				}
+			},
+			'isLow'(){
+				if(this.isLow){
+					this.top=uni.upx2px(20);
+					this.opacity=0;
+				}else{
+					this.top=uni.upx2px(5);
+					this.opacity=1;
+				}
 			}
-			
 		},
 		methods:{
 			activate(){
@@ -110,16 +115,14 @@
 		position: relative;
 		right: 65upx;
 		top:20upx;
-		transition-property: top;
-		transition-duration: .1s;
+		transition: all .3s;
 		transition-timing-function: linear;
 	}
 	.text2{
 		position: relative;
 		right: 67upx;
 		bottom: 25upx;
-		transition-property: opacity;
-		transition-duration: .1s;
+		transition: all .3s;
 		transition-timing-function: linear;
 		
 	}
