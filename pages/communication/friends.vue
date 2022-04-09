@@ -39,6 +39,7 @@
 		methods:{
 			click(name,toUid,index){
 				this.friends[index].hasNew=false;
+				this.friends[index].newMessageNum=0;
 				uni.navigateTo({
 					url: './chat?toUid='+toUid,
 				});
@@ -82,35 +83,28 @@
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			this.contacterBottom=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight;
-			// this.friends.push({
-			// 	uid:1,
-			// 	name:'solaking',
-			// 	lastWord:'',
-			// 	lastTime:'',
-			// 	newMessageNum:0,//新消息数量
-			// 	hasNew:false//是否有新消息
-			// },{
-			// 	uid:2,
-			// 	name:'gxnsos',
-			// 	lastWord:'',
-			// 	lastTime:'',
-			// 	newMessageNum:0,//新消息数量
-			// 	hasNew:false//是否有新消息
-			// },{
-			// 	uid:3,
-			// 	name:'d-sketon',
-			// 	lastWord:'',
-			// 	lastTime:'',
-			// 	newMessageNum:0,//新消息数量
-			// 	hasNew:false//是否有新消息
-			// },{
-			// 	uid:4,
-			// 	name:'lecter',
-			// 	lastWord:'',
-			// 	lastTime:'',
-			// 	newMessageNum:0,//新消息数量
-			// 	hasNew:false//是否有新消息
-			// });
+			this.friends.push({
+				uid:1,
+				name:'solaking',
+				lastWord:'',
+				lastTime:'',
+				newMessageNum:0,//新消息数量
+				hasNew:false//是否有新消息
+			},{
+				uid:2,
+				name:'gxnsos',
+				lastWord:'',
+				lastTime:'',
+				newMessageNum:0,//新消息数量
+				hasNew:false//是否有新消息
+			},{
+				uid:3,
+				name:'d-sketon',
+				lastWord:'',
+				lastTime:'',
+				newMessageNum:0,//新消息数量
+				hasNew:false//是否有新消息
+			});
 	
 		},
 		onUnload() {
@@ -123,24 +117,33 @@
 			}
 		},
 		onShow() {
-			this.friends.splice(0);
+			// this.friends.splice(0);   //正式版
 			var reminder=uni.getStorageSync(this.uid+'friends');
 			if(reminder!=''){
 				reminder=JSON.parse(reminder);
 				var keys=Object.keys(reminder);
 				console.log(reminder);
 				console.log(keys);
-				for(var index in keys){
-					this.friends.push({
-						uid:keys[index],
-						name:reminder[[keys[index]]].name,
-						lastWord:reminder[[keys[index]]].message,
-						lastTime:reminder[[keys[index]]].time,
-						newMessageNum:0,//新消息数量
-						hasNew:false//是否有新消息
-					})
-					
+				// for(var index in keys){   //正式版
+				// 	this.friends.push({
+				// 		uid:keys[index],
+				// 		name:reminder[[keys[index]]].name,
+				// 		lastWord:reminder[[keys[index]]].message,
+				// 		lastTime:reminder[[keys[index]]].time,
+				// 		newMessageNum:0,//新消息数量
+				// 		hasNew:false//是否有新消息
+				// 	})
+				// }
+				
+				for(var index in keys){ //临时测试用
+					for(var i in this.friends){
+						if(this.friends[i].uid==keys[index]){
+							this.friends[i].lastWord=reminder[[keys[index]]].message;
+							this.friends[i].lastTime=reminder[[keys[index]]].time;
+						}
+					}
 				}
+				
 			}
 			if(this.socketTask==null){
 				this.connect();
