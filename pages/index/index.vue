@@ -48,41 +48,38 @@
 			}, 2500)
 		},
 		onShow() {
-			if(this.$store.state.uid!=null) {
 				wx.cloud.callFunction({ //uid获取
 					name: 'searchCharger',
 					data: {
 						uid:this.$store.state.uid
 					}
 				}).then(
-					
 					res => {
-						if(res && res.result.data) {
+						if(res.result!=null && res.result.data) {
 							this.chargers.splice(0)
 							this.chargers.push(...res.result.data)
 						}
 					}
 				)
-			} else {
-				setTimeout(()=>{
-					wx.cloud.callFunction({ //uid获取
-						name: 'searchCharger',
-						data: {
-							uid:this.$store.state.uid
-						}
-					}).then(
-						
-						res => {
-							if(res && res.result.data) {
-								this.chargers.splice(0)
-								this.chargers.push(...res.result.data)
-							}
-						}
-					)
-				},500);
-			}
 			
 		},
+		watch:{
+			'$store.state.uid'() {
+				wx.cloud.callFunction({ //uid获取
+					name: 'searchCharger',
+					data: {
+						uid:this.$store.state.uid
+					}
+				}).then(
+					res => {
+						if(res.result!=null && res.result.data) {
+							this.chargers.splice(0)
+							this.chargers.push(...res.result.data)
+						}
+					}
+				)
+			}
+		}
 	}
 </script>
 

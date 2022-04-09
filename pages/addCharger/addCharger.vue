@@ -363,7 +363,7 @@
 					}
 				}).then(
 					res => {
-						console.log(res.data);
+						console.log("云函数"+res.data);
 					}
 				)
 				for (var i = 0; i < this.avatarUrl.length; i++) {
