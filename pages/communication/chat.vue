@@ -12,7 +12,15 @@
 				:style="{'height':scrollHeight+'px'}"
 			>
 				<view v-for="text,index in texts" :key="index" :id="'index'+index" :class="text.fromMe?'myTextView':'otherTextView'">
+					<view class="avatarView" v-if="!text.fromMe">
+						<image style="width: 90upx;height: 90upx;" :src="yourAvatarUrl"></image>
+					</view>
+					
 					<text :class="text.fromMe?'myText':'otherText'" selectable="true" space="nbsp">{{text.message}}</text>
+					<view class="avatarView" v-if="text.fromMe">
+						<image style="width: 90upx;height: 90upx;"  :src="myAvatarUrl"></image>
+					</view>
+					
 				</view>
 			</scroll-view>
 		</view>
@@ -20,9 +28,12 @@
 			<view style="display: flex;">
 				<textarea class="type" v-model="message" maxlength="140"
 					confirm-hold="true"
-					show-confirm-bar="false"
+					:show-confirm-bar="False"
 					hold-keyboard="true"
 					auto-height="true"
+					:adjust-position="False"
+					@focus="focus($event)"
+					@blur="unfocus()"
 				></textarea>
 				<view class="send" @click="send">发送</view>
 			</view>
@@ -39,6 +50,8 @@
 				// statusHeight:0,
 				// scrollHeight:0,
 				name:'',
+				yourAvatarUrl:'',
+				myAvatarUrl:'',
 				uid:0,
 				toUid:0,
 				socketTask:null,
@@ -46,12 +59,33 @@
 				texts:[],//所有消息
 				textIndex:'index0',
 				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
+				statusHeight:0,
+				scrollHeight:0,
+				
+				False:false,
+				
+				keyboardHeight:0,
 				
 				storageNum:100,//最大存储历史数据数量
 				storage:[],//缓存历史数据
 			}
 		},
+		mounted() {
+			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
+			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight-uni.upx2px(130);
+		},
 		methods:{
+			focus(e){
+				this.keyboardHeight=e.detail.height;
+				this.scrollHeight-=this.keyboardHeight;
+				this.textIndex='';
+				this.$nextTick(function(){
+					this.textIndex='index'+(this.texts.length-1);
+				})
+			},
+			unfocus(){
+				this.scrollHeight+=this.keyboardHeight;
+			},
 			back() {
 				uni.navigateBack({
 				})
@@ -113,21 +147,16 @@
 			},
 		},
 		computed:{
-			statusHeight(){
-				return uni.getSystemInfoSync().statusBarHeight+50;
-			},
+			
 			friendBottom(){
 				return (this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			},
-			scrollHeight(){
-				return uni.getSystemInfoSync().windowHeight-this.statusHeight-uni.upx2px(160);
-			}
+			
 		},
 		onLoad(option) {
 			this.uid=this.$store.state.uid;
 			this.toUid=option.toUid;
-			console.log(this.toUid)
-			
+			this.myAvatarUrl=this.$store.state.avatarUrl;
 			wx.cloud.callFunction({   //uid获取
 				name:'infoReturn',
 				data:{
@@ -136,6 +165,7 @@
 			}).then(
 				res=>{
 					this.name=res.result.userName;
+					this.yourAvatarUrl=res.result.avatarUrl;
 				}
 			)
 			
@@ -182,7 +212,7 @@
 				var minute=time.getMinutes();
 				reminder[this.toUid]={
 					name:this.name,
-					avatarUrl:'',
+					avatarUrl:this.yourAvatarUrl,
 					time:hour+':'+minute,
 					message:last.message
 				};
@@ -220,10 +250,8 @@
 	}
 	
 	.typeView{
-		position: absolute;
-		bottom: 0;
 		background-color: rgba(240,240,240,1);
-		height: 150upx;
+		height: 130upx;
 		width: 100%;
 		/* border: 2px solid red; */
 	}
@@ -258,6 +286,14 @@
 		letter-spacing: 1upx;
 	}
 	
+	.avatarView{
+		width: 90upx;
+		height: 90upx;
+		margin: 20upx;
+		border-radius: 50%;
+		overflow: hidden;
+	}
+	
 	.myTextView{
 		display:flex;
 		justify-content: flex-end;
@@ -271,6 +307,7 @@
 		background-color: rgba(102,205,170,1);
 		color: #FFFFFF;
 		margin: 20upx;
+		margin-right: 0;
 		padding: 30upx;
 		border-radius: 30upx;
 		border-top-right-radius: 0upx;
@@ -282,6 +319,7 @@
 	.otherText{
 		background-color: rgba(255,255,255,1);
 		margin: 20upx;
+		margin-left: 0;
 		padding: 30upx;
 		border-radius: 30upx;
 		border-top-left-radius: 0upx;

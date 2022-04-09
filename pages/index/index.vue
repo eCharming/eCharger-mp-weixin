@@ -34,8 +34,20 @@
 			}).then(
 				res=>{
 					this.$store.commit('setUid',res.result);
+					wx.cloud.callFunction({   //uid获取
+						name:'infoReturn',
+						data:{
+							uid: res.result
+						}
+					}).then(
+						res=>{
+							this.$store.commit('setUserName',res.result.userName);
+							this.$store.commit('setAvatarUrl',res.result.avatarUrl);
+						}
+					)
 				}
 			)
+			
 			// this.$store.commit('setUid',2);	
 			
 			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;

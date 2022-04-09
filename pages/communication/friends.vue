@@ -10,7 +10,7 @@
 		>
 			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(friend.name,friend.uid,index)">
 				<view class="avatarView">
-					<image class="avatar" src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epC7z1MOibsdn9Z8P5kl2oNOMaJufQy7luCAlzmBVlY8ERytGHgOvw4CD9xUoxPhiciaBrJIJTPM1dcQ/132"></image>
+					<image class="avatar" :src="friend.avatarUrl"></image>
 				</view>
 				<text class="name">{{friend.name}}</text>
 				<text class="lastWord">{{friend.lastWord}}</text>
@@ -44,7 +44,7 @@
 					url: './chat?toUid='+toUid,
 				});
 			},
-			connect(){
+			connect(reminder){
 				this.socketTask=uni.connectSocket({		//打开链接
 					url:'wss://ws.healtool.cn/websocketapi/Reminder/'+this.uid,
 					// url:'ws://127.0.0.1:8080/websocketapi/Reminder/'+this.uid,
@@ -60,16 +60,46 @@
 						var fromUid=reminders[index].fromUid;
 						var text=JSON.parse(reminders[index].latestText);
 						var num=reminders[index].num;
+						var hasFound=false;
+						var time=new Date(text.time);
+						var hour=time.getHours();
+						var minute=time.getMinutes();
 						for(var i in this.friends){
 							if(fromUid==this.friends[i].uid){
 								this.friends[i].lastWord=text.message;
 								this.friends[i].newMessageNum=num;
 								this.friends[i].hasNew=true;
-								var time=new Date(text.time);
-								var hour=time.getHours();
-								var minute=time.getMinutes();
 								this.friends[i].lastTime=hour+':'+minute;
+								hasFound=true;
+								break;
 							}
+						}
+						if(hasFound==false){
+							wx.cloud.callFunction({   //uid获取
+								name:'infoReturn',
+								data:{
+									uid: Number(fromUid)
+								}
+							}).then(
+								res=>{
+									reminder[fromUid]={
+										name:res.result.userName,
+										avatarUrl:res.result.avatarUrl,
+										time:hour+':'+minute,
+										message:text.message
+									};
+									this.friends.unshift({
+										uid:fromUid,
+										name:res.result.userName,
+										avatarUrl:res.result.avatarUrl,
+										lastWord:text.message,
+										lastTime:hour+':'+minute,
+										newMessageNum:num,//新消息数量
+										hasNew:true//是否有新消息
+									})
+								}
+							)
+							
 						}
 					}
 				});
@@ -85,21 +115,24 @@
 			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight;
 			this.friends.push({
 				uid:1,
-				name:'solaking',
+				name:'',
+				avatarUrl:'',
 				lastWord:'',
 				lastTime:'',
 				newMessageNum:0,//新消息数量
 				hasNew:false//是否有新消息
 			},{
 				uid:2,
-				name:'gxnsos',
+				name:'',
+				avatarUrl:'',
 				lastWord:'',
 				lastTime:'',
 				newMessageNum:0,//新消息数量
 				hasNew:false//是否有新消息
 			},{
 				uid:3,
-				name:'d-sketon',
+				name:'',
+				avatarUrl:'',
 				lastWord:'',
 				lastTime:'',
 				newMessageNum:0,//新消息数量
@@ -122,8 +155,6 @@
 			if(reminder!=''){
 				reminder=JSON.parse(reminder);
 				var keys=Object.keys(reminder);
-				console.log(reminder);
-				console.log(keys);
 				// for(var index in keys){   //正式版
 				// 	this.friends.push({
 				// 		uid:keys[index],
@@ -138,15 +169,17 @@
 				for(var index in keys){ //临时测试用
 					for(var i in this.friends){
 						if(this.friends[i].uid==keys[index]){
+							this.friends[i].name=reminder[[keys[index]]].name;
+							this.friends[i].avatarUrl=reminder[[keys[index]]].avatarUrl;
 							this.friends[i].lastWord=reminder[[keys[index]]].message;
 							this.friends[i].lastTime=reminder[[keys[index]]].time;
 						}
 					}
 				}
 				
-			}
+			}else reminder={};
 			if(this.socketTask==null){
-				this.connect();
+				this.connect(reminder);
 			}
 		},
 		onHide() {
