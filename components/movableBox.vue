@@ -20,7 +20,7 @@
 						</view>
 		
 						
-						<hiddencard :percent="percent"></hiddencard>
+						<hiddencard :isLow="isLow"></hiddencard>
 						<hiddendetail v-if="hiddenDetail" :percent="percent" @tap="detail"></hiddendetail>
 						
 						<!-- <view style="height: 250upx;position: absolute;border: 2px solid red;top:-20upx"></view> -->

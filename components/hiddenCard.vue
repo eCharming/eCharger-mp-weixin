@@ -8,8 +8,8 @@
 <script>
 	export default{
 		props:{
-			percent:{
-				type:Number
+			isLow:{
+				type:Boolean
 			},
 		},
 		data(){
@@ -17,18 +17,23 @@
 				text1:'在附近搜索电桩',
 				text2:'',
 				color:'rgb(102,205,170)',
+				top:0,
+				opacity:0,
 			}
 		},
-		
-		computed:{
-			top(){
-				return uni.upx2px(-30-(1-this.percent)*100)
-			},
-			opacity(){
-				return (1-this.percent)*(1-this.percent)*(1-this.percent)
-			}
+		mounted() {
+			this.top=uni.upx2px(-30);
 		},
 		watch:{
+			'isLow'(){
+				if(this.isLow){
+					this.top=uni.upx2px(-30);
+					this.opacity=0;
+				}else{
+					this.top=uni.upx2px(-130);
+					this.opacity=1;
+				}
+			},
 			'$store.state.destination'() {
 				if(this.$store.state.destination!=null){
 					this.text1='距离目的地';
@@ -71,10 +76,7 @@
 		font-size: 32upx;
 		letter-spacing: 2upx;
 		font-weight: 700;
-		transition-property: top;
-		transition-duration: .1s;
-		transition-property: opacity;
-		transition-duration: .1s;
+		transition: all .3s;
 		
 	}
 	.text1{
