@@ -11,7 +11,7 @@
 		name: "infoButton",
 		data() {
 			return {
-				src:"../static/image/person.png",
+				src:"../static/image/person.gif",
 			};
 		},
 		methods:{
@@ -20,7 +20,13 @@
 				wx.getUserProfile({
 					desc:'获取微信头像以及昵称',
 					success: (res) => {
-						console.log(res)
+						wx.cloud.callFunction({   //uid获取
+							name:'updateUrl',
+							data:{
+								userName:res.userInfo.nickName,
+								avatarUrl:res.userInfo.avatarUrl
+							}
+						})
 					}
 				})
 			}
@@ -28,7 +34,7 @@
 		watch:{
 			'$store.state.buttonSelected'(){
 				if(this.$store.state.buttonSelected==1){
-					this.src="../static/image/person.png";
+					this.src="../static/image/person.gif";
 				}	
 				else{
 					this.src="../static/image/person_blue.png";
