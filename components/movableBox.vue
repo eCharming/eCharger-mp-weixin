@@ -100,6 +100,9 @@
 			hiddendetail,
 			navigator
 		},
+		props:[
+			"chargers"
+		],
 		data() {
 			return {
 				liveY: 0, //实时movablebox的高度(实时位置)
@@ -129,15 +132,6 @@
 				orderIndex: 0, //记录scroller刷新到哪个order
 				isFull: false, //是否拿满
 
-				chargers: [
-					{
-						location:123,
-						state:true,
-						price:114514,
-						startTime:123,
-						endTime:465,
-					}
-				],
 				chargerSelected: -1,
 				preCharger:-2,
 
@@ -305,6 +299,7 @@
 			this.boxHeight = this.windowHeight * (1 - this.maxHeight);
 			this.areaLength=(1+(this.maxHeight-this.minHeight))*this.windowHeight;
 			this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
+			
 		},
 		watch: {
 			'$store.state.orders'() { //用于加载order
