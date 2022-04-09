@@ -18,7 +18,12 @@
 		</view>
 		<view class="typeView">
 			<view style="display: flex;">
-				<textarea class="type" v-model="message" maxlength="140"></textarea>
+				<textarea class="type" v-model="message" maxlength="140"
+					confirm-hold="true"
+					show-confirm-bar="false"
+					hold-keyboard="true"
+					auto-height="true"
+				></textarea>
 				<view class="send" @click="send">发送</view>
 			</view>
 			
@@ -30,17 +35,20 @@
 	export default{
 		data(){
 			return{
-				friendBottom:0,
-				statusHeight:0,
-				scrollHeight:0,
+				// friendBottom:0,
+				// statusHeight:0,
+				// scrollHeight:0,
 				name:'',
 				uid:0,
 				toUid:0,
 				socketTask:null,
-				message:'',
-				texts:[],
+				message:'',//textarea中的文字
+				texts:[],//所有消息
 				textIndex:'index0',
 				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
+				
+				storageNum:100,//最大存储历史数据数量
+				storage:[],//缓存历史数据
 			}
 		},
 		methods:{
@@ -56,7 +64,6 @@
 					message:message,
 				});
 				this.textIndex="index"+(this.texts.length-1);//移动到这条数据
-				console.log(this.textIndex)
 				var data={
 					uid:this.uid,
 					toUid:this.toUid,
@@ -64,7 +71,9 @@
 					message:message
 				}
 				data=JSON.stringify(data);
-				console.log(data)
+				this.storage.push(data);
+				if(this.storage.length>=100)
+					this.storage.splice(0,1);
 				this.socketTask.send({ //发送到服务器
 					data:data,
 					success: () => {
@@ -77,14 +86,18 @@
 					url:'wss://ws.healtool.cn/websocketapi/Chat/'+this.uid+'/'+this.toUid,
 					// url:'ws://127.0.0.1:8080/websocketapi/Chat/'+this.uid+'/'+this.toUid,
 					success: () => {
-						console.log(11111)
+						
 					}
 				});
 				this.socketTask.onMessage((res)=>{
 					console.log(res)
 					var data=JSON.parse(res.data);
+					var num=data.num;
 					var messages=data.message;
-					console.log(messages)
+					this.storage.push(...messages);
+					if(this.storage.length>=this.storageNum){
+						this.storage.splice(0,this.storage.length-this.storageNum);
+					}
 					for(var index in messages){
 						var text=JSON.parse(messages[index])
 						this.texts.push({
@@ -97,25 +110,57 @@
 				this.socketTask.onClose((res)=>{
 					console.log(res)
 				})
+			},
+		},
+		computed:{
+			statusHeight(){
+				return uni.getSystemInfoSync().statusBarHeight+50;
+			},
+			friendBottom(){
+				return (this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
+			},
+			scrollHeight(){
+				return uni.getSystemInfoSync().windowHeight-this.statusHeight-uni.upx2px(160);
 			}
 		},
 		onLoad(option) {
-			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
-			this.friendBottom=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
-			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight-uni.upx2px(160);
-			this.name=option.name;
 			this.uid=this.$store.state.uid;
-			console.log(this.uid)
 			this.toUid=option.toUid;
+			console.log(this.toUid)
 			
-			// this.texts.push({
-			// 	fromMe:true,
-			// 	message:'111'
-			// })
-			// this.texts.push({
-			// 	fromMe:false,
-			// 	message:'222'
-			// });
+			wx.cloud.callFunction({   //uid获取
+				name:'infoReturn',
+				data:{
+					uid: Number(this.toUid)
+				}
+			}).then(
+				res=>{
+					this.name=res.result.userName;
+				}
+			)
+			
+			this.storage=uni.getStorageSync(this.uid+'ChatWith'+this.toUid);
+			if(this.storage==''){
+				this.storage=[];
+			}else this.storage=JSON.parse(this.storage);
+			var length=this.storage.length;
+			var init=0;
+			if(length>=10){
+				init=length-10;
+			}else{
+				init=0;
+			}
+			for(var i=init;i<=length-1;i++){
+				var text= JSON.parse(this.storage[i]);
+				var fromMe=false;
+				if(text.uid==this.uid)
+					fromMe=true;
+				this.texts.push({
+					fromMe:fromMe,//是否是我发出的
+					message:text.message,
+				})
+			}
+			
 		},
 		onUnload() {
 			if(this.socketTask!=null){
@@ -125,6 +170,25 @@
 					}
 				});
 			}
+			var reminder=uni.getStorageSync(this.uid+'friends');
+			if(this.storage!=''){
+				uni.setStorageSync(this.uid+'ChatWith'+this.toUid,JSON.stringify(this.storage));
+				if(reminder!=''){
+					reminder=JSON.parse(reminder);
+				}else reminder={};
+				var last=JSON.parse(this.storage[this.storage.length-1]);
+				var time=new Date(last.time);
+				var hour=time.getHours();
+				var minute=time.getMinutes();
+				reminder[this.toUid]={
+					name:this.name,
+					avatarUrl:'',
+					time:hour+':'+minute,
+					message:last.message
+				};
+				uni.setStorageSync(this.uid+'friends',JSON.stringify(reminder));
+			}
+				
 		},
 		onShow() {
 			if(this.socketTask==null){
@@ -166,12 +230,15 @@
 	
 	.type{
 		/* border: 2px red solid; */
-		padding: 10upx;
+		/* padding: 10upx;
 		padding-left: 20upx;
-		padding-top: 18upx;
+		padding-top: 18upx; */
+		padding: 20upx;
 		font-size: 30upx;
+		line-height: 30upx;
+		min-height: 70upx;
 		margin: 20upx;
-		height: 70upx;
+		/* height: 70upx; */
 		border-radius: 35upx;
 		width: 600upx;
 		background-color: rgb(255,255,255);

@@ -1,7 +1,6 @@
 <template>
 	<view>
 		<view class="navigator" :style="{'height':statusHeight+'px'}">
-			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}" @tap="back"></image>
 			<text class="contacter" :style="{'margin-bottom':contacterBottom+'px'}">联系人</text>
 		</view>
 		<scroll-view
@@ -9,7 +8,7 @@
 			scroll-with-animation=true
 			:style="{'height':scrollHeight+'px'}"
 		>
-			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(friend.name,friend.uid)">
+			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(friend.name,friend.uid,index)">
 				<view class="avatarView">
 					<image class="avatar" src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epC7z1MOibsdn9Z8P5kl2oNOMaJufQy7luCAlzmBVlY8ERytGHgOvw4CD9xUoxPhiciaBrJIJTPM1dcQ/132"></image>
 				</view>
@@ -35,19 +34,13 @@
 				scrollHeight:0,
 				friends:[],
 				uid:-1,
-				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
 			}
 		},
 		methods:{
-			back() {
-				uni.navigateBack({
-				})
-			},
-			click(name,toUid){
+			click(name,toUid,index){
+				this.friends[index].hasNew=false;
 				uni.navigateTo({
-					url: './chat?toUid='+toUid+'&name='+name,
-					animationType: 'slide-in-bottom',
-					animationDuration: 200
+					url: './chat?toUid='+toUid,
 				});
 			},
 			connect(){
@@ -59,7 +52,7 @@
 					}
 				});
 				this.socketTask.onMessage((res)=>{
-					console.log(res)
+					// console.log(res)
 					var reminders=JSON.parse(res.data);
 					console.log(reminders)
 					for(var index in reminders){
@@ -80,7 +73,7 @@
 					}
 				});
 				this.socketTask.onClose((res)=>{
-					console.log(res)
+					// console.log(res)
 				});
 			}
 		},
@@ -89,35 +82,35 @@
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			this.contacterBottom=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight;
-			this.friends.push({
-				uid:1,
-				name:'solaking',
-				lastWord:'',
-				lastTime:'',
-				newMessageNum:0,//新消息数量
-				hasNew:false//是否有新消息
-			},{
-				uid:2,
-				name:'gxnsos',
-				lastWord:'',
-				lastTime:'',
-				newMessageNum:0,//新消息数量
-				hasNew:false//是否有新消息
-			},{
-				uid:3,
-				name:'d-sketon',
-				lastWord:'',
-				lastTime:'',
-				newMessageNum:0,//新消息数量
-				hasNew:false//是否有新消息
-			},{
-				uid:4,
-				name:'lecter',
-				lastWord:'',
-				lastTime:'',
-				newMessageNum:0,//新消息数量
-				hasNew:false//是否有新消息
-			});
+			// this.friends.push({
+			// 	uid:1,
+			// 	name:'solaking',
+			// 	lastWord:'',
+			// 	lastTime:'',
+			// 	newMessageNum:0,//新消息数量
+			// 	hasNew:false//是否有新消息
+			// },{
+			// 	uid:2,
+			// 	name:'gxnsos',
+			// 	lastWord:'',
+			// 	lastTime:'',
+			// 	newMessageNum:0,//新消息数量
+			// 	hasNew:false//是否有新消息
+			// },{
+			// 	uid:3,
+			// 	name:'d-sketon',
+			// 	lastWord:'',
+			// 	lastTime:'',
+			// 	newMessageNum:0,//新消息数量
+			// 	hasNew:false//是否有新消息
+			// },{
+			// 	uid:4,
+			// 	name:'lecter',
+			// 	lastWord:'',
+			// 	lastTime:'',
+			// 	newMessageNum:0,//新消息数量
+			// 	hasNew:false//是否有新消息
+			// });
 	
 		},
 		onUnload() {
@@ -130,6 +123,25 @@
 			}
 		},
 		onShow() {
+			this.friends.splice(0);
+			var reminder=uni.getStorageSync(this.uid+'friends');
+			if(reminder!=''){
+				reminder=JSON.parse(reminder);
+				var keys=Object.keys(reminder);
+				console.log(reminder);
+				console.log(keys);
+				for(var index in keys){
+					this.friends.push({
+						uid:keys[index],
+						name:reminder[[keys[index]]].name,
+						lastWord:reminder[[keys[index]]].message,
+						lastTime:reminder[[keys[index]]].time,
+						newMessageNum:0,//新消息数量
+						hasNew:false//是否有新消息
+					})
+					
+				}
+			}
 			if(this.socketTask==null){
 				this.connect();
 			}
@@ -191,9 +203,13 @@
 	.lastWord{
 		letter-spacing: 1upx;
 		position: absolute;
+		width: 500upx;
 		top:80upx;
 		left: 150upx;
 		color: rgba(0,0,0,0.5);
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 	
 	.lastTime{
@@ -217,12 +233,6 @@
 		position: absolute;
 		top:80upx;
 		right: 30upx;
-	}
-	
-	.backimg {
-		position:absolute;
-		left:8px;
-		width:25px;
-		height:25px;
+		
 	}
 </style>
