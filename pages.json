@@ -28,6 +28,13 @@
 				"navigationBarTitleText": "易插eCharger",
 				"disableScroll":true
 			}
+		},
+		{
+			"path" : "pages/addCharger/addCharger",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+			
 		}
 	],
 	"globalStyle": {

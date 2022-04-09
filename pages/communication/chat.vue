@@ -1,6 +1,7 @@
 <template>
 	<view style="background-color: rgb(240,240,240);">
 		<view class="navigator" :style="{'height':statusHeight+'px'}">
+			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}" @tap="back"></image>
 			<text :style="{'margin-bottom':friendBottom+'px'}">{{name}}</text>
 		</view>
 		<view>
@@ -39,9 +40,14 @@
 				message:'',
 				texts:[],
 				textIndex:'index0',
+				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
 			}
 		},
 		methods:{
+			back() {
+				uni.navigateBack({
+				})
+			},
 			send(){
 				var message=this.message;
 				this.message='';
@@ -215,5 +221,12 @@
 		font-size: 30upx;
 		word-break:break-all;
 		word-wrap:break-word; 
+	}
+	
+	.backimg {
+		position:absolute;
+		left:8px;
+		width:25px;
+		height:25px;
 	}
 </style>

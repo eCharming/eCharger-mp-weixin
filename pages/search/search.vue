@@ -1,6 +1,8 @@
 <template>
 	<view>
-		<view :style="{'height':statusHeight+'px','background':doubleColor}"></view>
+		<view :style="{'height':statusHeight+'px','background':doubleColor}">
+			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}" @tap="back"></image>
+		</view>
 		<view class="searchbox">
 			<view class="textareaview">
 				<textarea class="textarea" 
@@ -154,6 +156,7 @@
 		data(){
 			return{
 				statusHeight:0,
+				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
 				position:"",
 				suggestions:[],
 				storageHeight:0,
@@ -177,6 +180,10 @@
 			}
 		},
 		methods:{
+			back() {
+				uni.navigateBack({
+				})
+			},
 			request(){
 				if(this.position=="") {
 					this.isInput=false;
@@ -620,5 +627,12 @@
 	
 	.richtext {
 		width: 450upx;
+	}
+	
+	.backimg {
+		position:absolute;
+		left:8px;
+		width:25px;
+		height:25px;
 	}
 </style>

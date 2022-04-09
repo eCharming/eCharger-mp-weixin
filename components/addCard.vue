@@ -1,0 +1,24 @@
+<template>
+	<view class="card">
+		<slot></slot>
+	</view>
+</template>
+
+<script>
+	export default{
+
+	}
+</script>
+
+<style scoped>
+	.card{
+		margin:20upx;
+		padding: 15upx;
+		background-color: rgba(250,255,250,1);
+		border-radius: 20upx;
+		display: flex;
+		flex-direction:column;
+		justify-content: space-between;
+		box-shadow:0px 6px 12px 4px #e5e5e5 ;
+	}
+</style>

@@ -51,9 +51,11 @@
 								@tap="tapCharger(index)">
 							</charger>
 							<view class="scrollerview">
-								<image :src="src1" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
-								<image :src="src2" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
-								<text>{{icontext}}</text>  
+								<image :src="src1" style="width: 23px;height: 23px;" v-show="icontype=='download'" v-if="isSelected1"></image>
+								<image :src="src2" style="width: 23px;height: 23px;" v-show="icontype=='warn'" v-if="isSelected1"></image>
+								<image :src="src3" style="width: 23px;height: 23px;" v-if="isSelected2" @tap="addCharger"></image>
+								<text v-if="isSelected1">{{icontext}}</text>  
+								<text v-if="isSelected2" @tap="addCharger">添加你的电桩</text>  
 							</view>
 								
 							
@@ -127,7 +129,15 @@
 				orderIndex: 0, //记录scroller刷新到哪个order
 				isFull: false, //是否拿满
 
-				chargers: [],
+				chargers: [
+					{
+						location:123,
+						state:true,
+						price:114514,
+						startTime:123,
+						endTime:465,
+					}
+				],
 				chargerSelected: -1,
 				preCharger:-2,
 
@@ -136,6 +146,7 @@
 				
 				src1:"/static/image/uparrow.png",
 				src2:"/static/image/warning.png",
+				src3:"/static/image/plus_blue.png"
 			}
 		},
 		methods: {
@@ -279,6 +290,11 @@
 				this.isLow=false;
 				this.hiddenDetail=false;
 				this.currentY = 0;
+			},
+			addCharger() {
+				uni.navigateTo({
+					url: '../addCharger/addCharger',
+				});
 			}
 		},
 		mounted() {

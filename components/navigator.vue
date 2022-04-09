@@ -57,8 +57,6 @@
 			connection(){
 				uni.navigateTo({
 					url: '../communication/friends',
-					animationType: 'slide-in-bottom',
-					animationDuration: 200
 				});
 			}
 		},

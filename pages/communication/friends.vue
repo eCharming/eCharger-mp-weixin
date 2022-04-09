@@ -1,6 +1,7 @@
 <template>
 	<view>
 		<view class="navigator" :style="{'height':statusHeight+'px'}">
+			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}" @tap="back"></image>
 			<text class="contacter" :style="{'margin-bottom':contacterBottom+'px'}">联系人</text>
 		</view>
 		<scroll-view
@@ -34,9 +35,14 @@
 				scrollHeight:0,
 				friends:[],
 				uid:-1,
+				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
 			}
 		},
 		methods:{
+			back() {
+				uni.navigateBack({
+				})
+			},
 			click(name,toUid){
 				uni.navigateTo({
 					url: './chat?toUid='+toUid+'&name='+name,
@@ -211,5 +217,12 @@
 		position: absolute;
 		top:80upx;
 		right: 30upx;
+	}
+	
+	.backimg {
+		position:absolute;
+		left:8px;
+		width:25px;
+		height:25px;
 	}
 </style>

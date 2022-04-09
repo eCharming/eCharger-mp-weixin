@@ -70,8 +70,6 @@
 			navigate(){
 				uni.navigateTo({
 					url: '../search/search',
-					animationType: 'slide-in-bottom',
-					animationDuration: 200
 				});
 			}
 		},
