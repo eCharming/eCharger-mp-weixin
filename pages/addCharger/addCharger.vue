@@ -15,23 +15,42 @@
 				<input class="input" placeholder="请输入电话号码" type="number" v-model="phoneNumber"></input>
 			</view>
 		</addcard>
-		<addcard>
+		<addcard style="position: relative;">
 			<view class="display">
 				<text class="labeltext">电桩位置</text>
-				<input class="input" placeholder="请输入电桩位置" type="text" v-model='location'></input>
+				<input class="input" placeholder="请输入电桩位置" type="text" v-model='address' @input="searchKeyword"></input>
 			</view>
-			<view class="divLine"></view>
 
-			<map id="myMap" style="width: 100%; height: 500upx;" layer-style="1" :latitude="center_latitude"
+
+			<map id="myMap" style="width: 680upx; height: 500upx;" layer-style="1" :latitude="center_latitude"
 				:longitude="center_longitude" showLocation='true' subkey="ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL"
-				@tap="addMarker" :markers="covers">
+				:markers="covers" @tap="addMarker">
 			</map>
+			<view class="scroll" v-if="locationList.length!=0">
+				<view style="display: flex;justify-content: flex-end;">
+					<scroll-view class="scrollview" scroll-y="true" enhanced="true" show-scrollbar="true" scroll-with-animation="true">
+						<view v-for="(item,index) in locationList" :key="index" class="scroll-innerview" @tap="tapsearch(item)">
+							<text v-text="item.title" class="scroll-text" style="margin:5px"></text>
+						</view>
+						
+					</scroll-view>
+				</view>
+			</view>
+
+			<view class="display">
+				<text class="labeltext">详细地址</text>
+				<textarea class="textareainput" placeholder="请输入详细地址,精确到门牌号或停车位" maxlength="100"
+					v-model='location'></textarea>
+			</view>
 
 			<view class="divLine"></view>
+
 			<view class="display">
 				<text class="labeltext">电桩单价</text>
 				<input class="input" placeholder="请输入单价" type="digit" v-model="price"></input>
 			</view>
+		</addcard>
+		<addcard>
 			<view class="divLine"></view>
 			<view class="display">
 				<text class="labeltext">周一可用时段</text>
@@ -198,6 +217,7 @@
 				name: "",
 				phoneNumber: "",
 				location: "",
+				address: "",
 				price: "",
 				text: ["起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间",
 					"起始时间", "结束时间"
@@ -217,7 +237,9 @@
 				geopoint: {
 					latitude: -1,
 					longitude: -1,
-				}
+				},
+				locationList: [],
+				scrolltop:0,
 			}
 		},
 		computed: {
@@ -229,10 +251,8 @@
 			}
 		},
 		methods: {
-			addMarker(res) {
-				this.geopoint.longitude = res.detail.longitude;
-				this.geopoint.latitude = res.detail.latitude;
-				this.covers.splice(0, 1, {
+			showMarker() {
+				this.covers.splice(0,1,{
 					title: "定位点",
 					id: 0,
 					latitude: this.geopoint.latitude,
@@ -240,6 +260,48 @@
 					iconPath: "/static/image/charger.png",
 					width: 50,
 					height: 50,
+				})
+			},
+			tapsearch(item) {
+				this.address=item.title;
+				this.geopoint.latitude=item.location.lat;
+				this.geopoint.longitude=item.location.lng;
+				this.showMarker();
+				this.center_latitude=this.geopoint.latitude;
+				this.center_longitude=this.geopoint.longitude;
+				this.locationList.splice(0);
+			},
+			searchKeyword() {
+				var url = 'https://apis.map.qq.com/ws/place/v1/suggestion?keyword=' + this.address +
+					'&address_format=short' +
+					'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL';
+				uni.request({
+					url: url,
+					method: 'GET',
+					success: (res) => {
+						console.log(res)
+						this.locationList.splice(0)
+						if(res.data.status==0) {
+							this.locationList.push(...res.data.data)
+						}
+					},
+					fail:(res) => {
+						this.locationList.splice(0)
+					}
+				})
+			},
+			addMarker(res) {
+				this.geopoint.longitude = res.detail.longitude;
+				this.geopoint.latitude = res.detail.latitude;
+				this.showMarker();
+				var url = "https://apis.map.qq.com/ws/geocoder/v1/?location=" + this.geopoint.latitude + "," + this
+					.geopoint.longitude + '&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL';
+				uni.request({
+					url: url,
+					method: 'GET',
+					success: (res) => {
+						this.address = res.data.result.address
+					},
 				})
 			},
 			back() {
@@ -364,6 +426,7 @@
 						uid: this.$store.state.uid,
 						userName: this.name,
 						phoneNumber: this.phoneNumber,
+						address: this.address,
 						location: this.location,
 						geoPoint: {
 							coordinates: [this.geopoint.longitude, this.geopoint.latitude],
@@ -396,7 +459,7 @@
 											},
 										}).then(
 											result => {
-												console.log(res)
+												console.log(result)
 											}
 										)
 										return;
@@ -415,7 +478,7 @@
 										},
 									}).then(
 										result => {
-											console.log(res)
+											console.log(result)
 										}
 									)
 									return;
@@ -439,8 +502,7 @@
 				this.avatarUrl.splice(index, 1);
 			}
 		},
-		mounted() {
-		}
+		mounted() {}
 	}
 </script>
 
@@ -470,7 +532,7 @@
 	}
 
 	.input {
-		width: 300upx;
+		width: 500upx;
 		text-align: right;
 	}
 
@@ -515,5 +577,34 @@
 		letter-spacing: 3upx;
 		margin: 20upx;
 		border-radius: 20upx;
+	}
+
+	.textareainput {
+		height: 100upx;
+		width: 500upx;
+		text-align: right;
+	}
+
+	.scroll {
+		position: absolute;
+		height: 300upx;
+		width: 680upx;
+		top: 110upx;
+	}
+
+	.scrollview {
+		background-color: rgba(250,255,250,1);
+		height: 300upx;
+		width:100%;
+		border-bottom-right-radius: 10px;
+		border-bottom-left-radius: 10px;
+		box-shadow:-8px 8px 10px -4px rgba(116, 118, 116, 0.2),8px 8px 10px -4px rgba(116, 118, 116, 0.2);
+	}
+
+	.scroll-innerview {
+		margin:15px;
+	}
+	.scroll-text {
+		
 	}
 </style>
