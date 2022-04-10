@@ -67,9 +67,9 @@
 					}
 				}).then(
 					res => {
-						if(res.result!=null && res.result.data) {
+						if(res.result!=null && res.result) {
 							this.chargers.splice(0)
-							this.chargers.push(...res.result.data)
+							this.chargers.push(...res.result)
 						}
 					}
 				)
@@ -84,9 +84,9 @@
 					}
 				}).then(
 					res => {
-						if(res.result!=null && res.result.data) {
+						if(res.result!=null && res.result) {
 							this.chargers.splice(0)
-							this.chargers.push(...res.result.data)
+							this.chargers.push(...res.result)
 						}
 					}
 				)

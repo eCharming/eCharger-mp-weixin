@@ -46,7 +46,7 @@
 								@tap="tapOrder(index)" @emit="detail()" @toLow="toLow">
 							</order>
 							<charger v-if="isSelected2" v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
-								:location="charger.location" :state="charger.state" :price="charger.price"
+								:location="charger.location" :state="charger.isAvailable" :price="charger.price"
 								:startTime="charger.startTime" :endTime="charger.endTime"
 								@tap="tapCharger(index)">
 							</charger>

@@ -68,7 +68,7 @@
 					}
 				}).then(
 					res => {
-						let chargerList = res.result.data;
+						let chargerList = res.result;
 						this.ordersCopy.splice(0);
 						this.polyline.splice(0);
 						this.covers.splice(0, this.covers.length);
