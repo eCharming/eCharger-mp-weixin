@@ -101,8 +101,7 @@
 									latitude: charger.geoPoint.coordinates[1],
 									longitude: charger.geoPoint.coordinates[0],
 									price: charger.price,
-									startTime: '08:00',
-									endTime: '18:00',
+									time:charger.time,
 									distance: distance,
 									detail: false,
 								});

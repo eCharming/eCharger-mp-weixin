@@ -239,7 +239,6 @@
 					longitude: -1,
 				},
 				locationList: [],
-				scrolltop:0,
 			}
 		},
 		computed: {

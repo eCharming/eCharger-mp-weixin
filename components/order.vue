@@ -48,7 +48,7 @@
 				</view>
 				<view class="timeview">
 					<text>可用时间：</text>
-					<text class="time">{{startTime}}-{{endTime}}</text>
+					<text class="time">{{showTime}}</text>
 				</view>
 				
 			</view>
@@ -72,11 +72,9 @@
 			price:{
 				type:String
 			},
-			startTime:{
-				type:String
-			},
-			endTime:{
-				type:String
+			time:{
+				type:Array,
+				default:()=>[]
 			},
 			detail:{
 				type:Boolean
@@ -93,6 +91,22 @@
 				checkRight:0,
 				opacity:0,
 				bottom:0,
+			}
+		},
+		computed:{
+			showTime() {
+				var tempDate = new Date();
+				var days = tempDate.getDay();
+				if(days==0) {
+					days=7;
+				}
+				var showTime="";
+				if(this.time[days-1]=="") {
+					showTime="-"
+				} else {
+					showTime=this.time[days-1]
+				}
+				return showTime;
 			}
 		},
 		methods:{
