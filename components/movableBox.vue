@@ -47,7 +47,7 @@
 							</order>
 							<charger v-if="isSelected2" v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 								:location="charger.location" :state="charger.isAvailable" :price="charger.price"
-								:startTime="charger.startTime" :endTime="charger.endTime"
+								:time="charger.time"
 								@tap="tapCharger(index)">
 							</charger>
 							<view class="scrollerview">
