@@ -6,20 +6,30 @@
 		</view>
 		<view>
 			<scroll-view
-				scroll-y="true"
-				scroll-with-animation=true
+				style="overflow-anchor:auto;"
+				scroll-anchoring="true"
+				:scroll-y="scrollStatus"
+				:scroll-with-animation="False"
+				:scroll-top="scrollAnchor"
 				:scroll-into-view="textIndex"
 				:style="{'height':scrollHeight+'px'}"
+				@scrolltoupper="scrollToUpper()"
 			>
-				<view v-for="text,index in texts" :key="index" :id="'index'+index" :class="text.fromMe?'myTextView':'otherTextView'">
-					<view class="avatarView" v-if="!text.fromMe">
-						<image style="width: 90upx;height: 90upx;" :src="yourAvatarUrl"></image>
+				<view v-for="text,index in texts" :key="index" :id="'index'+index" >
+					<view class="time" v-if="text.showTime">
+						<text>{{text.time.timeText}}</text>
+					</view>
+					<view :class="text.fromMe?'myTextView':'otherTextView'">
+						<view class="avatarView" v-if="!text.fromMe">
+							<image style="width: 90upx;height: 90upx;" :src="yourAvatarUrl"></image>
+						</view>
+						
+						<text :class="text.fromMe?'myText':'otherText'" selectable="true" space="nbsp">{{text.message}}</text>
+						<view class="avatarView" v-if="text.fromMe">
+							<image style="width: 90upx;height: 90upx;"  :src="myAvatarUrl"></image>
+						</view>
 					</view>
 					
-					<text :class="text.fromMe?'myText':'otherText'" selectable="true" space="nbsp">{{text.message}}</text>
-					<view class="avatarView" v-if="text.fromMe">
-						<image style="width: 90upx;height: 90upx;"  :src="myAvatarUrl"></image>
-					</view>
 					
 				</view>
 			</scroll-view>
@@ -57,22 +67,23 @@
 				socketTask:null,
 				message:'',//textarea中的文字
 				texts:[],//所有消息
-				textIndex:'index0',
+				firstTop:true,//是否第一次爬升到顶部
+				textIndex:'index0',//判定scroll滚动到哪里
+				historyIndex:0,//判定缓存记录显示到哪里
 				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
 				statusHeight:0,
+				
+				scrollStatus:true,
 				scrollHeight:0,
+				scrollAnchor:1,
 				
 				False:false,
 				
-				keyboardHeight:0,
+				keyboardHeight:0,//键盘高度
 				
 				storageNum:100,//最大存储历史数据数量
 				storage:[],//缓存历史数据
 			}
-		},
-		mounted() {
-			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
-			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight-uni.upx2px(130);
 		},
 		methods:{
 			focus(e){
@@ -90,18 +101,77 @@
 				uni.navigateBack({
 				})
 			},
+			judgeTime(time){
+				if(this.texts=='')
+					return true;
+				else{
+					if(time-this.texts[this.texts.length-1].time.timeStamp>=300000)
+						return true;
+					else return false;
+				}
+			},
+			timeObject(time,bool){
+				if(bool){
+					var currentTime=new Date();
+					var currentYear=currentTime.getFullYear();
+					var currentMonth=currentTime.getMonth()+1;
+					var currentDay=currentTime.getDate();
+					var timeDate=new Date(time);
+					var year=timeDate.getFullYear();
+					var month=timeDate.getMonth()+1;
+					var day=timeDate.getDate();
+					var hour=timeDate.getHours();
+					var minute=timeDate.getMinutes();
+					if(hour<10)
+						hour='0'+hour;
+					if(minute<10)
+						minute='0'+minute;
+					var timeText='';
+					if(currentYear==year){
+						if(currentMonth==month&&currentDay==day){
+							timeText=hour+':'+minute;
+						}else if(currentMonth==month&&currentDay-day==1){
+							timeText='昨天'+hour+':'+minute;
+						}else {
+							month=(month<10)?'0'+month:month;
+							day=(day<10)?'0'+day:day;
+							timeText=month+'-'+day+' '+hour+':'+minute;				
+						}
+					}else{
+						month=(month<10)?'0'+month:month;
+						day=(day<10)?'0'+day:day;
+						timeText=year+'-'+month+'-'+day+' '+hour+':'+minute;	
+					} 
+
+					return {
+						timeStamp:time,
+						timeText:timeText,
+					}
+					
+				}else return{
+					timeStamp:time,
+					timeText:'',
+				}
+				
+			},
 			send(){
 				var message=this.message;
 				this.message='';
+				var time=new Date().getTime();
+				var showTime=this.judgeTime(time);
+				var timeObject=this.timeObject(time,showTime);
+				
 				this.texts.push({
 					fromMe:true,//是否是我发出的
+					time:timeObject,
+					showTime:showTime,
 					message:message,
 				});
 				this.textIndex="index"+(this.texts.length-1);//移动到这条数据
 				var data={
 					uid:this.uid,
 					toUid:this.toUid,
-					time:new Date().getTime(),
+					time:time,
 					message:message
 				}
 				data=JSON.stringify(data);
@@ -134,8 +204,12 @@
 					}
 					for(var index in messages){
 						var text=JSON.parse(messages[index])
+						var showTime=this.judgeTime(text.time);
+						var timeObject=this.timeObject(text.time,showTime);
 						this.texts.push({
 							fromMe:false,//是否是我发出的
+							time:timeObject,
+							showTime:showTime,
 							message:text.message,
 						})
 					}
@@ -145,6 +219,60 @@
 					console.log(res)
 				})
 			},
+			scrollToUpper(){
+				// this.scrollAnchor=2;
+				// this.$nextTick(function(){
+				// 	this.scrollAnchor=1;
+				// })
+				this.scrollStatus=false;
+				
+				if(this.historyIndex!=0){
+					setTimeout(() => {	
+						var length=this.storage.length;
+						var lastIndex=this.historyIndex-1;
+						if(this.historyIndex>15)
+							this.historyIndex-=15;
+						else this.historyIndex=0;
+						var textsCopy=[];
+						for(var i=this.historyIndex;i<=lastIndex;i++){
+							var text= JSON.parse(this.storage[i]);
+							var fromMe=false;
+							if(text.uid==this.uid)
+								fromMe=true;
+								
+							var showTime=false;
+							if(i==this.historyIndex)
+								showTime=true;
+							else{
+								if(text.time-textsCopy[textsCopy.length-1].time.timeStamp>=300000)
+									showTime=true;
+								else showTime=false;
+							}	
+							var timeObject=this.timeObject(text.time,showTime);
+							textsCopy.push({
+								fromMe:fromMe,//是否是我发出的
+								time:timeObject,
+								showTime:showTime,
+								message:text.message,
+							})
+						}
+						this.texts.unshift(...textsCopy);
+						this.textIndex='index'+(lastIndex-this.historyIndex+1);
+						// this.$nextTick(function(){
+							
+						// })
+						
+						// this.scrollAnchor=200;
+					}, 1000)
+					
+				}
+				// this.$nextTick(function(){
+				this.scrollStatus=true;	
+					
+				
+				// })
+				
+			}
 		},
 		computed:{
 			
@@ -154,6 +282,8 @@
 			
 		},
 		onLoad(option) {
+			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
+			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight-uni.upx2px(130);
 			this.uid=this.$store.state.uid;
 			this.toUid=option.toUid;
 			this.myAvatarUrl=this.$store.state.avatarUrl;
@@ -174,23 +304,25 @@
 				this.storage=[];
 			}else this.storage=JSON.parse(this.storage);
 			var length=this.storage.length;
-			var init=0;
-			if(length>=10){
-				init=length-10;
-			}else{
-				init=0;
-			}
-			for(var i=init;i<=length-1;i++){
+			if(length>15)
+				this.historyIndex=length-15;
+			else this.historyIndex=0;
+			for(var i=this.historyIndex;i<=length-1;i++){
 				var text= JSON.parse(this.storage[i]);
 				var fromMe=false;
 				if(text.uid==this.uid)
 					fromMe=true;
+				var showTime=this.judgeTime(text.time);
+				var timeObject=this.timeObject(text.time,showTime);
 				this.texts.push({
 					fromMe:fromMe,//是否是我发出的
+					time:timeObject,
+					showTime:showTime,
 					message:text.message,
 				})
 			}
-			
+			if(this.texts.length!=0)
+				this.textIndex='index'+(this.texts.length-1)
 		},
 		onUnload() {
 			if(this.socketTask!=null){
@@ -292,6 +424,15 @@
 		margin: 20upx;
 		border-radius: 50%;
 		overflow: hidden;
+	}
+	
+	.time{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 20upx;
+		font-size: 25upx;
+		color: rgba(0,0,0,0.5);
 	}
 	
 	.myTextView{
