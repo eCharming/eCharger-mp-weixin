@@ -60,12 +60,14 @@
 				this.text1=this.time1;
 				this.minTime2=this.time1;
 				this.opacity1=1;
+				this.$store.commit('setStartTime',this.text1);
 			},
 			changetime2(e){
 				this.time2=e.detail.value;
 				this.text2=this.time2;
 				this.maxTime1=this.time2;
 				this.opacity2=1;
+				this.$store.commit('setEndTime',this.text2);
 			},
 			navigate(){
 				uni.navigateTo({
@@ -78,7 +80,7 @@
 			this.month=date.getMonth()+1;
 			this.date=date.getDate();
 			this.day=date.getDay();
-			if(this.day===0) this.day="天";
+			if(this.day===0) this.day="日";
 			else if(this.day===1) this.day="一";
 			else if(this.day===2) this.day="二";
 			else if(this.day===3) this.day="三";

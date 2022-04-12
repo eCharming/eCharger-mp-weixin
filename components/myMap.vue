@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<map id="myMap" ref="map" style="width: 100%; height: 100vh;position: absolute;top: 0;" layer-style="1" :latitude="center_latitude"
-			:longitude="center_longitude" :markers="covers" :setting="mapSetting" :circles="circles" :scale="scale" :polyline="polyline"
-			@markertap="markertap($event)">
+		<map id="myMap" ref="map" style="width: 100%; height: 100vh;position: absolute;top: 0;" layer-style="1"
+			:latitude="center_latitude" :longitude="center_longitude" :markers="covers" :setting="mapSetting"
+			:circles="circles" :scale="scale" :polyline="polyline" @markertap="markertap($event)">
 		</map>
 	</view>
 </template>
@@ -28,7 +28,7 @@
 					"subkey": "ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL"
 				},
 				covers: [],
-				polyline:[],
+				polyline: [],
 				circles: [],
 				mapContext: null,
 				scale: 16,
@@ -36,16 +36,70 @@
 				url: 'https://apis.map.qq.com/ws/distance/v1/matrix/?mode=driving&from=',
 				distance: [],
 				markerSelected: -1,
+				chargerList: [], //请求所获得的所有桩信息
 			}
 		},
-		mounted() { 
-			setTimeout(()=>{
+		mounted() {
+			setTimeout(() => {
 				this.mapContext = uni.createMapContext('myMap', this);
 				this.openLocation();
-			},1500)
-			
+			}, 1500)
+
 		},
 		methods: {
+			pickerHandler(lon, lat) {
+				this.ordersCopy.splice(0);
+				this.polyline.splice(0);
+				this.markerSelected = -1;
+				if (this.chargerList.length != 0) {
+					var tempDate = new Date();
+					var days = tempDate.getDay();
+					if (days == 0) {
+						days = 7;
+					}
+					var rawStartTime = this.$store.state.startTime.split(":");
+					var rawEndTime = this.$store.state.endTime.split(":");
+					var endTime = rawEndTime.length > 1 ? (Number(rawEndTime[0]) * 60 + Number(rawEndTime[1])) : 1440;
+					var startTime = rawStartTime.length > 1 ? (Number(rawStartTime[0]) * 60 + Number(rawStartTime[1])) : 0;
+
+					for (let charger of this.chargerList) {
+						var timeStamp = charger.timeStamp;
+						if (timeStamp[2 * days - 2] >= startTime && timeStamp[2 * days - 1] <= endTime) {
+							this.covers.push({
+								title: charger.location,
+								id: charger._id,
+								latitude: charger.geoPoint.coordinates[1],
+								longitude: charger.geoPoint.coordinates[0],
+								iconPath: "/static/image/charger.png",
+								width: 40,
+								height: 40,
+								callout: {
+									content: charger.location,
+									color: "#333333",
+									fontSize: 13,
+									borderRadius: 20,
+									bgColor: "#e7ffed",
+									textAlign: "center",
+									padding: 10,
+								}
+							});
+
+							var distance = (charger.Distance / 1000).toFixed(1);
+							this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
+								location: charger.location,
+								id: charger._id,
+								latitude: charger.geoPoint.coordinates[1],
+								longitude: charger.geoPoint.coordinates[0],
+								price: charger.price,
+								time: charger.time,
+								distance: distance,
+								detail: false,
+							});
+						}
+					}
+				}
+				this.$store.commit('setOrders', this.ordersCopy);
+			},
 			MoveLocation(lat, lon) {
 				let _this = this
 				this.mapContext.moveToLocation({
@@ -69,22 +123,25 @@
 				}).then(
 					res => {
 						let chargerList = res.result;
-						this.ordersCopy.splice(0);
-						this.polyline.splice(0);
-						this.covers.splice(0, this.covers.length);
-						this.markerSelected = -1;
-						if (chargerList.length != 0) {
-							for (let charger of chargerList) {
+						this.chargerList.splice(0);
+						this.chargerList = res.result;
+
+						if (this.$store.state.startTime == "" && this.$store.state.endTime == "") {
+							this.ordersCopy.splice(0);
+							this.polyline.splice(0);
+							this.covers.splice(0);
+							this.markerSelected = -1;
+							if (tle != null) { //为了防止异步问题，所以放在这里
 								this.covers.push({
-									title: charger.location,
-									id: charger._id,
-									latitude: charger.geoPoint.coordinates[1],
-									longitude: charger.geoPoint.coordinates[0],
-									iconPath: "/static/image/charger.png",
-									width: 40,
-									height: 40,
+									title: tle,
+									id: 1027368,
+									latitude: lat,
+									longitude: lon,
+									iconPath: "/static/image/landmarksolid.png",
+									width: 50,
+									height: 50,
 									callout: {
-										content: charger.location,
+										content: tle,
 										color: "#333333",
 										fontSize: 13,
 										borderRadius: 20,
@@ -93,48 +150,81 @@
 										padding: 10,
 									}
 								});
-								
-								var distance =(charger.Distance/ 1000).toFixed(1);
-								this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
-									location: charger.location,
-									id: charger._id,
-									latitude: charger.geoPoint.coordinates[1],
-									longitude: charger.geoPoint.coordinates[0],
-									price: charger.price,
-									time:charger.time,
-									distance: distance,
-									detail: false,
-								});
+								this.circles.splice(0, 1, {
+									latitude: lat,
+									longitude: lon,
+									fillColor: "#4162996A",
+									color: "#b0daff",
+									radius: 300,
+									strokeWidth: 1,
+								})
 							}
-						}
-						this.$store.commit('setOrders', this.ordersCopy);
-						if (tle) { //为了防止异步问题，所以放在这里
-							this.covers.push({
-								title: tle,
-								id: 278,
-								latitude: lat,
-								longitude: lon,
-								iconPath: "/static/image/landmarksolid.png",
-								width: 50,
-								height: 50,
-								callout: {
-									content: tle,
-									color: "#333333",
-									fontSize: 13,
-									borderRadius: 20,
-									bgColor: "#e7ffed",
-									textAlign: "center",
-									padding: 10,
+							if (chargerList.length != 0) {
+								for (let charger of chargerList) {
+									this.covers.push({
+										title: charger.location,
+										id: charger._id,
+										latitude: charger.geoPoint.coordinates[1],
+										longitude: charger.geoPoint.coordinates[0],
+										iconPath: "/static/image/charger.png",
+										width: 40,
+										height: 40,
+										callout: {
+											content: charger.location,
+											color: "#333333",
+											fontSize: 13,
+											borderRadius: 20,
+											bgColor: "#e7ffed",
+											textAlign: "center",
+											padding: 10,
+										}
+									});
+
+									var distance = (charger.Distance / 1000).toFixed(1);
+									this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
+										location: charger.location,
+										id: charger._id,
+										latitude: charger.geoPoint.coordinates[1],
+										longitude: charger.geoPoint.coordinates[0],
+										price: charger.price,
+										time: charger.time,
+										distance: distance,
+										detail: false,
+									});
 								}
-							});
-							this.circles.splice(0, 1, {
-								latitude: lat,
-								longitude: lon,
-								fillColor: "#4162996A",
-								color: "#b0daff",
-								radius: 300,
-								strokeWidth: 1,
-							})
+							}
+							this.$store.commit('setOrders', this.ordersCopy);
+						} else {
+							this.covers.splice(0);
+							if (tle != null) { //为了防止异步问题，所以放在这里
+								this.covers.push({
+									title: tle,
+									id: 1027368,
+									latitude: lat,
+									longitude: lon,
+									iconPath: "/static/image/landmarksolid.png",
+									width: 50,
+									height: 50,
+									callout: {
+										content: tle,
+										color: "#333333",
+										fontSize: 13,
+										borderRadius: 20,
+										bgColor: "#e7ffed",
+										textAlign: "center",
+										padding: 10,
+									}
+								});
+								this.circles.splice(0, 1, {
+									latitude: lat,
+									longitude: lon,
+									fillColor: "#4162996A",
+									color: "#b0daff",
+									radius: 300,
+									strokeWidth: 1,
+								})
+							}
+							this.pickerHandler(lon, lat)
 						}
 					}
 				)
@@ -154,9 +244,9 @@
 								latitude: this.latitude,
 								longitude: this.longitude
 							});
-							if(firstFlag) {
-								this.center_latitude=this.latitude;
-								this.center_longitude=this.longitude;
+							if (firstFlag) {
+								this.center_latitude = this.latitude;
+								this.center_longitude = this.longitude;
 							}
 							this.circles.splice(0, 1, {
 								latitude: this.latitude,
@@ -171,7 +261,7 @@
 									.longitude) > 0.005)) { //两次定位距离过近时不调用云函数以减小负载
 								this.getChargerLocation(this.longitude, this.latitude, null);
 							}
-							firstFlag=false;
+							firstFlag = false;
 						});
 					},
 					fail: (err) => {
@@ -194,41 +284,42 @@
 				}
 				this.markerSelected = number;
 			},
-			navigate(index){
-				var url="https://apis.map.qq.com/ws/direction/v1/driving/?from="
-				+this.latitude+","+this.longitude+"&to="+this.covers[index].latitude+","+this.covers[index].longitude+"&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL";
+			navigate(index) {
+				var url = "https://apis.map.qq.com/ws/direction/v1/driving/?from=" +
+					this.latitude + "," + this.longitude + "&to=" + this.covers[index].latitude + "," + this.covers[index]
+					.longitude + "&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL";
 				uni.request({
-					url:url,
+					url: url,
 					success: (res) => {
-						if(res.data.status=="0"){
+						if (res.data.status == "0") {
 							this.polyline.splice(0);
 							this.polyline.push({
-								points:[],
-								width:5,
-								color:"#66CDAA"
+								points: [],
+								width: 5,
+								color: "#66CDAA"
 							});
-							var polyline=res.data.result.routes[0].polyline;
+							var polyline = res.data.result.routes[0].polyline;
 							this.polyline[0].points.push({
-								latitude:polyline[0],
-								longitude:polyline[1]
+								latitude: polyline[0],
+								longitude: polyline[1]
 							})
-							
-							for (var i = 2; i < polyline.length ; i++){
-								polyline[i] = polyline[i-2] + polyline[i]/1000000;
-								if(i%2==1){
+
+							for (var i = 2; i < polyline.length; i++) {
+								polyline[i] = polyline[i - 2] + polyline[i] / 1000000;
+								if (i % 2 == 1) {
 									this.polyline[0].points.push({
-										latitude:polyline[i-1],
-										longitude:polyline[i]
+										latitude: polyline[i - 1],
+										longitude: polyline[i]
 									});
-								
+
 								}
 							};
-							
+
 						}
-						
+
 					}
 				});
-				this.MoveLocation(this.covers[index].latitude,this.covers[index].longitude);
+				this.MoveLocation(this.covers[index].latitude, this.covers[index].longitude);
 			}
 		},
 		watch: {
@@ -248,15 +339,15 @@
 					this.openLocation();
 			},
 			'$store.state.orderSelected'() { //当选中一个order后在地图上移动到该标记点
-				if(this.$store.state.orderSelected!=null){
+				if (this.$store.state.orderSelected != null) {
 					var latitude = this.covers[this.$store.state.orderSelected].latitude;
 					var longitude = this.covers[this.$store.state.orderSelected].longitude;
 					this.MoveLocation(latitude, longitude);
-					this.$nextTick(function(){
-						this.$store.commit('setOrderSelected',null);
+					this.$nextTick(function() {
+						this.$store.commit('setOrderSelected', null);
 					})
 				}
-				
+
 			},
 			'$store.state.locationres'() {
 				let res = this.$store.state.locationres;
@@ -280,15 +371,35 @@
 				}
 				this.getChargerLocation(this.longitude, this.latitude, null);
 				this.$store.commit('setLocationRes', null);
+				this.scale = 0;
+				this.$nextTick(() => {
+					this.scale = 16;
+				})
 			},
-			'$store.state.navigateSelected'(){
-				if(this.$store.state.navigateSelected!=null){
+			'$store.state.navigateSelected'() {
+				if (this.$store.state.navigateSelected != null) {
 					this.navigate(this.$store.state.navigateSelected);
-					this.$nextTick(function(){
-						this.$store.commit('setNavigateSelected',null);
+					this.$nextTick(function() {
+						this.$store.commit('setNavigateSelected', null);
 					})
-					
+
 				}
+			},
+			'$store.state.startTime'() {
+				if (this.covers.length > 0 && this.covers[0].id == 1027368) {
+					this.covers.splice(1);
+				} else {
+					this.covers.splice(0);
+				}
+				this.pickerHandler(null, null)
+			},
+			'$store.state.endTime'() {
+				if (this.covers.length > 0 && this.covers[0].id == 1027368) {
+					this.covers.splice(1);
+				} else {
+					this.covers.splice(0);
+				}
+				this.pickerHandler(null, null)
 			}
 		}
 	}

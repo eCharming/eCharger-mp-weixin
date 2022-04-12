@@ -21,9 +21,17 @@ export default new Vuex.Store({
 		windowHeight:null,
 		buttonSelected:1,
 		color:"rgb(50,200,210)",
+		startTime:"",
+		endTime:"",
 		
     },
     mutations: {
+		setStartTime(state,startTime) {
+			state.startTime=startTime;
+		},
+		setEndTime(state,endTime) {
+			state.endTime=endTime;
+		},
 		setUid(state,uid){
 			state.uid=uid;
 		},

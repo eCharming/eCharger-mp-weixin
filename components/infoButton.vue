@@ -37,7 +37,7 @@
 					this.src="../static/image/person.gif";
 				}	
 				else{
-					this.src="../static/image/person_blue.png";
+					this.src="../static/image/person_blue.gif";
 				} 
 			}
 		}
