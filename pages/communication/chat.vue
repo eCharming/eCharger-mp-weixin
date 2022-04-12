@@ -8,12 +8,13 @@
 			<scroll-view
 				style="overflow-anchor:auto;"
 				scroll-anchoring="true"
+				refresher-enabled="true"
 				:scroll-y="scrollStatus"
-				:scroll-with-animation="False"
-				:scroll-top="scrollAnchor"
+				:scroll-with-animation="scrollAnimation"
 				:scroll-into-view="textIndex"
+				:refresher-triggered="refreshTriggered"
 				:style="{'height':scrollHeight+'px'}"
-				@scrolltoupper="scrollToUpper()"
+				@refresherrefresh="scrollToUpper()"
 			>
 				<view v-for="text,index in texts" :key="index" :id="'index'+index" >
 					<view class="time" v-if="text.showTime">
@@ -64,54 +65,55 @@
 				myAvatarUrl:'',
 				uid:0,
 				toUid:0,
-				socketTask:null,
-				message:'',//textarea中的文字
-				texts:[],//所有消息
+				socketTask:null,//websocket
+				message:'',//textarea中的文字 双向绑定
+				texts:[],//显示在屏幕上的所有消息
 				firstTop:true,//是否第一次爬升到顶部
 				textIndex:'index0',//判定scroll滚动到哪里
 				historyIndex:0,//判定缓存记录显示到哪里
-				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
-				statusHeight:uni.getSystemInfoSync().statusBarHeight+50,
+				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,//状态栏高度
+				statusHeight:uni.getSystemInfoSync().statusBarHeight+50,//导航栏高度
 				
-				scrollStatus:true,
-				scrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(130),
-				scrollAnchor:1,
+				scrollStatus:true,//是否允许滚动
+				scrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(130),//scollview的高度
+				scrollAnimation:true,//是否允许滚动动画
+				refreshTriggered:false,//是否触发刷新
 				
-				False:false,
+				False:false,//需要规定一个变量否则直接绑定false会被解释为字符串
 				
 				keyboardHeight:0,//键盘高度
 				
 				storageNum:100,//最大存储历史数据数量
-				storage:[],//缓存历史数据
+				storage:[],//缓存的所有历史数据
 			}
 		},
 		methods:{
-			focus(e){
+			focus(e){		//当文本框focus时 获得键盘高度并且减少scrollview的高度来获得页面变短的效果
 				this.keyboardHeight=e.detail.height;
 				this.scrollHeight-=this.keyboardHeight;
-				this.textIndex='';
-				this.$nextTick(function(){
-					this.textIndex='index'+(this.texts.length-1);
-				})
+				// this.textIndex='';
+				// this.$nextTick(function(){
+				// 	this.textIndex='index'+(this.texts.length-1);
+				// })
 			},
-			unfocus(){
+			unfocus(){	//文本框失焦 返还scrollview的高度
 				this.scrollHeight+=this.keyboardHeight;
 			},
 			back() {
 				uni.navigateBack({
 				})
 			},
-			judgeTime(time){
-				if(this.texts=='')
+			judgeTime(time){	//判断这条消息是否要加上时间
+				if(this.texts=='')	//如果这是第一条消息那么就加上时间
 					return true;
-				else{
-					if(time-this.texts[this.texts.length-1].time.timeStamp>=300000)
+				else{				//如果不是第一条消息
+					if(time-this.texts[this.texts.length-1].time.timeStamp>=300000)		//如果距离上一条消息超过五分钟就显示时间
 						return true;
 					else return false;
 				}
 			},
-			timeObject(time,bool){
-				if(bool){
+			timeObject(time,bool){		//用于将时间戳转化为时间显示 需要完成显示 昨天 或者日期 或者不显示日期的功能 
+				if(bool){				//如果不需要显示时间那么就直接返回空字符串
 					var currentTime=new Date();
 					var currentYear=currentTime.getFullYear();
 					var currentMonth=currentTime.getMonth()+1;
@@ -154,14 +156,14 @@
 				}
 				
 			},
-			send(){
+			send(){		//发送消息
 				var message=this.message;
 				this.message='';
 				var time=new Date().getTime();
 				var showTime=this.judgeTime(time);
 				var timeObject=this.timeObject(time,showTime);
 				
-				this.texts.push({
+				this.texts.push({					//将数据加入texts数组显示在scroll中
 					fromMe:true,//是否是我发出的
 					time:timeObject,
 					showTime:showTime,
@@ -174,11 +176,11 @@
 					time:time,
 					message:message
 				}
-				data=JSON.stringify(data);
-				this.storage.push(data);
-				if(this.storage.length>=100)
+				data=JSON.stringify(data);	//将这条数据json字符串化
+				this.storage.push(data);	//放入storage数组 一会儿一起放入缓存
+				if(this.storage.length>=this.storageNum)	//如果缓存的数量大于最大缓存数量，那么就直接删除第一条数据
 					this.storage.splice(0,1);
-				this.socketTask.send({ //发送到服务器
+				this.socketTask.send({ 		//发送到服务器
 					data:data,
 					success: () => {
 				
@@ -195,14 +197,14 @@
 				});
 				this.socketTask.onMessage((res)=>{
 					console.log(res)
-					var data=JSON.parse(res.data);
+					var data=JSON.parse(res.data);		//将数据对象化
 					var num=data.num;
 					var messages=data.message;
-					this.storage.push(...messages);
-					if(this.storage.length>=this.storageNum){
-						this.storage.splice(0,this.storage.length-this.storageNum);
+					this.storage.push(...messages);		//放入storage数组 一会儿一起放入缓存
+					if(this.storage.length>=this.storageNum){	//如果缓存的数量大于最大缓存数量，那么就直接删除第一条数据
+						this.storage.splice(0,this.storage.length-this.storageNum);		
 					}
-					for(var index in messages){
+					for(var index in messages){		//将每一条数据加入texts数组显示在scroll中
 						var text=JSON.parse(messages[index])
 						var showTime=this.judgeTime(text.time);
 						var timeObject=this.timeObject(text.time,showTime);
@@ -215,40 +217,40 @@
 					}
 					
 				});
-				this.socketTask.onClose((res)=>{
+				this.socketTask.onClose((res)=>{	//连接关闭
 					console.log(res)
 				})
 			},
-			scrollToUpper(){
-				// this.scrollAnchor=2;
-				// this.$nextTick(function(){
-				// 	this.scrollAnchor=1;
-				// })
-				this.scrollStatus=false;
+			scrollToUpper(){		//滚动到最上层刷新缓存
+				this.scrollStatus=false;	//不准scroll滚动
+				this.scrollAnimation=false;	//关闭滚动动画模拟实现页面锚定功能（但会出现闪烁）
+				this.refreshTriggered=true;	//打开刷新触发
 				
-				if(this.historyIndex!=0){
-					setTimeout(() => {	
+				if(this.historyIndex!=0){	//如果缓存中的历史纪录不是最后一条那么刷新更多消息
+					console.log(1)
+					setTimeout(() => {		//一秒后再刷新
 						var length=this.storage.length;
 						var lastIndex=this.historyIndex-1;
-						if(this.historyIndex>15)
+						if(this.historyIndex>15)	//如果历史记录还有超过15条那么减少15 如果小于15那么直接变为零
 							this.historyIndex-=15;
 						else this.historyIndex=0;
-						var textsCopy=[];
-						for(var i=this.historyIndex;i<=lastIndex;i++){
-							var text= JSON.parse(this.storage[i]);
+						var textsCopy=[];	//利用副本 避免一条一条加入texts数组
+						for(var i=this.historyIndex;i<=lastIndex;i++){		//将缓存中的数据推入texts数组来显示在屏幕上
+							var text= JSON.parse(this.storage[i]);		
 							var fromMe=false;
 							if(text.uid==this.uid)
 								fromMe=true;
 								
 							var showTime=false;
-							if(i==this.historyIndex)
+							if(i==this.historyIndex)		//是否显示时间
 								showTime=true;
 							else{
-								if(text.time-textsCopy[textsCopy.length-1].time.timeStamp>=300000)
+								if(text.time-textsCopy[textsCopy.length-1].time.timeStamp>=300000)	
 									showTime=true;
 								else showTime=false;
 							}	
-							var timeObject=this.timeObject(text.time,showTime);
+							
+							var timeObject=this.timeObject(text.time,showTime);		//时间字符串
 							textsCopy.push({
 								fromMe:fromMe,//是否是我发出的
 								time:timeObject,
@@ -256,22 +258,23 @@
 								message:text.message,
 							})
 						}
-						this.texts.unshift(...textsCopy);
-						this.textIndex='index'+(lastIndex-this.historyIndex+1);
-						// this.$nextTick(function(){
-							
-						// })
+						this.texts.unshift(...textsCopy);	//将副本一道推入texts数组
 						
-						// this.scrollAnchor=200;
+						this.$nextTick(function(){	//在下一帧移动到刷新之前的第一条以模拟实现页面锚定
+							
+							
+							this.textIndex='index'+(lastIndex-this.historyIndex+1);
+							this.$nextTick(function(){
+								this.scrollAnimation=true;	//在下下一帧将动画再次打开
+							})
+							
+						})
 					}, 1000)
-					
 				}
-				// this.$nextTick(function(){
-				this.scrollStatus=true;	
-					
-				
-				// })
-				
+				setTimeout(()=>{		//在0.8秒后关闭刷新的动画以及打开页面的滚动
+					this.refreshTriggered=false;
+					this.scrollStatus=true;	
+				},800)
 			}
 		},
 		computed:{
@@ -283,11 +286,11 @@
 		},
 		onLoad(option) {
 			this.uid=this.$store.state.uid;
-			this.toUid=option.toUid;
-			this.name=option.name;
-			this.yourAvatarUrl=option.avatarUrl;
+			this.toUid=option.toUid;//从上个页面的url获得好友的uid信息
+			this.name=option.name;//从上个页面的url获得好友的姓名信息
+			this.yourAvatarUrl=option.avatarUrl;//从上个页面的url获得好友的头像url信息
 			this.myAvatarUrl=this.$store.state.avatarUrl;
-			wx.cloud.callFunction({   //uid获取
+			wx.cloud.callFunction({   //再获取一次好友的头像和名字
 				name:'infoReturn',
 				data:{
 					uid: Number(this.toUid)
@@ -299,15 +302,15 @@
 				}
 			)
 			
-			this.storage=uni.getStorageSync(this.uid+'ChatWith'+this.toUid);
-			if(this.storage==''){
+			this.storage=uni.getStorageSync(this.uid+'ChatWith'+this.toUid);	//将所有的历史记录缓存存入storage缓存
+			if(this.storage==''){	//如果缓存为空那么显式声明为数组
 				this.storage=[];
-			}else this.storage=JSON.parse(this.storage);
+			}else this.storage=JSON.parse(this.storage);	//不是空则对象化
 			var length=this.storage.length;
-			if(length>15)
+			if(length>15)	//如果历史记录缓存大于十五条则historyIndex为长度－15，否则直接为零
 				this.historyIndex=length-15;
 			else this.historyIndex=0;
-			for(var i=this.historyIndex;i<=length-1;i++){
+			for(var i=this.historyIndex;i<=length-1;i++){	//从historyIndex到最后一条缓存全部推入texts数组来显示在屏幕上
 				var text= JSON.parse(this.storage[i]);
 				var fromMe=false;
 				if(text.uid==this.uid)
@@ -321,24 +324,24 @@
 					message:text.message,
 				})
 			}
-			if(this.texts.length!=0)
+			if(this.texts.length!=0)	//如果屏幕上有消息 那么移动到最下一条消息
 				this.textIndex='index'+(this.texts.length-1)
 		},
-		onUnload() {
-			if(this.socketTask!=null){
+		onUnload() {	
+			if(this.socketTask!=null){		//页面关闭那么关闭链接
 				this.socketTask.close({
 					success: () => {
 						this.socketTask=null;
 					}
 				});
 			}
-			var reminder=uni.getStorageSync(this.uid+'friends');
+			var reminder=uni.getStorageSync(this.uid+'friends');	//获取friends页面好友列表的缓存
 			if(this.storage!=''){
-				uni.setStorageSync(this.uid+'ChatWith'+this.toUid,JSON.stringify(this.storage));
+				uni.setStorageSync(this.uid+'ChatWith'+this.toUid,JSON.stringify(this.storage));	//页面关闭时将storage数组存入缓存以达到持久化并且最小化设备压力的目的
 				if(reminder!=''){
 					reminder=JSON.parse(reminder);
 				}else reminder={};
-				var last=JSON.parse(this.storage[this.storage.length-1]);
+				var last=JSON.parse(this.storage[this.storage.length-1]);	//将好友uid、最新的头像、名字以及最后一条消息的文字和时间存入缓存持久化
 				reminder[this.toUid]={
 					name:this.name,
 					avatarUrl:this.yourAvatarUrl,
@@ -350,11 +353,11 @@
 				
 		},
 		onShow() {
-			if(this.socketTask==null){
+			if(this.socketTask==null){	//打开页面打开链接
 				this.connect();
 			}
 		},
-		onHide() {
+		onHide() {	//页面隐藏关闭链接
 			if(this.socketTask!=null){
 				this.socketTask.close({
 					success: () => {

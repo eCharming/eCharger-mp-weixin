@@ -30,12 +30,12 @@
 	export default{
 		data(){
 			return{
-				contacterBottom:0,
-				statusHeight:0,
-				scrollHeight:0,
-				friends:[],
+				contacterBottom:0,//联系人距离导航栏底部距离
+				statusHeight:0,//导航栏高度
+				scrollHeight:0,//scrollview高度
+				friends:[],//所有好友数据的信息都存储在这个数组里
 				uid:-1,
-				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
+				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,//状态栏高度
 			}
 		},
 		methods:{
@@ -43,7 +43,7 @@
 				uni.navigateBack({
 				})
 			},
-			click(index){
+			click(index){	//按下某一个好友 导航到chat页面 通过缓存传送好友的uid、姓名和头像url
 				this.friends[index].hasNew=false;
 				this.friends[index].newMessageNum=0;
 				uni.navigateTo({
@@ -58,18 +58,16 @@
 						
 					}
 				});
-				this.socketTask.onMessage((res)=>{
-					// console.log(res)
-					var reminders=JSON.parse(res.data);
-					console.log(reminders)
-					for(var index in reminders){
+				this.socketTask.onMessage((res)=>{	//接收到消息
+					var reminders=JSON.parse(res.data); //对象化
+					for(var index in reminders){	//检索每一条数据
 						var fromUid=reminders[index].fromUid;
 						var text=JSON.parse(reminders[index].latestText);
 						var num=reminders[index].num;
-						var hasFound=false;
+						var hasFound=false;//用于判断是否寻找到匹配的好友
 						var time=this.timeObject(text.time);
-						for(var i in this.friends){
-							if(fromUid==this.friends[i].uid){
+						for(var i in this.friends){		
+							if(fromUid==this.friends[i].uid){	//匹配到好友的uid之后修正数据
 								this.friends[i].lastWord=text.message;
 								this.friends[i].newMessageNum=num;
 								this.friends[i].hasNew=true;
@@ -78,21 +76,22 @@
 								break;
 							}
 						}
-						if(hasFound==false){
-							wx.cloud.callFunction({   //uid获取
-								name:'infoReturn',
+						if(hasFound==false){	//没有匹配到好友 则好友列表当中没有该好友 向friends里加入该好友并且向缓存中注入该好友
+							wx.cloud.callFunction({   //获取该好友的头像以及名字
+								name:'infoReturn',		
 								data:{
 									uid: Number(fromUid)
 								}
 							}).then(
 								res=>{
-									reminder[fromUid]={
+									reminder[fromUid]={			//将传入的reminder参数增加该好友
 										name:res.result.userName,
 										avatarUrl:res.result.avatarUrl,
 										time:time,
 										message:text.message
 									};
-									this.friends.unshift({
+									uni.setStorageSync(this.uid+'friends',JSON.stringify(reminder)); 	//存入缓存持久化该好友 用于下一次打开时可以找到该好友
+									this.friends.unshift({		//向好友列表当中推入该好友
 										uid:fromUid,
 										name:res.result.userName,
 										avatarUrl:res.result.avatarUrl,
@@ -111,7 +110,7 @@
 					// console.log(res)
 				});
 			},
-			timeObject(time){
+			timeObject(time){		//用于将时间戳转化为时间显示 需要完成显示 昨天 或者日期 或者不显示日期的功能
 				var currentTime=new Date();
 				var currentYear=currentTime.getFullYear();
 				var currentMonth=currentTime.getMonth()+1;
@@ -152,7 +151,7 @@
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			this.contacterBottom=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight;
-			this.friends.push({
+			this.friends.push({			//测试版使用
 				uid:1,
 				name:'',
 				avatarUrl:'',
@@ -179,7 +178,7 @@
 			});
 	
 		},
-		onUnload() {
+		onUnload() {		//页面关闭则断开连接
 			if(this.socketTask!=null){
 				this.socketTask.close({
 					success: () => {
@@ -190,7 +189,7 @@
 		},
 		onShow() {
 			// this.friends.splice(0);   //正式版
-			var reminder=uni.getStorageSync(this.uid+'friends');
+			var reminder=uni.getStorageSync(this.uid+'friends');		//获取好友列表缓存
 			if(reminder!=''){
 				reminder=JSON.parse(reminder);
 				var keys=Object.keys(reminder);
@@ -218,11 +217,11 @@
 				
 			}else reminder={};
 			if(this.socketTask==null){
-				this.connect(reminder);
+				this.connect(reminder);		//先注入缓存再打开websocket链接查看好友是否在我离线的时候发来了新消息
 			}
 		},
 		onHide() {
-			if(this.socketTask!=null){
+			if(this.socketTask!=null){		//页面隐藏就关闭连接
 				this.socketTask.close({
 					success: () => {
 						this.socketTask=null;
