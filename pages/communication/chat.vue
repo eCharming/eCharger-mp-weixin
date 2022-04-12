@@ -71,10 +71,10 @@
 				textIndex:'index0',//判定scroll滚动到哪里
 				historyIndex:0,//判定缓存记录显示到哪里
 				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
-				statusHeight:0,
+				statusHeight:uni.getSystemInfoSync().statusBarHeight+50,
 				
 				scrollStatus:true,
-				scrollHeight:0,
+				scrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(130),
 				scrollAnchor:1,
 				
 				False:false,
@@ -282,10 +282,10 @@
 			
 		},
 		onLoad(option) {
-			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
-			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight-uni.upx2px(130);
 			this.uid=this.$store.state.uid;
 			this.toUid=option.toUid;
+			this.name=option.name;
+			this.yourAvatarUrl=option.avatarUrl;
 			this.myAvatarUrl=this.$store.state.avatarUrl;
 			wx.cloud.callFunction({   //uid获取
 				name:'infoReturn',

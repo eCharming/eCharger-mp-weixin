@@ -9,7 +9,7 @@
 			scroll-with-animation=true
 			:style="{'height':scrollHeight+'px'}"
 		>
-			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(friend.name,friend.uid,index)">
+			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(index)">
 				<view class="avatarView">
 					<image class="avatar" :src="friend.avatarUrl"></image>
 				</view>
@@ -43,11 +43,11 @@
 				uni.navigateBack({
 				})
 			},
-			click(name,toUid,index){
+			click(index){
 				this.friends[index].hasNew=false;
 				this.friends[index].newMessageNum=0;
 				uni.navigateTo({
-					url: './chat?toUid='+toUid,
+					url: './chat?toUid='+this.friends[index].uid+'&name='+this.friends[index].name+'&avatarUrl='+this.friends[index].avatarUrl,
 				});
 			},
 			connect(reminder){
