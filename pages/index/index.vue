@@ -2,7 +2,7 @@
 	<view>
 		
 		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
-			<image src="/static/image/logo.gif" class="img-class"></image>
+			<image src="/static/image/logo-2.gif" class="img-class"></image>
 		</view>
 		<mymap v-show='!isShown'></mymap>
 		<movablebox v-if='!isShown' :chargers="chargers"></movablebox>

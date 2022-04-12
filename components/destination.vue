@@ -36,8 +36,6 @@
 				month:0,
 				date:0,
 				day:0,
-				time1:'12:01',
-				time2:'12:01',
 				minTime1:'00:00',
 				maxTime1:'24:00',
 				minTime2:'00:00',
@@ -56,16 +54,16 @@
 		},
 		methods:{
 			changetime1(e){
-				this.time1=e.detail.value;
-				this.text1=this.time1;
-				this.minTime2=this.time1;
+				var time1=e.detail.value;
+				this.text1=time1;
+				this.minTime2=time1;
 				this.opacity1=1;
 				this.$store.commit('setStartTime',this.text1);
 			},
 			changetime2(e){
-				this.time2=e.detail.value;
-				this.text2=this.time2;
-				this.maxTime1=this.time2;
+				var time2=e.detail.value;
+				this.text2=time2;
+				this.maxTime1=time2;
 				this.opacity2=1;
 				this.$store.commit('setEndTime',this.text2);
 			},

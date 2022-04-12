@@ -278,7 +278,6 @@
 					url: url,
 					method: 'GET',
 					success: (res) => {
-						console.log(res)
 						this.locationList.splice(0)
 						if(res.data.status==0) {
 							this.locationList.push(...res.data.data)
