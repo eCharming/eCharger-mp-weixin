@@ -278,6 +278,7 @@
 		letter-spacing: 1upx;
 		position: absolute;
 		width: 500upx;
+		height: 33upx;
 		top:80upx;
 		left: 150upx;
 		color: rgba(0,0,0,0.5);

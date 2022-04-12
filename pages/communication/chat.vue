@@ -455,6 +455,8 @@
 		font-size: 30upx;
 		word-break:break-all;
 		word-wrap:break-word; 
+		max-width: 520upx;
+		
 	}
 	
 	.otherText{
@@ -467,6 +469,7 @@
 		font-size: 30upx;
 		word-break:break-all;
 		word-wrap:break-word; 
+		max-width: 520upx;
 	}
 	
 	.backimg {
