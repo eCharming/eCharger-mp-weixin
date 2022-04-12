@@ -339,13 +339,10 @@
 					reminder=JSON.parse(reminder);
 				}else reminder={};
 				var last=JSON.parse(this.storage[this.storage.length-1]);
-				var time=new Date(last.time);
-				var hour=time.getHours();
-				var minute=time.getMinutes();
 				reminder[this.toUid]={
 					name:this.name,
 					avatarUrl:this.yourAvatarUrl,
-					time:hour+':'+minute,
+					time:last.time,
 					message:last.message
 				};
 				uni.setStorageSync(this.uid+'friends',JSON.stringify(reminder));

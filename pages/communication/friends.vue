@@ -67,15 +67,13 @@
 						var text=JSON.parse(reminders[index].latestText);
 						var num=reminders[index].num;
 						var hasFound=false;
-						var time=new Date(text.time);
-						var hour=time.getHours();
-						var minute=time.getMinutes();
+						var time=this.timeObject(text.time);
 						for(var i in this.friends){
 							if(fromUid==this.friends[i].uid){
 								this.friends[i].lastWord=text.message;
 								this.friends[i].newMessageNum=num;
 								this.friends[i].hasNew=true;
-								this.friends[i].lastTime=hour+':'+minute;
+								this.friends[i].lastTime=time;
 								hasFound=true;
 								break;
 							}
@@ -91,7 +89,7 @@
 									reminder[fromUid]={
 										name:res.result.userName,
 										avatarUrl:res.result.avatarUrl,
-										time:hour+':'+minute,
+										time:time,
 										message:text.message
 									};
 									this.friends.unshift({
@@ -99,7 +97,7 @@
 										name:res.result.userName,
 										avatarUrl:res.result.avatarUrl,
 										lastWord:text.message,
-										lastTime:hour+':'+minute,
+										lastTime:time,
 										newMessageNum:num,//新消息数量
 										hasNew:true//是否有新消息
 									})
@@ -112,7 +110,42 @@
 				this.socketTask.onClose((res)=>{
 					// console.log(res)
 				});
-			}
+			},
+			timeObject(time){
+				var currentTime=new Date();
+				var currentYear=currentTime.getFullYear();
+				var currentMonth=currentTime.getMonth()+1;
+				var currentDay=currentTime.getDate();
+				var timeDate=new Date(time);
+				var year=timeDate.getFullYear();
+				var month=timeDate.getMonth()+1;
+				var day=timeDate.getDate();
+				var hour=timeDate.getHours();
+				var minute=timeDate.getMinutes();
+				if(hour<10)
+					hour='0'+hour;
+				if(minute<10)
+					minute='0'+minute;
+				var timeText='';
+				if(currentYear==year){
+					if(currentMonth==month&&currentDay==day){
+						timeText=hour+':'+minute;
+					}else if(currentMonth==month&&currentDay-day==1){
+						timeText='昨天'+hour+':'+minute;
+					}else {
+						month=(month<10)?'0'+month:month;
+						day=(day<10)?'0'+day:day;
+						timeText=month+'-'+day+' '+hour+':'+minute;				
+					}
+				}else{
+					month=(month<10)?'0'+month:month;
+					day=(day<10)?'0'+day:day;
+					timeText=year+'-'+month+'-'+day+' '+hour+':'+minute;	
+				} 
+		
+				return timeText
+
+			},
 		},
 		onLoad() {
 			this.uid=this.$store.state.uid;
@@ -166,7 +199,7 @@
 				// 		uid:keys[index],
 				// 		name:reminder[[keys[index]]].name,
 				// 		lastWord:reminder[[keys[index]]].message,
-				// 		lastTime:reminder[[keys[index]]].time,
+				// 		lastTime:this.timeObject(reminder[[keys[index]]].time),
 				// 		newMessageNum:0,//新消息数量
 				// 		hasNew:false//是否有新消息
 				// 	})
@@ -178,7 +211,7 @@
 							this.friends[i].name=reminder[[keys[index]]].name;
 							this.friends[i].avatarUrl=reminder[[keys[index]]].avatarUrl;
 							this.friends[i].lastWord=reminder[[keys[index]]].message;
-							this.friends[i].lastTime=reminder[[keys[index]]].time;
+							this.friends[i].lastTime=this.timeObject(reminder[[keys[index]]].time);
 						}
 					}
 				}
