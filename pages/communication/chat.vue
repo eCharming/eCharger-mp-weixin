@@ -42,8 +42,7 @@
 					:show-confirm-bar="False"
 					hold-keyboard="true"
 					:adjust-position="False"
-					@focus="focus($event)"
-					@blur="unfocus()"
+					@keyboardheightchange="keyboardheightchange($event)"
 				></textarea>
 				<view class="send" @click="send">发送</view>
 			</view>
@@ -56,9 +55,6 @@
 	export default{
 		data(){
 			return{
-				// friendBottom:0,
-				// statusHeight:0,
-				// scrollHeight:0,
 				name:'',
 				yourAvatarUrl:'',
 				myAvatarUrl:'',
@@ -74,7 +70,8 @@
 				statusHeight:uni.getSystemInfoSync().statusBarHeight+50,//导航栏高度
 				
 				scrollStatus:true,//是否允许滚动
-				scrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(230),//scollview的高度
+				constscrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(230),//scollview的高度
+				scrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(230),
 				scrollAnimation:true,//是否允许滚动动画
 				refreshTriggered:false,//是否触发刷新
 				
@@ -87,16 +84,11 @@
 			}
 		},
 		methods:{
-			focus(e){		//当文本框focus时 获得键盘高度并且减少scrollview的高度来获得页面变短的效果
-				this.keyboardHeight=e.detail.height;
-				this.scrollHeight-=this.keyboardHeight;
-				// this.textIndex='';
-				// this.$nextTick(function(){
-				// 	this.textIndex='index'+(this.texts.length-1);
-				// })
-			},
-			unfocus(){	//文本框失焦 返还scrollview的高度
-				this.scrollHeight+=this.keyboardHeight;
+			keyboardheightchange(e) {
+				if(e.detail.height!=this.keyboardHeight) {
+					this.keyboardHeight=e.detail.height
+					this.scrollHeight=this.constscrollHeight-e.detail.height;
+				}
 			},
 			back() {
 				uni.navigateBack({
@@ -157,6 +149,9 @@
 			},
 			send(){		//发送消息
 				var message=this.message;
+				if(message=='') {
+					return;
+				}
 				this.message='';
 				var time=new Date().getTime();
 				var showTime=this.judgeTime(time);

@@ -505,7 +505,13 @@
 						}
 						wx.showToast({
 							title: "提交成功！",
-							icon: 'none',
+							icon: 'success',
+							complete:()=>{
+								setTimeout(()=>{
+									uni.navigateBack({})
+								},1500)
+								
+							}
 						})
 					}
 				)
@@ -520,7 +526,20 @@
 				this.avatarUrl.splice(index, 1);
 			}
 		},
-		mounted() {}
+		mounted() {
+			if(this.$store.state.currentLocation==null) {
+				wx.showToast({
+					title: "请打开定位！",
+					icon: 'error',
+					complete:()=>{
+						setTimeout(()=>{
+							uni.navigateBack({})
+						},1500)
+						
+					}
+				})
+			}
+		}
 	}
 </script>
 
