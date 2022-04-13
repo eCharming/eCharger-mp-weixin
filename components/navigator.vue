@@ -1,5 +1,5 @@
 <template>
-	<view style="position: relative;">
+	<view style="position: relative;perspective: 500upx;transform-style: preserve-3d;">
 		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
 		<view style="height: 50px;display: flex;position: relative;" :style="{'background-color':backColor}">
 				<view style="color:#FFFFFF ;margin-left: 15upx;margin-top: 25upx;">成都</view>
@@ -26,7 +26,7 @@
 		<view  
 		style="height: 62upx;width: 100%;transition: all .3s;
 		position: absolute;display: flex;justify-content: space-around;
-		transform-style: preserve-3d;transform-origin: top;"
+		transform-origin: top;"
 		:style="{'bottom':textBottom+'px','background-color':backColor,'transform':'rotateX('+rotate+'deg)'}">
 			<view class="text1">
 				<text>扫一扫</text>
@@ -95,7 +95,7 @@
 					this.bottom=-uni.upx2px(0);
 					this.textBottom=-uni.upx2px(60);
 					this.opacity=0;
-					this.rotate=90;
+					this.rotate=-90;
 				};
 			}
 		}

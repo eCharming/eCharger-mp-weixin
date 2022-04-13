@@ -1,45 +1,25 @@
 <template>
-	<view class="card" 
-		:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow,'height':height}"
+	<view style="position: relative;height: 300upx;margin:20upx;margin-bottom: 40upx;transform-style: preserve-3d; transition: .7s all;"
+	:style="{'transform':'rotateY('+rotate+'deg)'}">
+		<view class="card"
+			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow,'height':height}"
 		>
-		<view style="display: flex;flex-direction: column;">
-			<view class="view1">
-				<text class="location">{{location}}</text>
-				<view>
-					<image class="image" src="../static/image/arrow.png"></image>
-					<text class="distance">{{distance}}km</text>
+			<view style="display: flex;flex-direction: column;">
+				<view class="view1">
+					<text class="location">{{location}}</text>
+					<view>
+						<image class="image" src="../static/image/arrow.png"></image>
+						<text class="distance">{{distance}}km</text>
+					</view>
+					
+				</view>
+				<view style="display: flex;justify-content: space-between;position: relative;">
+					<text class="text">{{location}}</text>
+					<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight}" src='../static/image/checkdetail.png' v-if="check" 
+					@click.native.stop.prevent="checkDetail"></image>
 				</view>
 				
 			</view>
-			<view style="display: flex;justify-content: space-between;position: relative;">
-				<text class="text">{{location}}</text>
-				<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight}" src='../static/image/checkdetail.png' v-if="check" 
-				@click.native.stop.prevent="checkDetail"></image>
-			</view>
-			
-		</view>
-		
-		<view class="button" v-if="detail" :style="{'top':bottom,'opacity':opacity}">
-			<view style="display: flex;flex-direction: column;justify-content: center;">
-				<image src="../static/image/order.png" style="height: 125upx;width: 125upx;"></image>
-				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">预约</text>
-			</view>
-			<view style="display: flex;flex-direction: column;justify-content: center;">
-				<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
-				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">联系</text>
-			</view>
-			<view style="display: flex;flex-direction: column;justify-content: center;" @click.native.stop.prevent="navigate">
-				<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
-				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">导航</text>
-			</view>
-			<view style="display: flex;flex-direction: column;justify-content: center;">
-				<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"></image>
-				<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">详情</text>
-			</view>
-		</view>
-			
-			
-			
 			<view class="view2">
 				<view class="priceview">
 					<text>价格</text>
@@ -53,8 +33,34 @@
 				
 			</view>
 		
-		
+		</view>
+		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);
+		height: 300upx;width: 100%;display:flex;justify-content: center;flex-direction: column;
+		border-radius: 30upx;border-top: 5px solid rgba(102,205,170,1);border-bottom: 5px solid rgba(102,205,170,1);">
+			<view class="button">
+				<view style="display: flex;flex-direction: column;justify-content: center;">
+					<image src="../static/image/order.png" style="height: 125upx;width: 125upx;"></image>
+					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">预约</text>
+				</view>
+				<view style="display: flex;flex-direction: column;justify-content: center;">
+					<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
+					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">联系</text>
+				</view>
+				
+
+				<view style="display: flex;flex-direction: column;justify-content: center;a" @click.native.stop.prevent="navigate">
+					<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
+					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">导航</text>
+				</view>
+				<view style="display: flex;flex-direction: column;justify-content: center;">
+					<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"></image>
+					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">详情</text>
+				</view>
+			</view>
+				
+		</view>
 	</view>
+	
 </template>
 
 <script>
@@ -91,6 +97,7 @@
 				checkRight:0,
 				opacity:0,
 				bottom:0,
+				rotate:0,
 			}
 		},
 		computed:{
@@ -144,17 +151,19 @@
 						this.height=uni.upx2px(300)+'px';
 						this.opacity=0;
 						this.bottom=uni.upx2px(200)+'px';
+						this.rotate=0;
 					})
 					
 				}else if(this.detail==true){
 					this.$nextTick(function(){
 						
-						this.height=uni.upx2px(680)+'px';
+						// this.height=uni.upx2px(680)+'px';
 						this.check=false;
 						this.checkOpacity=0;
 						this.checkRight=uni.upx2px(100)+'px';
 						this.opacity=1;
 						this.bottom=uni.upx2px(400)+'px';
+						this.rotate=-90;
 					})
 					
 				}
@@ -170,9 +179,9 @@
 
 <style scoped>
 	.card{
-		position: relative;
-		margin:20upx;
-		margin-bottom: 40upx; 
+		width: 100%;
+		position: absolute;
+		transform: translateZ(300upx);
 		padding: 15upx;
 		background-color: rgba(253,255,253,1);
 		border-radius: 40upx;
@@ -264,10 +273,6 @@
 	.button{
 		display: flex;
 		justify-content: space-around;
-		position: absolute;
-		/* bottom: 150upx; */
-		width: 550upx;
-		transition: all .5s;
 	}
 </style>
 
