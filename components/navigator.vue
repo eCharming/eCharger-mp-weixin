@@ -24,7 +24,7 @@
 			</view>
 		</view>
 		<view  
-		style="height: 60upx;width: 100%;transition: all .3s;
+		style="height: 62upx;width: 100%;transition: all .3s;
 		position: absolute;display: flex;justify-content: space-around;
 		transform-style: preserve-3d;transform-origin: top;"
 		:style="{'bottom':textBottom+'px','background-color':backColor,'transform':'rotateX('+rotate+'deg)'}">
@@ -125,6 +125,6 @@
 		font-weight: 700;
 		font-size: 30upx;
 		width: 100upx;
-		margin-top: 5upx;
+		margin-top: 7upx;
 	}
 </style>
