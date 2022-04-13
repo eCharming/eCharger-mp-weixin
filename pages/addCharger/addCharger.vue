@@ -1,204 +1,218 @@
 <template>
-	<view>
-		<view :style="{'height':statusHeight+'px','background':color}">
-			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}"
-				@tap="back"></image>
+	<view style="display: flex;flex-direction:column">
+		<view :style="{'height':statusHeight+'px','width':'100%','top':0,'z-index':9999}">
+			<view :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
+				<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}"
+					@tap="back"></image>
+			</view>
 		</view>
-		<addcard>
-			<view class="display">
-				<text class="labeltext">姓名</text>
-				<input class="input" placeholder="请输入姓名" type="text" v-model="name"></input>
-			</view>
-			<view class="divLine"></view>
-			<view class="display">
-				<text class="labeltext">电话号码</text>
-				<input class="input" placeholder="请输入电话号码" type="number" v-model="phoneNumber"></input>
-			</view>
-		</addcard>
-		<addcard style="position: relative;">
-			<view class="display">
-				<text class="labeltext">电桩位置</text>
-				<input class="input" placeholder="请输入电桩位置" type="text" v-model='address' @input="searchKeyword"></input>
-			</view>
+
+		<view>
+			<addcard>
+				<view class="display">
+					<text class="labeltext">姓名</text>
+					<input class="input" placeholder="请输入姓名" type="text" v-model="name"></input>
+				</view>
+				<view class="divLine"></view>
+				<view class="display">
+					<text class="labeltext">电话号码</text>
+					<input class="input" placeholder="请输入电话号码" type="number" v-model="phoneNumber"></input>
+				</view>
+			</addcard>
+			<addcard style="position: relative;">
+				<view class="display">
+					<text class="labeltext">电桩位置</text>
+					<input class="input" placeholder="请输入电桩位置" type="text" v-model='address'
+						@input="searchKeyword"></input>
+				</view>
 
 
-			<map id="myMap" style="width: 680upx; height: 500upx;" layer-style="1" :latitude="center_latitude"
-				:longitude="center_longitude" showLocation='true' subkey="ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL"
-				:markers="covers" @tap="addMarker">
-			</map>
-			<view class="scroll" v-if="locationList.length!=0">
-				<view style="display: flex;justify-content: flex-end;">
-					<scroll-view class="scrollview" scroll-y="true" enhanced="true" show-scrollbar="true" scroll-with-animation="true">
-						<view v-for="(item,index) in locationList" :key="index" class="scroll-innerview" @tap="tapsearch(item)">
-							<text v-text="item.title" class="scroll-text" style="margin:5px"></text>
+				<map id="myMap" style="width: 680upx; height: 500upx;" layer-style="1" :latitude="center_latitude"
+					:longitude="center_longitude" showLocation='true' subkey="ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL"
+					:markers="covers" @tap="addMarker">
+				</map>
+				<view class="scroll" v-if="locationList.length!=0">
+					<view style="display: flex;justify-content: flex-end;">
+						<scroll-view class="scrollview" scroll-y="true" enhanced="true" show-scrollbar="true"
+							scroll-with-animation="true">
+							<view v-for="(item,index) in locationList" :key="index" class="scroll-innerview"
+								@tap="tapsearch(item)">
+								<text v-text="item.title" class="scroll-text" style="margin:5px"></text>
+							</view>
+
+						</scroll-view>
+					</view>
+				</view>
+
+				<view class="display">
+					<text class="labeltext">详细地址</text>
+					<textarea class="textareainput" placeholder="请输入详细地址,精确到门牌号或停车位" maxlength="100"
+						v-model='location'></textarea>
+				</view>
+
+				<view class="divLine"></view>
+
+				<view class="display">
+					<text class="labeltext">电桩单价</text>
+					<input class="input" placeholder="请输入单价" type="digit" v-model="price"></input>
+				</view>
+			</addcard>
+			<addcard>
+				<view class="divLine"></view>
+				<view class="display">
+					<text class="labeltext">周一可用时段</text>
+					<view style="display:flex;justify-content: space-between;align-items:center;">
+						<view class="timer1">
+							<picker mode="time" :start="minTime[0]" :end="maxTime[0]" @change="changetime1($event,0)">
+								<text class="timetext1" :style="{'opacity':opacity[0]}">{{text[0]}}</text>
+							</picker>
 						</view>
-						
-					</scroll-view>
-				</view>
-			</view>
 
-			<view class="display">
-				<text class="labeltext">详细地址</text>
-				<textarea class="textareainput" placeholder="请输入详细地址,精确到门牌号或停车位" maxlength="100"
-					v-model='location'></textarea>
-			</view>
+						<text class="line">-</text>
 
-			<view class="divLine"></view>
-
-			<view class="display">
-				<text class="labeltext">电桩单价</text>
-				<input class="input" placeholder="请输入单价" type="digit" v-model="price"></input>
-			</view>
-		</addcard>
-		<addcard>
-			<view class="divLine"></view>
-			<view class="display">
-				<text class="labeltext">周一可用时段</text>
-				<view style="display:flex;justify-content: space-between;align-items:center;">
-					<view class="timer1">
-						<picker mode="time" :start="minTime[0]" :end="maxTime[0]" @change="changetime1($event,0)">
-							<text class="timetext1" :style="{'opacity':opacity[0]}">{{text[0]}}</text>
-						</picker>
-					</view>
-
-					<text class="line">-</text>
-
-					<view class="timer1">
-						<picker mode="time" :start="minTime[1]" :end="maxTime[1]" @change="changetime2($event,1)">
-							<text class="timetext1" :style="{'opacity':opacity[1]}">{{text[1]}}</text>
-						</picker>
+						<view class="timer1">
+							<picker mode="time" :start="minTime[1]" :end="maxTime[1]" @change="changetime2($event,1)">
+								<text class="timetext1" :style="{'opacity':opacity[1]}">{{text[1]}}</text>
+							</picker>
+						</view>
 					</view>
 				</view>
-			</view>
-			<view class="display">
-				<text class="labeltext">周二可用时段</text>
-				<view style="display:flex;justify-content: space-between;align-items:center;">
-					<view class="timer1">
-						<picker mode="time" :start="minTime[2]" :end="maxTime[2]" @change="changetime1($event,2)">
-							<text class="timetext1" :style="{'opacity':opacity[2]}">{{text[2]}}</text>
-						</picker>
-					</view>
+				<view class="display">
+					<text class="labeltext">周二可用时段</text>
+					<view style="display:flex;justify-content: space-between;align-items:center;">
+						<view class="timer1">
+							<picker mode="time" :start="minTime[2]" :end="maxTime[2]" @change="changetime1($event,2)">
+								<text class="timetext1" :style="{'opacity':opacity[2]}">{{text[2]}}</text>
+							</picker>
+						</view>
 
-					<text class="line">-</text>
+						<text class="line">-</text>
 
-					<view class="timer1">
-						<picker mode="time" :start="minTime[3]" :end="maxTime[3]" @change="changetime2($event,3)">
-							<text class="timetext1" :style="{'opacity':opacity[3]}">{{text[3]}}</text>
-						</picker>
-					</view>
-				</view>
-			</view>
-			<view class="display">
-				<text class="labeltext">周三可用时段</text>
-				<view style="display:flex;justify-content: space-between;align-items:center;">
-					<view class="timer1">
-						<picker mode="time" :start="minTime[4]" :end="maxTime[4]" @change="changetime1($event,4)">
-							<text class="timetext1" :style="{'opacity':opacity[4]}">{{text[4]}}</text>
-						</picker>
-					</view>
-
-					<text class="line">-</text>
-
-					<view class="timer1">
-						<picker mode="time" :start="minTime[5]" :end="maxTime[5]" @change="changetime2($event,5)">
-							<text class="timetext1" :style="{'opacity':opacity[5]}">{{text[5]}}</text>
-						</picker>
+						<view class="timer1">
+							<picker mode="time" :start="minTime[3]" :end="maxTime[3]" @change="changetime2($event,3)">
+								<text class="timetext1" :style="{'opacity':opacity[3]}">{{text[3]}}</text>
+							</picker>
+						</view>
 					</view>
 				</view>
-			</view>
-			<view class="display">
-				<text class="labeltext">周四可用时段</text>
-				<view style="display:flex;justify-content: space-between;align-items:center;">
-					<view class="timer1">
-						<picker mode="time" :start="minTime[6]" :end="maxTime[6]" @change="changetime1($event,6)">
-							<text class="timetext1" :style="{'opacity':opacity[6]}">{{text[6]}}</text>
-						</picker>
-					</view>
+				<view class="display">
+					<text class="labeltext">周三可用时段</text>
+					<view style="display:flex;justify-content: space-between;align-items:center;">
+						<view class="timer1">
+							<picker mode="time" :start="minTime[4]" :end="maxTime[4]" @change="changetime1($event,4)">
+								<text class="timetext1" :style="{'opacity':opacity[4]}">{{text[4]}}</text>
+							</picker>
+						</view>
 
-					<text class="line">-</text>
+						<text class="line">-</text>
 
-					<view class="timer1">
-						<picker mode="time" :start="minTime[7]" :end="maxTime[7]" @change="changetime2($event,7)">
-							<text class="timetext1" :style="{'opacity':opacity[7]}">{{text[7]}}</text>
-						</picker>
-					</view>
-				</view>
-			</view>
-			<view class="display">
-				<text class="labeltext">周五可用时段</text>
-				<view style="display:flex;justify-content: space-between;align-items:center;">
-					<view class="timer1">
-						<picker mode="time" :start="minTime[8]" :end="maxTime[8]" @change="changetime1($event,8)">
-							<text class="timetext1" :style="{'opacity':opacity[8]}">{{text[8]}}</text>
-						</picker>
-					</view>
-
-					<text class="line">-</text>
-
-					<view class="timer1">
-						<picker mode="time" :start="minTime[9]" :end="maxTime[9]" @change="changetime2($event,9)">
-							<text class="timetext1" :style="{'opacity':opacity[9]}">{{text[9]}}</text>
-						</picker>
+						<view class="timer1">
+							<picker mode="time" :start="minTime[5]" :end="maxTime[5]" @change="changetime2($event,5)">
+								<text class="timetext1" :style="{'opacity':opacity[5]}">{{text[5]}}</text>
+							</picker>
+						</view>
 					</view>
 				</view>
-			</view>
-			<view class="display">
-				<text class="labeltext">周六可用时段</text>
-				<view style="display:flex;justify-content: space-between;align-items:center;">
-					<view class="timer1">
-						<picker mode="time" :start="minTime[10]" :end="maxTime[10]" @change="changetime1($event,10)">
-							<text class="timetext1" :style="{'opacity':opacity[10]}">{{text[10]}}</text>
-						</picker>
-					</view>
+				<view class="display">
+					<text class="labeltext">周四可用时段</text>
+					<view style="display:flex;justify-content: space-between;align-items:center;">
+						<view class="timer1">
+							<picker mode="time" :start="minTime[6]" :end="maxTime[6]" @change="changetime1($event,6)">
+								<text class="timetext1" :style="{'opacity':opacity[6]}">{{text[6]}}</text>
+							</picker>
+						</view>
 
-					<text class="line">-</text>
+						<text class="line">-</text>
 
-					<view class="timer1">
-						<picker mode="time" :start="minTime[11]" :end="maxTime[11]" @change="changetime2($event,11)">
-							<text class="timetext1" :style="{'opacity':opacity[11]}">{{text[11]}}</text>
-						</picker>
-					</view>
-				</view>
-			</view>
-			<view class="display">
-				<text class="labeltext">周日可用时段</text>
-				<view style="display:flex;justify-content: space-between;align-items:center;">
-					<view class="timer1">
-						<picker mode="time" :start="minTime[12]" :end="maxTime[12]" @change="changetime1($event,12)">
-							<text class="timetext1" :style="{'opacity':opacity[12]}">{{text[12]}}</text>
-						</picker>
-					</view>
-
-					<text class="line">-</text>
-
-					<view class="timer1">
-						<picker mode="time" :start="minTime[13]" :end="maxTime[13]" @change="changetime2($event,13)">
-							<text class="timetext1" :style="{'opacity':opacity[13]}">{{text[13]}}</text>
-						</picker>
+						<view class="timer1">
+							<picker mode="time" :start="minTime[7]" :end="maxTime[7]" @change="changetime2($event,7)">
+								<text class="timetext1" :style="{'opacity':opacity[7]}">{{text[7]}}</text>
+							</picker>
+						</view>
 					</view>
 				</view>
-			</view>
-		</addcard>
-		<addcard>
-			<view class="display">
-				<text class="labeltext">图片</text>
-			</view>
-			<view class='content'>
-				<view class='img-view' v-for='(item,index) in avatarUrl' :key='index'>
-					<image :src='item' @tap='showPic(item)'
-						style="width:200upx;height:200upx;margin-left: 3.9upx;margin-right: 3.9upx;" mode='aspectFill'>
-					</image>
-					<icon @tap='deletePic(index)' class='close' color='rgb(199, 0, 3)' type='clear' size='15'></icon>
+				<view class="display">
+					<text class="labeltext">周五可用时段</text>
+					<view style="display:flex;justify-content: space-between;align-items:center;">
+						<view class="timer1">
+							<picker mode="time" :start="minTime[8]" :end="maxTime[8]" @change="changetime1($event,8)">
+								<text class="timetext1" :style="{'opacity':opacity[8]}">{{text[8]}}</text>
+							</picker>
+						</view>
+
+						<text class="line">-</text>
+
+						<view class="timer1">
+							<picker mode="time" :start="minTime[9]" :end="maxTime[9]" @change="changetime2($event,9)">
+								<text class="timetext1" :style="{'opacity':opacity[9]}">{{text[9]}}</text>
+							</picker>
+						</view>
+					</view>
 				</view>
-				<image @tap='uploadPic' class='add-img' src='../../static/image/addImg.png' v-show="isAdd"></image>
-			</view>
-			<view class="divLine"></view>
-			<view class="display">
-				<text class="labeltext">备注</text>
-				<textarea class="input" placeholder="备注" maxlength="140" auto-height="true">{{remarks}}</textarea>
-			</view>
-		</addcard>
-		<button class="submit" @tap="submit">提交</button>
+				<view class="display">
+					<text class="labeltext">周六可用时段</text>
+					<view style="display:flex;justify-content: space-between;align-items:center;">
+						<view class="timer1">
+							<picker mode="time" :start="minTime[10]" :end="maxTime[10]"
+								@change="changetime1($event,10)">
+								<text class="timetext1" :style="{'opacity':opacity[10]}">{{text[10]}}</text>
+							</picker>
+						</view>
+
+						<text class="line">-</text>
+
+						<view class="timer1">
+							<picker mode="time" :start="minTime[11]" :end="maxTime[11]"
+								@change="changetime2($event,11)">
+								<text class="timetext1" :style="{'opacity':opacity[11]}">{{text[11]}}</text>
+							</picker>
+						</view>
+					</view>
+				</view>
+				<view class="display">
+					<text class="labeltext">周日可用时段</text>
+					<view style="display:flex;justify-content: space-between;align-items:center;">
+						<view class="timer1">
+							<picker mode="time" :start="minTime[12]" :end="maxTime[12]"
+								@change="changetime1($event,12)">
+								<text class="timetext1" :style="{'opacity':opacity[12]}">{{text[12]}}</text>
+							</picker>
+						</view>
+
+						<text class="line">-</text>
+
+						<view class="timer1">
+							<picker mode="time" :start="minTime[13]" :end="maxTime[13]"
+								@change="changetime2($event,13)">
+								<text class="timetext1" :style="{'opacity':opacity[13]}">{{text[13]}}</text>
+							</picker>
+						</view>
+					</view>
+				</view>
+			</addcard>
+			<addcard>
+				<view class="display">
+					<text class="labeltext">图片</text>
+				</view>
+				<view class='content'>
+					<view class='img-view' v-for='(item,index) in avatarUrl' :key='index'>
+						<image :src='item' @tap='showPic(item)'
+							style="width:200upx;height:200upx;margin-left: 3.9upx;margin-right: 3.9upx;"
+							mode='aspectFill'>
+						</image>
+						<icon @tap='deletePic(index)' class='close' color='rgb(199, 0, 3)' type='clear' size='15'>
+						</icon>
+					</view>
+					<image @tap='uploadPic' class='add-img' src='../../static/image/addImg.png' v-show="isAdd"></image>
+				</view>
+				<view class="divLine"></view>
+				<view class="display">
+					<text class="labeltext">备注</text>
+					<textarea class="input" placeholder="备注" maxlength="140" auto-height="true">{{remarks}}</textarea>
+				</view>
+			</addcard>
+			<button class="submit" @tap="submit">提交</button>
+		</view>
 	</view>
 </template>
 
@@ -231,12 +245,10 @@
 				opacity: [0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7],
 				remarks: "",
 				avatarUrl: [],
-				center_latitude: this.$store.state.currentLocation.latitude, //中心纬度
-				center_longitude: this.$store.state.currentLocation.longitude, //中心经度
 				covers: [],
 				geopoint: {
-					latitude: -1,
-					longitude: -1,
+					latitude: 39.909,
+					longitude: 116.39742,
 				},
 				locationList: [],
 			}
@@ -247,11 +259,19 @@
 			},
 			listLength() {
 				return 6 - this.avatarUrl.length;
+			},
+			center_latitude() {
+				return this.$store.state.currentLocation == null ? 39.909 : this.$store.state.currentLocation
+					.latitude;
+			},
+			center_longitude() {
+				return this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation
+					.longitude;
 			}
 		},
 		methods: {
 			showMarker() {
-				this.covers.splice(0,1,{
+				this.covers.splice(0, 1, {
 					title: "定位点",
 					id: 0,
 					latitude: this.geopoint.latitude,
@@ -262,12 +282,12 @@
 				})
 			},
 			tapsearch(item) {
-				this.address=item.title;
-				this.geopoint.latitude=item.location.lat;
-				this.geopoint.longitude=item.location.lng;
+				this.address = item.title;
+				this.geopoint.latitude = item.location.lat;
+				this.geopoint.longitude = item.location.lng;
 				this.showMarker();
-				this.center_latitude=this.geopoint.latitude;
-				this.center_longitude=this.geopoint.longitude;
+				this.center_latitude = this.geopoint.latitude;
+				this.center_longitude = this.geopoint.longitude;
 				this.locationList.splice(0);
 			},
 			searchKeyword() {
@@ -279,11 +299,11 @@
 					method: 'GET',
 					success: (res) => {
 						this.locationList.splice(0)
-						if(res.data.status==0) {
+						if (res.data.status == 0) {
 							this.locationList.push(...res.data.data)
 						}
 					},
-					fail:(res) => {
+					fail: (res) => {
 						this.locationList.splice(0)
 					}
 				})
@@ -591,18 +611,17 @@
 	}
 
 	.scrollview {
-		background-color: rgba(250,255,250,1);
+		background-color: rgba(250, 255, 250, 1);
 		height: 300upx;
-		width:100%;
+		width: 100%;
 		border-bottom-right-radius: 10px;
 		border-bottom-left-radius: 10px;
-		box-shadow:-8px 8px 10px -4px rgba(116, 118, 116, 0.2),8px 8px 10px -4px rgba(116, 118, 116, 0.2);
+		box-shadow: -8px 8px 10px -4px rgba(116, 118, 116, 0.2), 8px 8px 10px -4px rgba(116, 118, 116, 0.2);
 	}
 
 	.scroll-innerview {
-		margin:15px;
+		margin: 15px;
 	}
-	.scroll-text {
-		
-	}
+
+	.scroll-text {}
 </style>

@@ -41,7 +41,6 @@
 					confirm-hold="true"
 					:show-confirm-bar="False"
 					hold-keyboard="true"
-					auto-height="true"
 					:adjust-position="False"
 					@focus="focus($event)"
 					@blur="unfocus()"
@@ -75,7 +74,7 @@
 				statusHeight:uni.getSystemInfoSync().statusBarHeight+50,//导航栏高度
 				
 				scrollStatus:true,//是否允许滚动
-				scrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(130),//scollview的高度
+				scrollHeight:uni.getSystemInfoSync().windowHeight-(uni.getSystemInfoSync().statusBarHeight+50)-uni.upx2px(230),//scollview的高度
 				scrollAnimation:true,//是否允许滚动动画
 				refreshTriggered:false,//是否触发刷新
 				
@@ -383,22 +382,17 @@
 	
 	.typeView{
 		background-color: rgba(240,240,240,1);
-		height: 130upx;
+		height: 230upx;
 		width: 100%;
-		/* border: 2px solid red; */
 	}
 	
 	.type{
-		/* border: 2px red solid; */
-		/* padding: 10upx;
-		padding-left: 20upx;
-		padding-top: 18upx; */
 		padding: 20upx;
 		font-size: 30upx;
 		line-height: 30upx;
 		min-height: 70upx;
 		margin: 20upx;
-		/* height: 70upx; */
+		height: 180upx;
 		border-radius: 35upx;
 		width: 600upx;
 		background-color: rgb(255,255,255);
@@ -456,7 +450,6 @@
 		word-break:break-all;
 		word-wrap:break-word; 
 		max-width: 520upx;
-		
 	}
 	
 	.otherText{
