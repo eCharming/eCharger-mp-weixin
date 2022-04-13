@@ -40,7 +40,9 @@
 						<destination></destination>
 		
 		
-						<view style="transform-style: preserve-3d;transition:all .3s;position: relative;" :style="{'transform':'rotateY('+rotate+'deg)'}">
+						<view style="transform-style: preserve-3d;transition:all .6s;
+						transition-timing-function: cubic-bezier(0.6,-0.5,0.3,1.5);position: relative;" 
+						:style="{'transform':'rotateY('+rotate+'deg)'}">
 							<view style="position: absolute;width: 100%;" :class="isSelected1?'auto':'none'">
 								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
 									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"

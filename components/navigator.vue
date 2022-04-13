@@ -1,5 +1,5 @@
 <template>
-	<view style="transition: all .1s;position: relative;">
+	<view style="position: relative;">
 		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
 		<view style="height: 50px;display: flex;position: relative;" :style="{'background-color':backColor}">
 				<view style="color:#FFFFFF ;margin-left: 15upx;margin-top: 25upx;">成都</view>
@@ -8,24 +8,37 @@
 					<text style="margin-left: 10px;font-weight: 700;font-size: 32upx;">易插</text>
 				</view>
 		</view>
-		<view style="background-color:rgb(102,205,170) ;height: 150upx;width: 100%;transition: all .3s;
-		position: absolute;display: flex;justify-content: space-around;align-items: flex-end;" 
+		<view style="height: 90upx;width: 100%;transition: all .3s;position: absolute;display: flex;justify-content: space-around;align-items: flex-end;" 
 		:style="{'bottom':bottom+'px','background-color':backColor}">
-			<view class="view1" :style="{'margin-bottom':margin1+'px'}">
-				<image src="../static/image/scan.png" class="image1"  :style="{'margin-bottom':margin2+'px'}"></image>
-				<text class="text1" :style="{'opacity':opacity,'bottom':textBottom+'px'}">扫一扫</text>
+			<view>
+				<image src="../static/image/scan.png" class="image1"></image>
 			</view>
-			<view class="view1" :style="{'margin-bottom':margin1+'px'}" @click="connection()">
-				<image src="../static/image/connection2.png" class="image1" :style="{'margin-bottom':margin2+'px'}"></image>
-				<text class="text1" style="margin-left: 12upx;" :style="{'opacity':opacity,'bottom':textBottom+'px'}">联系</text>
+			<view @click="connection()">
+				<image src="../static/image/connection2.png" class="image1"></image>
 			</view>
-			<view class="view1" :style="{'margin-bottom':margin1+'px'}">
-				<image src="../static/image/city.png" class="image1" :style="{'margin-bottom':margin2+'px'}" ></image>
-				<text class="text1" style="margin-left: 12upx;" :style="{'opacity':opacity,'bottom':textBottom+'px'}">全城</text>
+			<view>
+				<image src="../static/image/city.png" class="image1"></image>
 			</view>
-			<view class="view1" :style="{'margin-bottom':margin1+'px'}">
-				<image src="../static/image/my.png" class="image1" :style="{'margin-bottom':margin2+'px','opacity':opacity}"></image>
-				<text class="text1" style="margin-left: 12upx;" :style="{'opacity':opacity,'bottom':textBottom+'px'}">我的</text>
+			<view>
+				<image src="../static/image/my.png" class="image1" :style="{'opacity':opacity}"></image>
+			</view>
+		</view>
+		<view  
+		style="height: 60upx;width: 100%;transition: all .3s;
+		position: absolute;display: flex;justify-content: space-around;
+		transform-style: preserve-3d;transform-origin: top;"
+		:style="{'bottom':textBottom+'px','background-color':backColor,'transform':'rotateX('+rotate+'deg)'}">
+			<view class="text1">
+				<text>扫一扫</text>
+			</view>
+			<view class="text1" @click="connection()">
+				<text>联系</text>
+			</view>
+			<view class="text1">
+				<text>全城</text>
+			</view>
+			<view class="text1">
+				<text>我的</text>
 			</view>
 		</view>
 	</view>
@@ -39,10 +52,9 @@
 				width:0,
 				backColor:'rgb(102,205,170)',
 				bottom:0,
-				margin1:0,
-				margin2:0,
 				textBottom:0,
 				opacity:1,
+				rotate:0,
 			}
 		},
 		props:{
@@ -63,10 +75,8 @@
 		mounted() {
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight;
 			this.width=uni.getMenuButtonBoundingClientRect().left-30-20;
-			this.bottom=-uni.upx2px(150);
-			this.margin1=uni.upx2px(50);
-			this.margin2=uni.upx2px(10);
-			this.textBottom=uni.upx2px(20);
+			this.bottom=-uni.upx2px(90);
+			this.textBottom=-uni.upx2px(150);
 		},
 		watch:{
 			'$store.state.buttonSelected'(){
@@ -77,27 +87,26 @@
 			},
 			'isLow'(){
 				if(this.isLow){
-					this.bottom=-uni.upx2px(150);
-					this.margin1=uni.upx2px(50);
-					this.margin2=uni.upx2px(10);
+					this.bottom=-uni.upx2px(90);
+					this.textBottom=-uni.upx2px(150);
 					this.opacity=1;
+					this.rotate=0;
 				}else{ 
-					this.bottom=-uni.upx2px(30);
-					this.margin1=uni.upx2px(20);
-					this.margin2=uni.upx2px(0);
+					this.bottom=-uni.upx2px(0);
+					this.textBottom=-uni.upx2px(60);
 					this.opacity=0;
+					this.rotate=90;
 				};
 			}
 		}
 	}
 </script>
 
-<style>
+<style scoped>
 	.view1{
 		display: flex;
 		flex-direction: column;
 		justify-content: flex-end;
-		margin-bottom: 20upx;
 		color: #FFFFFF;
 		transition: all .3s;
 	}
@@ -105,16 +114,17 @@
 	.image1{
 		width: 80upx;
 		height: 80upx;
-		margin-bottom: 10upx;
+		margin-bottom: 5upx;
 		transition: all .3s;
 	}
 	
 	.text1{
-		
+		color: #FFFFFF;
 		text-align: center;
 		transition: all .3s;
 		font-weight: 700;
 		font-size: 30upx;
-		position: absolute;
+		width: 100upx;
+		margin-top: 5upx;
 	}
 </style>
