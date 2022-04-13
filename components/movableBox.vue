@@ -39,28 +39,43 @@
 						<!-- <view style="height: 200upx;position: absolute;border: 2px solid red;"></view> -->
 						<destination></destination>
 		
-						<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
-							<order v-if="isSelected1" v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
-								:location="order.location" :distance="order.distance" :price="order.price"
-								:time="order.time" :detail="order.detail"
-								@tap="tapOrder(index)" @emit="detail()" @toLow="toLow">
-							</order>
-							<charger v-if="isSelected2" v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
-								:location="charger.location" :state="charger.isAvailable" :price="charger.price"
-								:time="charger.time"
-								@tap="tapCharger(index)">
-							</charger>
-							<view class="scrollerview">
-								<image :src="src1" style="width: 23px;height: 23px;" v-show="icontype=='download'" v-if="isSelected1"></image>
-								<image :src="src2" style="width: 23px;height: 23px;" v-show="icontype=='warn'" v-if="isSelected1"></image>
-								<image :src="src3" style="width: 23px;height: 23px;" v-if="isSelected2" @tap="addCharger"></image>
-								<text v-if="isSelected1">{{icontext}}</text>  
-								<text v-if="isSelected2" @tap="addCharger">添加你的电桩</text>  
+		
+						<view style="transform-style: preserve-3d;transition:all .3s;position: relative;" :style="{'transform':'rotateY('+rotate+'deg)'}">
+							<view style="position: absolute;width: 100%;" :class="isSelected1?'auto':'none'">
+								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
+									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
+										:location="order.location" :distance="order.distance" :price="order.price"
+										:time="order.time" :detail="order.detail"
+										@tap="tapOrder(index)" @emit="detail()" @toLow="toLow">
+									</order>
+									<view class="scrollerview">
+										<image :src="src1" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
+										<image :src="src2" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
+										<text>{{icontext}}</text>  
+									</view>
+								  
+								</scroller>
 							</view>
 								
 							
-							
-						</scroller>
+							<view style="transform: rotateY(180deg);position: absolute;width: 100%;" :class="isSelected2?'auto':'none'">
+								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
+									<charger  v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
+										:location="charger.location" :state="charger.isAvailable" :price="charger.price"
+										:time="charger.time"
+										@tap="tapCharger(index)">
+									</charger>
+									<view class="scrollerview">
+										<image :src="src3" style="width: 23px;height: 23px;" @tap="addCharger"></image>
+										<text @tap="addCharger">添加你的电桩</text>  
+									</view>
+								</scroller>
+							</view>
+								
+						</view>
+						
+						
+						
 		
 		
 					</view>
@@ -124,6 +139,8 @@
 
 				icontype: "warn",
 				icontext: "暂无更多",
+				
+				rotate:0,
 
 				orders: [],
 				orderSelected: -1,
@@ -175,13 +192,14 @@
 			},
 
 			tapButton1() {
+				this.rotate=0;
 				this.isSelected1 = true;
 				this.isSelected2 = false;
 				this.imageFilter1 = 0;
 				this.imageOpacity1 = 1;
 				this.imageFilter2 = 1;
 				this.imageOpacity2 = 0.3;
-				this.chargerSelected = -1;
+
 				
 				this.src1="/static/image/uparrow.png";
 				this.src2="/static/image/warning.png";
@@ -192,6 +210,7 @@
 				})
 			},
 			tapButton2() {  
+				this.rotate=180;
 				this.isSelected1 = false;
 				this.isSelected2 = true;
 				this.imageFilter1 = 1;
@@ -201,11 +220,7 @@
 				
 				this.src1="/static/image/uparrow_blue.png";
 				this.src2="/static/image/warning_blue.png";
-				
-				if(this.orderSelected!=-1){
-					this.orders[this.orderSelected].detail=false;
-					this.orderSelected = -1;
-				}
+
 				this.$store.commit('setButtonSelected',2);
 				this.$nextTick(function(){
 					this.toHigh();
@@ -353,6 +368,13 @@
 </script>
 
 <style scoped>
+	.auto{
+		pointer-events:auto;
+	}
+	.none{
+		pointer-events:none;
+	}
+	
 	.movable-area {
 		position: relative;
 		width: 100%;

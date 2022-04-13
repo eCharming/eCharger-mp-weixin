@@ -31,7 +31,7 @@
 			}
 		},
 		mounted() {
-			this.height=this.$store.state.windowHeight*0.9-uni.upx2px(590);
+			this.height=this.$store.state.windowHeight*0.9-uni.upx2px(560);
 		}
 	}
 </script>
@@ -39,6 +39,7 @@
 <style scoped>
 	.card{
 		margin:20upx;
+		margin-top: 0;
 		padding: 15upx;
 		background-color: rgba(250,255,250,1);
 		border-radius: 40upx;
