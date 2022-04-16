@@ -1,7 +1,7 @@
 <template>
 	<view style="position: relative;perspective: 500upx;transform-style: preserve-3d;">
 		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
-		<view style="height: 50px;display: flex;align-items: center;position: relative;" 
+		<view style="height: 50px;display: flex;align-items: center;position: relative;transition:background-color .3s ;" 
 		:style="{'background-color':backColor,'pointer-events':pointerEvents}">
 				<view style="color:#FFFFFF ;margin-left: 15upx;margin-top: 25upx;height:60upx ;">成都</view>
 				<view style="color: rgba(0,0,0,0.6);margin: 15upx;height: 60upx;background-color: #FFFFFF;border-radius: 20upx;
@@ -49,7 +49,7 @@
 		
 		
 		<view style="position: absolute;width: 100%;height: 30upx;transition: all .3s;" 
-		:style="{'bottom':textBottom+'px','background-color':backColor}">
+		:style="{'bottom':textBottom+'px','background-color':backColor,'opacity':opacity}">
 			<text style="position: absolute;text-align: center;left: 52upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
 			:style="{'bottom':word[0].bottom+'px','opacity':word[0].opacity}">扫一扫</text>
 			<text style="position: absolute;text-align: center;left: 250upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
