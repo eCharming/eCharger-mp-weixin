@@ -1,25 +1,25 @@
 <template>
 	<view>
 		
-		<view :class="isLaunch?'bg-class':'bg-class-none'" v-if="isShown">
-			<image src="/static/image/logo-2.gif" class="img-class"></image>
-		</view>
 		<mymap v-show='!isShown'></mymap>
 		<movablebox v-if='!isShown' :chargers="chargers"></movablebox>
+		<loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading>
 	</view>
 </template>
 
 <script>
+	import loading from '../../components/loading.vue'
 	import movablebox from '@/components/movableBox.vue'
 	import mymap from '../../components/myMap.vue'
 	export default {
 		components: {
+			loading,
 			movablebox,
 			mymap,
 		},
 		data() {
 			return {
-				isLaunch: true,
+				isLoading:true,
 				isShown:true,
 				chargers:[],
 			}
@@ -53,11 +53,11 @@
 			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;
 			this.$store.commit('setWindowHeight',windowHeight);
 			setTimeout(() => {
-				this.isLaunch = false;
-			}, 1500)
-			setTimeout(() => {
 				this.isShown = false;
 			}, 2500)
+			setTimeout(() => {
+				this.isLoading = false;
+			}, 10000)
 		},
 		onShow() {
 				wx.cloud.callFunction({ //uid获取
@@ -97,32 +97,5 @@
 </script>
 
 <style scoped>
-	.img-class {
-		width: 444upx;
-		height: 333upx;
-	}
 
-	.bg-class {
-		background-color: #66CDAA;
-		height: 100vh;
-		width: 100vw;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		opacity: 1;
-		
-	}
-
-	.bg-class-none {
-		background-color: #66CDAA;
-		height: 100vh;
-		width: 100vw;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		opacity: 0;
-		transform: translate(0, -100%);
-		transition: opacity 1s,top 1s,transform 1s;
-		transition-timing-function: ease-in;
-	}
 </style>

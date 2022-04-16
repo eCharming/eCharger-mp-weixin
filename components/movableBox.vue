@@ -10,8 +10,8 @@
 						
 						<view class="fixed-view">
 							<view :class="[isLow?'animationBtn':'stillBtn','flex-img']">
-								<infobutton></infobutton>
-								<locationbutton></locationbutton>
+								<infobutton :isLow="isLow"></infobutton>
+								<locationbutton :isLow="isLow"></locationbutton>
 							</view>
 						</view>
 						
@@ -41,7 +41,7 @@
 		
 		
 						<view style="transform-style: preserve-3d;transition:all .6s;
-						transition-timing-function: cubic-bezier(0.6,-0.5,0.3,1.5);position: relative;" 
+						transition-timing-function: cubic-bezier(.61,-0.38,.44,1.34);position: relative;" 
 						:style="{'transform':'rotateY('+rotate+'deg)'}">
 							<view style="position: absolute;width: 100%;" :class="isSelected1?'auto':'none'">
 								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">

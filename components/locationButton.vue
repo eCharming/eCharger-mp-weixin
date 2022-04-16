@@ -14,6 +14,11 @@
 				src:"../static/image/location.png"
 			};
 		},
+		props:{
+			isLow:{
+				type:Boolean,
+			},
+		},
 		methods:{
 			relocate() {
 				uni.getLocation({
@@ -36,6 +41,13 @@
 				}	
 				else{
 					this.src="../static/image/location_blue.png";
+				} 
+			},
+			'isLow'(){
+				if(this.isLow){
+					this.pointerEvents='auto';
+				}else{
+					this.pointerEvents='none';
 				} 
 			}
 		}

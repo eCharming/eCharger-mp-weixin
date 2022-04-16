@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view >
-			<image :src="src" mode="widthFix" style="width: 80px;" @click="info"></image>
+			<image :src="src" mode="widthFix" style="width: 80px;" :style="{'pointer-events':pointerEvents}" @click="info"></image>
 		</view>
 	</view>
 </template>
@@ -12,7 +12,13 @@
 		data() {
 			return {
 				src:"../static/image/person.gif",
+				pointerEvents:'auto',
 			};
+		},
+		props:{
+			isLow:{
+				type:Boolean,
+			},
 		},
 		methods:{
 			info() {
@@ -38,6 +44,13 @@
 				}	
 				else{
 					this.src="../static/image/person_blue.gif";
+				} 
+			},
+			'isLow'(){
+				if(this.isLow){
+					this.pointerEvents='auto';
+				}else{
+					this.pointerEvents='none';
 				} 
 			}
 		}
