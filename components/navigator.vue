@@ -12,24 +12,26 @@
 		
 		
 		
-		<view style="height: 32upx;background-color: rgb(166,236,146);position: absolute;width: 100%;border-bottom-left-radius: 20upx;border-bottom-right-radius: 25upx;
+		<view style="height: 32upx;position: absolute;width: 100%;border-bottom-left-radius: 20upx;border-bottom-right-radius: 25upx;
 		transition: all .3s;"
-		:style="{'bottom':lastBottom+'px'}"></view>
+		:style="{'bottom':lastBottom+'px','background-color':secondColor}"></view>
 		
 		
 		<view style="height: 92upx;width: 100%;transition: all .3s;position: absolute;" 
 		:style="{'bottom':bottom+'px','background-color':backColor}">
-			<view style="height: 70upx;width: 140upx;background-color: rgb(166,236,146);;position: absolute;border-top-left-radius: 70upx;border-top-right-radius: 70upx;
-			transition-property: left;transition-duration:.5s;bottom: 0;"
-			:style="{'left':left+'px'}">
-				<view style="width: 40upx;height: 24upx;position: absolute;bottom: -2upx;left: -35upx;background-color:rgb(166,236,146); ;"></view>
-				<view style="width: 70upx;height: 70upx;position: absolute;bottom: 0;left: -64upx;border-radius:50%;background-color:rgb(102,205,170) ;"></view>
-				<view style="width: 40upx;height: 24upx;position: absolute;bottom: -2upx;right: -35upx;background-color:rgb(166,236,146); ;"></view>
-				<view style="width: 70upx;height: 70upx;position: absolute;bottom: 0;right: -64upx;border-radius:50%;background-color:rgb(102,205,170) ;"></view>
-				<view style="height: 110upx;width: 110upx;background-color: rgb(102,205,170);position: absolute;border-radius:50%;left: 16upx;bottom: -55upx;
-				display: flex;justify-content: center;align-items: center;">
-
-				</view>
+			<view style="height: 70upx;width: 140upx;position: absolute;border-top-left-radius: 70upx;border-top-right-radius: 70upx;
+			transition-property: left,background-color;transition-duration:.5s,.3s;bottom: 0;"
+			:style="{'left':left+'px','background-color':secondColor}">
+				<view style="width: 40upx;height: 24upx;position: absolute;bottom: -2upx;left: -35upx;transition: all .3s;"
+				:style="{'background-color':secondColor}"></view>
+				<view style="width: 70upx;height: 70upx;position: absolute;bottom: 0;left: -64upx;border-radius:50%;transition: all .3s;"
+				:style="{'background-color':backColor}"></view>
+				<view style="width: 40upx;height: 24upx;position: absolute;bottom: -2upx;right: -35upx;transition: all .3s;"
+				:style="{'background-color':secondColor}"></view>
+				<view style="width: 70upx;height: 70upx;position: absolute;bottom: 0;right: -64upx;border-radius:50%;transition: all .3s;"
+				:style="{'background-color':backColor}"></view>
+				<view style="height: 110upx;width: 110upx;position: absolute;border-radius:50%;left: 16upx;bottom: -55upx;
+				display: flex;justify-content: center;align-items: center;" :style="{'background-color':backColor}"></view>
 			</view>
 			<view @click="tap(0)" style="position: absolute;left: 57upx;transition: all .5s;" :style="{'bottom':imageBottom[0]+'px'}">
 				<image src="../static/image/scan.png" class="image1"></image>
@@ -46,8 +48,8 @@
 		</view>
 		
 		
-		<view style="position: absolute;width: 100%;height: 30upx;background-color:rgb(102,205,170) ;transition: all .3s;" 
-		:style="{'bottom':textBottom+'px'}">
+		<view style="position: absolute;width: 100%;height: 30upx;transition: all .3s;" 
+		:style="{'bottom':textBottom+'px','background-color':backColor}">
 			<text style="position: absolute;text-align: center;left: 52upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
 			:style="{'bottom':word[0].bottom+'px','opacity':word[0].opacity}">扫一扫</text>
 			<text style="position: absolute;text-align: center;left: 250upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
@@ -94,6 +96,7 @@
 				statusHeight:0,
 				width:0,
 				backColor:'rgb(102,205,170)',
+				secondColor:'rgb(166,236,146)',
 				bottom:0,
 				lastBottom:0,
 				textBottom:0,
@@ -201,8 +204,12 @@
 			'$store.state.buttonSelected'(){
 				if(this.$store.state.buttonSelected==1){
 					this.backColor = "rgb(102,205,170)";
+					this.secondColor='rgb(166,236,146)';
 				}	
-				else this.backColor=this.$store.state.color;
+				else{
+					this.backColor=this.$store.state.color;
+					this.secondColor='rgb(152,245,255)';
+				} 
 			},
 			'isLow'(){
 				if(this.isLow){
