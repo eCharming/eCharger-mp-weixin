@@ -21,8 +21,8 @@ export default new Vuex.Store({
 		windowHeight:null,
 		buttonSelected:1,
 		color:"rgb(50,200,210)",
-		startTime:"",
-		endTime:"",
+		startTime:"起始时间",
+		endTime:"结束时间",
 		
     },
     mutations: {

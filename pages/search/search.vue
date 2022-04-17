@@ -5,14 +5,13 @@
 		</view>
 		<view class="searchbox">
 			<view class="textareaview">
-				<textarea class="textarea" 
+				<input class="textarea" 
 					placeholder="输入目的地"
 					v-model="position"
 					@input="request()"
 					:style="{'border-color':color}"
 				>
-					
-				</textarea>
+				</input>
 				<text class="searchtext" :style="{'color':color}">搜索</text>
 				<image :src="src1" :class="changeImg==0?'image1':'image1_none'"></image>
 				<image :src="src2" :class="changeImg==0?'image1_none':'image1'"></image>
@@ -436,8 +435,8 @@
 	.textarea{
 		background-color: rgb(255,255,255);
 		margin: 30upx;
-		padding-top:21upx;
 		padding-left:80upx;
+		padding-right:100upx;
 		width:700upx;
 		height:90upx;
 		font-size: 32upx;
