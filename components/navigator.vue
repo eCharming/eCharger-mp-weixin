@@ -89,7 +89,11 @@
 			tap(index){
 				if(index==this.selected){
 					if(index==0){
-						
+						uni.scanCode({
+							success: (res) => {
+								console.log(res)
+							}
+						})
 					}else if(index==1){
 						uni.navigateTo({
 							url: '../communication/friends',
