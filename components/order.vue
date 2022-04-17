@@ -2,7 +2,7 @@
 	<view style="position: relative;height: 300upx;margin:20upx;margin-bottom: 40upx;transform-style: preserve-3d; transition: .7s all;"
 	:style="{'transform':'rotateY('+rotate+'deg)'}">
 		<view class="card"
-			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow,'height':height}"
+			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow,'height':height + 'rpx'}"
 		>
 			<view style="display: flex;flex-direction: column;">
 				<view class="view1">
@@ -15,7 +15,7 @@
 				</view>
 				<view style="display: flex;justify-content: space-between;position: relative;">
 					<text class="text">{{location}}</text>
-					<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight}" src='../static/image/checkdetail.png' v-if="check" 
+					<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight+'rpx'}" src='../static/image/checkdetail.png' v-if="check" 
 					@click.native.stop.prevent="checkDetail"></image>
 				</view>
 				
@@ -89,13 +89,13 @@
 				borderleft:"10rpx solid rgba(102,205,170,0.6)",
 				borderright:"10rpx solid rgba(102,205,170,0.6)",
 				boxshadow:"",
-				height:"",
 				check:false,
 				checkOpacity:0,
-				checkRight:0,
 				opacity:0,
-				bottom:0,
 				rotate:0,
+				height:300,
+				// bottom:200,可能无用
+				checkRight:100,
 			}
 		},
 		computed:{
@@ -122,7 +122,7 @@
 				this.check=true;
 				this.$nextTick(function(){
 					this.checkOpacity=1;
-					this.checkRight=uni.upx2px(10)+'px';
+					this.checkRight=10;
 				});
 			},
 			untap(){
@@ -131,7 +131,7 @@
 				this.boxshadow="";
 				this.check=false;
 				this.checkOpacity=0;
-				this.checkRight=uni.upx2px(100)+'px';
+				this.checkRight=100;
 			},
 			checkDetail(){
 				this.$emit('emit');
@@ -146,9 +146,9 @@
 			'detail'(){
 				if(this.detail==false){
 					this.$nextTick(function(){
-						this.height=uni.upx2px(300)+'px';
+						this.height=300;
 						this.opacity=0;
-						this.bottom=uni.upx2px(200)+'px';
+						// this.bottom=200;
 						this.rotate=0;
 					})
 					
@@ -156,19 +156,14 @@
 					this.$nextTick(function(){
 						this.check=false;
 						this.checkOpacity=0;
-						this.checkRight=uni.upx2px(100)+'px';
+						this.checkRight=100;
 						this.opacity=1;
-						this.bottom=uni.upx2px(400)+'px';
+						// this.bottom=400;
 						this.rotate=-90;
 					})
 					
 				}
 			}
-		},
-		mounted(){
-			this.height=uni.upx2px(300)+'px';
-			this.bottom=uni.upx2px(200)+'px';
-			this.checkRight=uni.upx2px(100)+'px';
 		}
 	}
 </script>

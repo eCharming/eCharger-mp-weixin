@@ -1,5 +1,5 @@
 <template>
-	<view class="card" :style="{'top':top+'px','opacity':opacity}">
+	<view class="card" :style="{'top':top+'rpx','opacity':opacity}">
 		<text class="text1">{{text1}}</text>
 		<text class="text2" :style="{'color':color}">{{text2}}</text>
 	</view>
@@ -22,15 +22,15 @@
 			}
 		},
 		mounted() {
-			this.top=uni.upx2px(-30);
+			this.top=-30;
 		},
 		watch:{
 			'isLow'(){
 				if(this.isLow){
-					this.top=uni.upx2px(-30);
+					this.top=-30;
 					this.opacity=0;
 				}else{
-					this.top=uni.upx2px(-130);
+					this.top=-130;
 					this.opacity=1;
 				}
 			},

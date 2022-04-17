@@ -30,11 +30,11 @@
 							</view>
 						</view>
 						<view style="margin-left: 30upx;width: 290upx;height: 17upx;display: flex;" :style="{'justify-content':justifyContent}">
-							<view class="modelSelected" :style="{'height':modelHeight+'px','width':modelWidth+'px','background-color':color}"></view>
+							<view class="modelSelected" :style="{'height':modelHeight+'rpx','width':modelWidth+'rpx','background-color':color}"></view>
 						</view>
 					</view>
 					
-					<view style="display: flex;position: relative;transition: all .1s;" :style="{'left':buttonLeft+'px'}">
+					<view style="display: flex;position: relative;transition: all .1s;" :style="{'left':buttonLeft+'rpx'}">
 						<view class="clear" :style="{'opacity':buttonOpacity1}" @tap="clear">清空历史记录</view>
 						<view class="add" :style="{'opacity':buttonOpacity2 }">添加常用地点</view>
 					</view> 
@@ -154,24 +154,24 @@
 		},
 		data(){
 			return{
-				statusHeight:0,
+				statusHeight:uni.getSystemInfoSync().statusBarHeight+50,
 				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,
 				position:"",
 				suggestions:[],
-				storageHeight:0,
-				suggestionHeight:0,
+				storageHeight:this.$store.state.windowHeight*0.8,
+				suggestionHeight:this.$store.state.windowHeight*0.85,
 				index:0,
 				storages:[],
 				isInput:false,
-				modelWidth:0,
-				modelHeight:0,
-				windowWidth:0,
+				modelWidth:120,
+				modelHeight:15,
+				windowWidth:uni.getSystemInfoSync().windowWidth,
 				justifyContent:"flex-start",
 				currentPage:0,
 				changeImg:0,
-				buttonLeft:0,
+				buttonLeft:185,
 				buttonOpacity1:1,
-				buttonOpacity2:1,
+				buttonOpacity2:0,
 				color:'rgba(102,205,170,1)',
 				doubleColor:"linear-gradient(to right bottom,rgb(102,205,170) 0% 100%,rgb(50,200,210))",
 				src1:"../../static/image/lightning_green.png",
@@ -248,7 +248,6 @@
 					});
 					uni.setStorageSync('searchHistory',JSON.stringify(searchHistory));
 				}else{
-					console.log(2222)
 					searchHistory=[];
 					searchHistory.push({
 						id:id,
@@ -325,18 +324,15 @@
 							this.justifyContent="flex-start";
 						})
 						
-						this.modelWidth=uni.upx2px(120+280*percent*2);
-						// this.modelHeight=uni.upx2px(15-8*percent*2);
+						this.modelWidth=120+280*percent*2;
 					}else{
 						this.$nextTick(function(){
 							this.justifyContent="flex-end";
 						})
-						
-						this.modelWidth=uni.upx2px(400-280*(percent-0.5)*2);
-						// this.modelHeight=uni.upx2px(7+8*(percent-0.5)*2);
-						// console.log(this.modelWidth)
+	
+						this.modelWidth=400-280*(percent-0.5)*2;
 					}
-					this.buttonLeft=uni.upx2px(185-185*percent);
+					this.buttonLeft=185-185*percent;
 					this.buttonOpacity1=1-percent;
 					this.buttonOpacity2=percent;
 					this.color="rgba("+(102-52*percent)+","+(205-5*percent)+","+(170+40*percent)+",1)";
@@ -347,17 +343,15 @@
 							this.justifyContent="flex-end";
 						})
 						
-						this.modelWidth=uni.upx2px(120+280*percent*2);
-						// this.modelHeight=uni.upx2px(15-8*percent*2);
+						this.modelWidth=120+280*percent*2;
 					}else{
 						this.$nextTick(function(){
 							this.justifyContent="flex-start";
 						})
 						
-						this.modelWidth=uni.upx2px(400-280*(percent-0.5)*2);
-						// this.modelHeight=uni.upx2px(7+8*(percent-0.5)*2);
+						this.modelWidth=400-280*(percent-0.5)*2;
 					}
-					this.buttonLeft=uni.upx2px(185*percent);
+					this.buttonLeft=185*percent;
 					this.buttonOpacity1=percent;
 					this.buttonOpacity2=1-percent;
 					this.color="rgba("+(50+52*percent)+","+(200+5*percent)+","+(210-40*percent)+",1)";
@@ -366,8 +360,6 @@
 			}
 		}, 
 		mounted(){
-			console.log(uni.getStorageSync('searchHistory'))
-			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			var searchHistory=uni.getStorageSync('searchHistory');
 			if(searchHistory){
 				searchHistory=JSON.parse(searchHistory);
@@ -376,14 +368,6 @@
 					this.storages.push(searchHistory[length-1-index]);
 				}
 			}
-			this.windowWidth=uni.getSystemInfoSync().windowWidth;
-			this.storageHeight=this.$store.state.windowHeight*0.8;
-			this.suggestionHeight=this.$store.state.windowHeight*0.85;
-			this.modelHeight=uni.upx2px(15);
-			this.modelWidth=uni.upx2px(120);
-			this.buttonLeft=uni.upx2px(185);
-			this.buttonOpacity2=0;
-			
 		}
 	}
 	

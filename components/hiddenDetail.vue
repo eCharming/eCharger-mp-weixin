@@ -1,5 +1,5 @@
 <template>
-	<view class="card" :style="{'top':top+'px','opacity':opacity}">
+	<view class="card" :style="{'top':top+'rpx','opacity':opacity}">
 		<text class="text1">订单详情</text>
 	</view>
 </template>
@@ -18,7 +18,7 @@
 		
 		computed:{
 			top(){
-				return uni.upx2px(-30-this.percent*100)
+				return -30-this.percent*100
 			},
 			opacity(){
 				return this.percent*this.percent*this.percent

@@ -19,11 +19,9 @@
 							<view class="line"></view>
 						</view>
 		
-						
 						<hiddencard :isLow="isLow"></hiddencard>
 						<hiddendetail v-if="hiddenDetail" :percent="percent" @tap="detail"></hiddendetail>
 						
-						<!-- <view style="height: 250upx;position: absolute;border: 2px solid red;top:-20upx"></view> -->
 						<card>
 							<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :isLow="isLow" :type="1"
 								@tap="tapButton1()">
@@ -36,7 +34,6 @@
 									:style="{'filter':'grayscale('+imageFilter2+')','opacity':imageOpacity2}"></image>
 							</totalbutton>
 						</card>
-						<!-- <view style="height: 200upx;position: absolute;border: 2px solid red;"></view> -->
 						<destination></destination>
 		
 		
@@ -58,7 +55,6 @@
 								  
 								</scroller>
 							</view>
-								
 							
 							<view style="transform: rotateY(180deg) translateZ(13upx);position: absolute;width: 100%;" :class="isSelected2?'auto':'none'">
 								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
@@ -75,11 +71,7 @@
 							</view>
 								
 						</view>
-						
-						
-						
-		
-		
+
 					</view>
 				</view>
 			</movable-view>
@@ -311,7 +303,6 @@
 		mounted() {
 			this.windowHeight = this.$store.state.windowHeight;
 			this.minHeight=uni.upx2px(250)/this.windowHeight;
-			console.log((1+(this.maxHeight-this.minHeight)))
 			this.windowWidth = uni.getSystemInfoSync().windowWidth;
 			this.boxHeight = this.windowHeight * (1 - this.maxHeight);
 			this.areaLength=(1+(this.maxHeight-this.minHeight))*this.windowHeight;
@@ -358,8 +349,6 @@
 						this.scrollTop=uni.upx2px(this.$store.state.markerSelected*338);
 						this.toHigh();
 					})
-					console.log(this.scrollTop)
-					
 				}
 			},
 			'$store.state.isLow'(){  //用于从search页面回到主页面时将movablebox移向低位

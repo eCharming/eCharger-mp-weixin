@@ -6,7 +6,7 @@
 		:style="{'border-color':bordercolor}"
 	>
 		<view class="view1">
-			<text class="text1" :style="{'top':top+'px'}">{{text1}}</text>
+			<text class="text1" :style="{'top':top+'rpx'}">{{text1}}</text>
 		</view>
 		<view class="view2">
 			<text class="text2" :style="{'opacity':opacity}">{{text2}}</text>
@@ -24,7 +24,7 @@
 			return {
 				bordercolor:"rgba(0,0,0,0.3)",
 				opacity:0,
-				top:uni.upx2px(20),
+				top:20,
 			}
 		},
 		props:{
@@ -56,10 +56,10 @@
 			},
 			'isLow'(){
 				if(this.isLow){
-					this.top=uni.upx2px(20);
+					this.top=20;
 					this.opacity=0;
 				}else{
-					this.top=uni.upx2px(5);
+					this.top=5;
 					this.opacity=1;
 				}
 			}

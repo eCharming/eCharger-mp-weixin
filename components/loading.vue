@@ -26,8 +26,8 @@
 		:style="{'transform':'scale('+scale+')'}"
 		>
 			<view class="lightning" style="height: 750upx;width: 750upx;background-color: #d0c51b;"></view>
-			<view class="view1" :style="{'bottom':bottom+'px','transform':'rotate('+rotate+'deg)'}"></view>
-			<view class="view2" :style="{'bottom':bottom+'px','transform':'rotate('+rotate+'deg)'}"></view>
+			<view class="view1" :style="{'bottom':bottom+'rpx','transform':'rotate('+rotate+'deg)'}"></view>
+			<view class="view2" :style="{'bottom':bottom+'rpx','transform':'rotate('+rotate+'deg)'}"></view>
 			
 		</view>
 		
@@ -53,7 +53,7 @@
 		mounted() {
 			setTimeout(()=>{
 				this.rotate=360;
-				this.bottom=uni.upx2px(750);
+				this.bottom=750;
 				
 			},400)
 			setTimeout(()=>{
