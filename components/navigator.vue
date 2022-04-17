@@ -49,15 +49,18 @@
 		
 		
 		<view style="position: absolute;width: 100%;height: 30upx;transition: all .3s;" 
-		:style="{'bottom':textBottom+'px','background-color':backColor,'opacity':opacity}">
-			<text style="position: absolute;text-align: center;left: 52upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-			:style="{'bottom':word[0].bottom+'px','opacity':word[0].opacity}">扫一扫</text>
-			<text style="position: absolute;text-align: center;left: 250upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-			:style="{'bottom':word[1].bottom+'px','opacity':word[1].opacity}">联系</text>
-			<text style="position: absolute;text-align: center;left: 440upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-			:style="{'bottom':word[2].bottom+'px','opacity':word[2].opacity}">全城</text>
-			<text style="position: absolute;text-align: center;left: 630upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-			:style="{'bottom':word[3].bottom+'px','opacity':word[3].opacity}">我的</text>
+		:style="{'bottom':textBottom+'px','background-color':backColor}">
+			<view :style="{'opacity':opacity}" style="transition: all .5s;">
+				<text style="position: absolute;text-align: center;left: 52upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
+				:style="{'bottom':word[0].bottom+'px','opacity':word[0].opacity}">扫一扫</text>
+				<text style="position: absolute;text-align: center;left: 250upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
+				:style="{'bottom':word[1].bottom+'px','opacity':word[1].opacity}">联系</text>
+				<text style="position: absolute;text-align: center;left: 440upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
+				:style="{'bottom':word[2].bottom+'px','opacity':word[2].opacity}">全城</text>
+				<text style="position: absolute;text-align: center;left: 630upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
+				:style="{'bottom':word[3].bottom+'px','opacity':word[3].opacity}">我的</text>
+			</view>
+			
 		</view>
 		
 		

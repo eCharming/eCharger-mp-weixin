@@ -43,7 +43,7 @@
 						<view style="transform-style: preserve-3d;transition:all .6s;
 						transition-timing-function: cubic-bezier(.61,-0.38,.44,1.34);position: relative;" 
 						:style="{'transform':'rotateY('+rotate+'deg)'}">
-							<view style="position: absolute;width: 100%;" :class="isSelected1?'auto':'none'">
+							<view style="position: absolute;width: 100%;transform:translateZ(10upx);" :class="isSelected1?'auto':'none'">
 								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
 									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
 										:location="order.location" :distance="order.distance" :price="order.price"
@@ -60,7 +60,7 @@
 							</view>
 								
 							
-							<view style="transform: rotateY(180deg);position: absolute;width: 100%;" :class="isSelected2?'auto':'none'">
+							<view style="transform: rotateY(180deg) translateZ(13upx);position: absolute;width: 100%;" :class="isSelected2?'auto':'none'">
 								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
 									<charger  v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 										:location="charger.location" :state="charger.isAvailable" :price="charger.price"
