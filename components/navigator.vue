@@ -1,86 +1,47 @@
 <template>
-	<view style="position: relative;perspective: 500upx;transform-style: preserve-3d;">
+	<view style="position: relative;">
 		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
-		<view style="height: 50px;display: flex;align-items: center;position: relative;transition:background-color .3s ;" 
-		:style="{'background-color':backColor,'pointer-events':pointerEvents}">
-				<view style="color:#FFFFFF ;margin-left: 15upx;margin-top: 25upx;height:60upx ;">成都</view>
-				<view style="color: rgba(0,0,0,0.6);margin: 15upx;height: 60upx;background-color: #FFFFFF;border-radius: 20upx;
-					display: flex;flex-direction: column;justify-content: center;" :style="{'width':width+'px'}">
-					<text style="margin-left: 20upx;font-weight: 700;font-size: 32upx;">易插</text>
+		<view class="search-box" :style="{'background-color':backColor,'pointer-events':pointerEvents}">
+				<view class="position">成都</view>
+				<view class="search-view" :style="{'width':width+'px'}">
+					<text class="search-text">易插</text>
 				</view>
 		</view>
+
+		<view class="bottom-border" 		:style="{'bottom':lastBottom+'px','background-color':secondColor}"></view>
 		
-		
-		
-		<view style="height: 32upx;position: absolute;width: 100%;border-bottom-left-radius: 20upx;border-bottom-right-radius: 25upx;
-		transition: all .3s;"
-		:style="{'bottom':lastBottom+'px','background-color':secondColor}"></view>
-		
-		
-		<view style="height: 92upx;width: 100%;transition: all .3s;position: absolute;" 
-		:style="{'bottom':bottom+'px','background-color':backColor}">
-			<view style="height: 70upx;width: 140upx;position: absolute;border-top-left-radius: 70upx;border-top-right-radius: 70upx;
-			transition-property: left,background-color;transition-duration:.5s,.3s;bottom: 0;"
-			:style="{'left':left+'px','background-color':secondColor}">
-				<view style="width: 40upx;height: 24upx;position: absolute;bottom: -2upx;left: -35upx;transition: all .3s;"
-				:style="{'background-color':secondColor}"></view>
-				<view style="width: 70upx;height: 70upx;position: absolute;bottom: 0;left: -64upx;border-radius:50%;transition: all .3s;"
-				:style="{'background-color':backColor}"></view>
-				<view style="width: 40upx;height: 24upx;position: absolute;bottom: -2upx;right: -35upx;transition: all .3s;"
-				:style="{'background-color':secondColor}"></view>
-				<view style="width: 70upx;height: 70upx;position: absolute;bottom: 0;right: -64upx;border-radius:50%;transition: all .3s;"
-				:style="{'background-color':backColor}"></view>
-				<view style="height: 110upx;width: 110upx;position: absolute;border-radius:50%;left: 16upx;bottom: -55upx;
-				display: flex;justify-content: center;align-items: center;" :style="{'background-color':backColor}"></view>
+		<view class="image-box" 			:style="{'bottom':bottom+'px','background-color':backColor}">
+			<view class="selected-box" 		:style="{'left':left+'px','background-color':secondColor}">
+				<view class="fill-left" 	:style="{'background-color':secondColor}"></view>
+				<view class="ball-left" 	:style="{'background-color':backColor}"></view>
+				<view class="fill-right" 	:style="{'background-color':secondColor}"></view>
+				<view class="ball-right" 	:style="{'background-color':backColor}"></view>
+				<view class="selected-ball" :style="{'background-color':backColor}"></view>
 			</view>
-			<view @click="tap(0)" style="position: absolute;left: 57upx;transition: all .5s;" :style="{'bottom':imageBottom[0]+'px'}">
-				<image src="../static/image/scan.png" class="image1"></image>
+			<view class="image-1" @click="tap(0)" :style="{'bottom':imageBottom[0]+'px'}">
+				<image class="image" src="../static/image/scan.png"></image>
 			</view>
-			<view @click="tap(1)" style="position: absolute;left: 242upx;transition: all .5s;" :style="{'bottom':imageBottom[1]+'px'}">
-				<image src="../static/image/connection2.png" class="image1"></image>
+			<view class="image-2" @click="tap(1)" :style="{'bottom':imageBottom[1]+'px'}">
+				<image class="image" src="../static/image/connection2.png"></image>
 			</view>
-			<view @click="tap(2)" style="position: absolute;left: 430upx;transition: all .5s;" :style="{'bottom':imageBottom[2]+'px'}">
-				<image src="../static/image/city.png" class="image1"></image>
+			<view class="image-3" @click="tap(2)" :style="{'bottom':imageBottom[2]+'px'}">
+				<image class="image" src="../static/image/city.png"></image>
 			</view>
-			<view @click="tap(3)" style="position: absolute;left: 621upx;transition: all .5s;" :style="{'bottom':imageBottom[3]+'px'}">
-				<image src="../static/image/my.png" class="image1" :style="{'opacity':opacity}"></image>
+			<view class="image-4" @click="tap(3)" :style="{'bottom':imageBottom[3]+'px'}">
+				<image class="image" src="../static/image/my.png" :style="{'opacity':opacity}"></image>
 			</view>
 		</view>
 		
 		
-		<view style="position: absolute;width: 100%;height: 30upx;transition: all .3s;" 
-		:style="{'bottom':textBottom+'px','background-color':backColor}">
+		<view class="text-box" :style="{'bottom':textBottom+'px','background-color':backColor}">
 			<view :style="{'opacity':opacity}" style="transition: all .5s;">
-				<text style="position: absolute;text-align: center;left: 52upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-				:style="{'bottom':word[0].bottom+'px','opacity':word[0].opacity}">扫一扫</text>
-				<text style="position: absolute;text-align: center;left: 250upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-				:style="{'bottom':word[1].bottom+'px','opacity':word[1].opacity}">联系</text>
-				<text style="position: absolute;text-align: center;left: 440upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-				:style="{'bottom':word[2].bottom+'px','opacity':word[2].opacity}">全城</text>
-				<text style="position: absolute;text-align: center;left: 630upx;color: #FFFFFF;font-size: 30upx;font-weight: 700;transition: all .5s;"
-				:style="{'bottom':word[3].bottom+'px','opacity':word[3].opacity}">我的</text>
+				<text class="text-1" :style="{'bottom':word[0].bottom+'px','opacity':word[0].opacity}">扫一扫</text>
+				<text class="text-2" :style="{'bottom':word[1].bottom+'px','opacity':word[1].opacity}">联系</text>
+				<text class="text-3" :style="{'bottom':word[2].bottom+'px','opacity':word[2].opacity}">全城</text>
+				<text class="text-4" :style="{'bottom':word[3].bottom+'px','opacity':word[3].opacity}">我的</text>
 			</view>
 			
 		</view>
-		
-		<!-- <view  
-		style="height: 62upx;width: 100%;transition: all .3s;
-		position: absolute;display: flex;justify-content: space-around;
-		transform-origin: top;"
-		:style="{'bottom':textBottom+'px','background-color':backColor,'transform':'rotateX('+rotate+'deg)'}">
-			<view class="text1">
-				<text>扫一扫</text>
-			</view>
-			<view class="text1" @click="connection()">
-				<text>联系</text>
-			</view>
-			<view class="text1">
-				<text>全城</text>
-			</view>
-			<view class="text1">
-				<text>我的</text>
-			</view>
-		</view> -->
 		
 	</view>
 </template>
@@ -111,7 +72,6 @@
 					opacity:0,
 				},],
 				opacity:1,
-				rotate:0,
 				selected:0,
 				left:0,
 				pointerEvents:'auto',
@@ -129,7 +89,7 @@
 			tap(index){
 				if(index==this.selected){
 					if(index==0){
-
+						
 					}else if(index==1){
 						uni.navigateTo({
 							url: '../communication/friends',
@@ -213,14 +173,12 @@
 					this.textBottom=-uni.upx2px(30);
 					this.lastBottom=-uni.upx2px(150);
 					this.opacity=1;
-					this.rotate=0;
 					this.pointerEvents='auto';
 				}else{ 
 					this.bottom=-uni.upx2px(0);
 					this.textBottom=uni.upx2px(90);
 					this.lastBottom=-uni.upx2px(30);
 					this.opacity=0;
-					this.rotate=-90;
 					this.pointerEvents='none';
 					if(this.selected==3){
 						this.tap(2);
@@ -232,28 +190,190 @@
 </script>
 
 <style scoped>
-	.view1{
+	.search-box{
+		height: 50px;
+		display: flex;
+		align-items: center;
+		position: relative;
+		transition:background-color .3s ;
+	}
+	
+	.position{
+		color:#FFFFFF ;
+		margin-left: 15upx;
+		margin-top: 25upx;
+		height:60upx;
+	}	
+	
+	.search-view{
+		color: rgba(0,0,0,0.6);
+		margin: 15upx;
+		height: 60upx;
+		background-color: #FFFFFF;
+		border-radius: 20upx;
 		display: flex;
 		flex-direction: column;
-		justify-content: flex-end;
-		color: #FFFFFF;
+		justify-content: center;
+	}
+	
+	.search-text{
+		margin-left: 20upx;
+		font-weight: 700;
+		font-size: 32upx;
+	}
+	
+	.bottom-border{
+		position: absolute;
+		width: 100%;
+		height: 32upx;
+		border-bottom-left-radius: 20upx;
+		border-bottom-right-radius: 25upx;
 		transition: all .3s;
 	}
 	
-	.image1{
+	.image-box{
+		position: absolute;
+		height: 92upx;
+		width: 100%;
+		transition: all .3s;
+	}
+	
+	.selected-box{
+		position: absolute;
+		height: 70upx;
+		width: 140upx;
+		bottom: 0;
+		border-top-left-radius: 70upx;
+		border-top-right-radius: 70upx;
+		transition-property: left,background-color;
+		transition-duration:.5s,.3s;
+	}
+	
+	.fill-left{
+		position: absolute;
+		width: 40upx;
+		height: 24upx;
+		bottom: -2upx;
+		left: -35upx;
+		transition: all .3s;
+	}
+	
+	.fill-right{
+		position: absolute;
+		width: 40upx;
+		height: 24upx;		
+		bottom: -2upx;
+		right: -35upx;
+		transition: all .3s;
+	}
+	
+	.ball-left{
+		position: absolute;
+		width: 70upx;
+		height: 70upx;
+		bottom: 0;
+		left: -64upx;
+		border-radius:50%;
+		transition: all .3s;
+	}
+	
+	.ball-right{
+		position: absolute;
+		width: 70upx;
+		height: 70upx;
+		bottom: 0;
+		right: -64upx;
+		border-radius:50%;
+		transition: all .3s;
+	}
+	
+	.selected-ball{
+		position: absolute;
+		height: 110upx;
+		width: 110upx;
+		left: 16upx;
+		bottom: -55upx;
+		border-radius:50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+	.image-1{
+		position: absolute;
+		left: 57upx;
+		transition: all .5s;
+	}
+	
+	.image-2{
+		position: absolute;
+		left: 242upx;
+		transition: all .5s;
+	}
+	
+	.image-3{
+		position: absolute;
+		left: 430upx;
+		transition: all .5s;
+	}
+	
+	.image-4{
+		position: absolute;
+		left: 621upx;
+		transition: all .5s;
+	}
+	
+	.text-box{
+		position: absolute;
+		width: 100%;
+		height: 30upx;
+		transition: all .3s;
+	}
+	
+	.text-1{
+		position: absolute;
+		text-align: center;
+		left: 52upx;
+		color: #FFFFFF;
+		font-size: 30upx;
+		font-weight: 700;
+		transition: all .5s;
+	}
+	
+	.text-2{
+		position: absolute;
+		text-align: center;
+		left: 250upx;
+		color: #FFFFFF;
+		font-size: 30upx;
+		font-weight: 700;
+		transition: all .5s;
+	}
+	
+	.text-3{
+		position: absolute;
+		text-align: center;
+		left: 440upx;
+		color: #FFFFFF;
+		font-size: 30upx;
+		font-weight: 700;
+		transition: all .5s;
+	}
+	
+	.text-4{
+		position: absolute;
+		text-align: center;
+		left: 630upx;
+		color: #FFFFFF;
+		font-size: 30upx;
+		font-weight: 700;
+		transition: all .5s;
+	}
+
+	.image{
 		width: 80upx;
 		height: 80upx;
 		margin-bottom: 5upx;
 		transition: all .3s;
-	}
-	
-	.text1{
-		color: #FFFFFF;
-		text-align: center;
-		transition: all .3s;
-		font-weight: 700;
-		font-size: 30upx;
-		width: 100upx;
-		margin-top: 7upx;
 	}
 </style>
