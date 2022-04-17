@@ -8,7 +8,6 @@
 </template>
 
 <script>
-	import QQMapWX from '@/static/js/qqmap-wx-jssdk.min.js'
 	export default {
 		data() {
 			return {

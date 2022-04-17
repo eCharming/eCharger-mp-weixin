@@ -15,10 +15,9 @@
 		margin:20upx;
 		padding: 15upx;
 		background-color: rgba(250,255,250,1);
-		/* background-color: rgba(102,205,170,0.2); */
 		border-radius: 40upx;
 		display: flex;
 		justify-content: center;
-		box-shadow:0px 6px 12px 4px #e5e5e5 ;
+		box-shadow:0upx 12upx 24upx 8upx #e5e5e5 ;
 	}
 </style>

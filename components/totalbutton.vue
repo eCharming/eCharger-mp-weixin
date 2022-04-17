@@ -81,10 +81,10 @@
 	.btn{
 		height: 120upx;
 		width : 280upx;
-		border-radius: 10px;
+		border-radius: 20upx;
 		margin: 20upx;
 		padding-left: 10upx;
-		border: 3px solid;
+		border: 6upx solid;
 		overflow: visible;
 		display: flex;
 		flex-direction: column;
@@ -95,20 +95,12 @@
 	}
 	.view1{
 		font-weight:700 ;
-
 		font-size: 30upx;
-		// position: relative;
-		// bottom: 13upx;
-		// right:5upx
 
 	}
 	.view2{
 		font-size: 22upx;
 		color: rgba(0,0,0,0.3);
-		// position: relative;
-		// top: 30upx;
-		// right:90upx
-		// height:40%
 
 	}
 	.text1{

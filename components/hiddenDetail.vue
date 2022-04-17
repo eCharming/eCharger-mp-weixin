@@ -38,8 +38,7 @@
 		border-radius: 55upx;
 		display: flex;
 		justify-content: center;
-		box-shadow:0px 7px 10px -3px #a6a6a6 ;
-		/* width: 550upx; */
+		box-shadow:0upx 14upx 20upx -6upx #a6a6a6 ;
 		height: 90upx;
 		top:-30upx;
 		left:235upx;
@@ -57,6 +56,5 @@
 		margin-top: 10upx;
 		margin-right: 10upx;
 		color:rgba(102,205,170,1) ;
-		// border: 2px solid red;
 	}
 </style>

@@ -63,11 +63,10 @@
 		padding: 15upx;
 		padding-top: 20upx;
 		background-color: rgba(250,255,250,1);
-		/* background-color: rgb(102,205,170); */
 		border-radius: 55upx;
 		display: flex;
 		justify-content: center;
-		box-shadow:0px 7px 10px -3px #a6a6a6 ;
+		box-shadow:0upx 14upx 20upx -6upx #a6a6a6 ;
 		width: 550upx;
 		height: 90upx;
 		top:-30upx;
@@ -83,11 +82,8 @@
 		margin: 20upx;
 		margin-top: 10upx;
 		margin-right: 10upx;
-		// border: 2px solid red;
-		/* color: #FFFFFF; */
 	}
 	.text2{
-		// border: 2px solid red;
 		margin: 20upx;
 		margin-top: 10upx;
 		margin-left: 10upx;

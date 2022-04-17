@@ -37,7 +37,7 @@
 							scroll-with-animation="true">
 							<view v-for="(item,index) in locationList" :key="index" class="scroll-innerview"
 								@tap="tapsearch(item)">
-								<text v-text="item.title" class="scroll-text" style="margin:5px"></text>
+								<text v-text="item.title" class="scroll-text" style="margin:10upx"></text>
 							</view>
 
 						</scroll-view>
@@ -58,7 +58,6 @@
 				</view>
 			</addcard>
 			<addcard>
-				<view class="divLine"></view>
 				<view class="display">
 					<text class="labeltext">周一可用时段</text>
 					<view style="display:flex;justify-content: space-between;align-items:center;">
@@ -251,6 +250,8 @@
 					longitude: 116.39742,
 				},
 				locationList: [],
+				center_latitude:this.$store.state.currentLocation == null ? 39.909 : this.$store.state.currentLocation.latitude,
+				center_longitude:this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation.longitude,
 			}
 		},
 		computed: {
@@ -259,14 +260,6 @@
 			},
 			listLength() {
 				return 6 - this.avatarUrl.length;
-			},
-			center_latitude() {
-				return this.$store.state.currentLocation == null ? 39.909 : this.$store.state.currentLocation
-					.latitude;
-			},
-			center_longitude() {
-				return this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation
-					.longitude;
 			}
 		},
 		methods: {
@@ -559,7 +552,7 @@
 	.display {
 		display: flex;
 		justify-content: space-between;
-		margin: 15px;
+		margin: 28upx;
 	}
 
 	.divLine {
@@ -574,8 +567,8 @@
 	}
 
 	.line {
-		margin-left: 5px;
-		margin-right: 5px;
+		margin-left: 10upx;
+		margin-right: 10upx;
 	}
 
 	.timer1 {
@@ -596,15 +589,15 @@
 		display: flex;
 		justify-content: flex-start;
 		flex-wrap: wrap;
-		margin-left: 15px;
-		margin-right: 15px;
-		margin-bottom: 15px;
+		margin-left: 28upx;
+		margin-right: 28upx;
+		margin-bottom: 28upx;
 	}
 
 	.close {
 		position: absolute;
-		margin-left: -25px;
-		margin-top: 5px;
+		margin-left: -45upx;
+		margin-top: 10upx;
 	}
 
 	.submit {
@@ -633,14 +626,12 @@
 		background-color: rgba(250, 255, 250, 1);
 		height: 300upx;
 		width: 100%;
-		border-bottom-right-radius: 10px;
-		border-bottom-left-radius: 10px;
-		box-shadow: -8px 8px 10px -4px rgba(116, 118, 116, 0.2), 8px 8px 10px -4px rgba(116, 118, 116, 0.2);
+		border-bottom-right-radius: 20upx;
+		border-bottom-left-radius: 20upx;
+		box-shadow: -16upx 16upx 20upx -8upx rgba(116, 118, 116, 0.2), 16upx 16upx 20upx -8upx rgba(116, 118, 116, 0.2);
 	}
 
 	.scroll-innerview {
-		margin: 15px;
+		margin: 28upx;
 	}
-
-	.scroll-text {}
 </style>

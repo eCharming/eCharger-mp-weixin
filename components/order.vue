@@ -36,25 +36,23 @@
 		</view>
 		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);
 		height: 300upx;width: 100%;display:flex;justify-content: center;flex-direction: column;
-		border-radius: 30upx;border-top: 5px solid rgba(102,205,170,1);border-bottom: 5px solid rgba(102,205,170,1);">
+		border-radius: 30upx;border-top: 9upx solid rgba(102,205,170,1);border-bottom: 9upx solid rgba(102,205,170,1);">
 			<view class="button">
-				<view style="display: flex;flex-direction: column;justify-content: center;">
+				<view class="smalldetailview">
 					<image src="../static/image/order.png" style="height: 125upx;width: 125upx;"></image>
-					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">预约</text>
+					<text class="smalldetail">预约</text>
 				</view>
-				<view style="display: flex;flex-direction: column;justify-content: center;">
+				<view class="smalldetailview">
 					<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
-					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">联系</text>
+					<text class="smalldetail">联系</text>
 				</view>
-				
-
-				<view style="display: flex;flex-direction: column;justify-content: center;a" @click.native.stop.prevent="navigate">
+				<view class="smalldetailview" @click.native.stop.prevent="navigate">
 					<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
-					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">导航</text>
+					<text class="smalldetail">导航</text>
 				</view>
-				<view style="display: flex;flex-direction: column;justify-content: center;">
+				<view class="smalldetailview">
 					<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"></image>
-					<text style="font-size: 25upx;letter-spacing: 0.3px;margin-left: 38upx;position: relative;bottom: 10upx;">详情</text>
+					<text class="smalldetail">详情</text>
 				</view>
 			</view>
 				
@@ -88,8 +86,8 @@
 		},
 		data(){
 			return{
-				borderleft:"5px solid rgba(102,205,170,0.6)",
-				borderright:"5px solid rgba(102,205,170,0.6)",
+				borderleft:"10rpx solid rgba(102,205,170,0.6)",
+				borderright:"10rpx solid rgba(102,205,170,0.6)",
 				boxshadow:"",
 				height:"",
 				check:false,
@@ -118,9 +116,9 @@
 		},
 		methods:{
 			tap(){
-				this.borderleft="6px solid rgba(102,205,170,1)";
-				this.borderright="6px solid rgba(102,205,170,1)";
-				this.boxshadow="0px 33px 15px -30px rgba(102,205,170,0.5)";
+				this.borderleft="12rpx solid rgba(102,205,170,1)";
+				this.borderright="12rpx solid rgba(102,205,170,1)";
+				this.boxshadow="0rpx 60rpx 28rpx -60rpx rgba(102,205,170,0.5)";
 				this.check=true;
 				this.$nextTick(function(){
 					this.checkOpacity=1;
@@ -128,8 +126,8 @@
 				});
 			},
 			untap(){
-				this.borderleft="5px solid rgba(102,205,170,0.6)";
-				this.borderright="5px solid rgba(102,205,170,0.6)";
+				this.borderleft="10rpx solid rgba(102,205,170,0.6)";
+				this.borderright="10rpx solid rgba(102,205,170,0.6)";
 				this.boxshadow="";
 				this.check=false;
 				this.checkOpacity=0;
@@ -156,8 +154,6 @@
 					
 				}else if(this.detail==true){
 					this.$nextTick(function(){
-						
-						// this.height=uni.upx2px(680)+'px';
 						this.check=false;
 						this.checkOpacity=0;
 						this.checkRight=uni.upx2px(100)+'px';
@@ -251,9 +247,7 @@
 		position: absolute;
 		width: 80upx;
 		height: 80upx;
-		/* margin-right: 5upx; */
 		transition: all .5s;
-		/* border: 2px solid red; */
 	}
 	
 	.text{
@@ -261,8 +255,6 @@
 		margin-left: 15upx;
 		opacity: 0.5;
 		width: 450upx;
-		/* border: 2px solid red; */
-		/* white-space: nowrap; */
 		overflow: hidden;
 		-webkit-line-clamp: 3;
 		text-overflow: ellipsis;
@@ -273,6 +265,19 @@
 	.button{
 		display: flex;
 		justify-content: space-around;
+	}
+	
+	.smalldetail{
+		font-size: 25upx;
+		letter-spacing: 0.6upx;
+		margin-left: 38upx;
+		position: relative;
+		bottom: 10upx;
+	}
+	.smalldetailview {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
 	}
 </style>
 

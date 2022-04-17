@@ -19,6 +19,6 @@
 		display: flex;
 		flex-direction:column;
 		justify-content: space-between;
-		box-shadow:0px 6px 12px 4px #e5e5e5 ;
+		box-shadow:0upx 12upx 24upx 8upx #e5e5e5 ;
 	}
 </style>

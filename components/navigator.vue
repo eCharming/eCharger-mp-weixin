@@ -6,7 +6,7 @@
 				<view style="color:#FFFFFF ;margin-left: 15upx;margin-top: 25upx;height:60upx ;">成都</view>
 				<view style="color: rgba(0,0,0,0.6);margin: 15upx;height: 60upx;background-color: #FFFFFF;border-radius: 20upx;
 					display: flex;flex-direction: column;justify-content: center;" :style="{'width':width+'px'}">
-					<text style="margin-left: 10px;font-weight: 700;font-size: 32upx;">易插</text>
+					<text style="margin-left: 20upx;font-weight: 700;font-size: 32upx;">易插</text>
 				</view>
 		</view>
 		
@@ -63,10 +63,6 @@
 			
 		</view>
 		
-		
-		
-		
-		
 		<!-- <view  
 		style="height: 62upx;width: 100%;transition: all .3s;
 		position: absolute;display: flex;justify-content: space-around;
@@ -84,10 +80,7 @@
 			<view class="text1">
 				<text>我的</text>
 			</view>
-			
-			
 		</view> -->
-		
 		
 	</view>
 </template>

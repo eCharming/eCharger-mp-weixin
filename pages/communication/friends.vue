@@ -246,7 +246,6 @@
 
 	.friends{
 		height: 150upx;
-		/* border: 2px red solid; */
 		position: relative;
 	}
 	

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view>
-			<image :src="src" mode="widthFix" style="width: 80px;" @click="relocate"></image>
+			<image :src="src" mode="widthFix" style="width: 150upx;" @click="relocate"></image>
 		</view>
 	</view>
 </template>

@@ -143,12 +143,11 @@
 		padding: 15upx;
 
 		background-color: rgba(250,255,250,1);
-		/* background-color: rgba(102,205,170,0.2); */
 		border-radius: 40upx;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		box-shadow:0px 6px 12px 4px #e5e5e5 ;
+		box-shadow:0upx 12upx 24upx 8upx #e5e5e5 ;
 	} 
 	
 	.near{
@@ -189,14 +188,11 @@
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		/* border: 2px solid red; */
-		/* position: relative; */
 		margin-left:60upx;
 		width: 450upx;
 	}
 	
 	.time1{
-		// background-color: rgb(230,230,230);
 		height:56upx;
 		width:144upx;
 		border-radius: 12upx;
@@ -229,7 +225,6 @@
 	}
 	
 	.time2{
-		// background-color: rgb(230,230,230);
 		height:56upx;
 		width:144upx;
 		border-radius: 12upx;

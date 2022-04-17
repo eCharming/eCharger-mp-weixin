@@ -51,8 +51,8 @@
 										@tap="tapOrder(index)" @emit="detail()" @toLow="toLow">
 									</order>
 									<view class="scrollerview">
-										<image :src="src1" style="width: 23px;height: 23px;" v-show="icontype=='download'"></image>
-										<image :src="src2" style="width: 23px;height: 23px;" v-show="icontype=='warn'"></image>
+										<image :src="src1" style="width: 45rpx;height: 45rpx;" v-show="icontype=='download'"></image>
+										<image :src="src2" style="width: 45rpx;height: 45rpx;" v-show="icontype=='warn'"></image>
 										<text>{{icontext}}</text>  
 									</view>
 								  
@@ -68,7 +68,7 @@
 										@tap="tapCharger(index)">
 									</charger>
 									<view class="scrollerview">
-										<image :src="src3" style="width: 23px;height: 23px;" @tap="addCharger"></image>
+										<image :src="src3" style="width: 45rpx;height: 45rpx;" @tap="addCharger"></image>
 										<text @tap="addCharger">添加你的电桩</text>  
 									</view>
 								</scroller>
@@ -399,8 +399,7 @@
 	.main {
 		width: 750upx;
 		background-color: rgb(240, 245, 240);
-		/* background-color: #FFFFFF; */
-		padding: 0 12px;
+		padding: 0 20upx;
 		border-top-left-radius: 40upx;
 		border-top-right-radius: 40upx;
 		pointer-events: auto;
@@ -424,7 +423,7 @@
 	}
 
 	.line {
-		margin: 0px;
+		margin: 0upx;
 		vertical-align: middle;
 		border-bottom: 8rpx solid rgb(214, 215, 217);
 		width: 60rpx;
@@ -463,6 +462,6 @@
 		position: fixed;
 		left:0;
 		right:0;
-		top:-80px;
+		top:-150upx;
 	}
 </style>

@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view >
-			<image :src="src" mode="widthFix" style="width: 80px;" :style="{'pointer-events':pointerEvents}" @click="info"></image>
+			<image :src="src" mode="widthFix" style="width: 150rpx;" :style="{'pointer-events':pointerEvents}" @click="info"></image>
 		</view>
 	</view>
 </template>

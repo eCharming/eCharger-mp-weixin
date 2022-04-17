@@ -68,7 +68,7 @@
 									<text class="text6">{{storage.category}}</text>
 								</view>
 								<view style="display: flex;justify-content: center;margin-top: 20upx;">
-									<view style="border-bottom: 1px solid rgba(0,0,0,0.1);width: 500upx;"></view>
+									<view style="border-bottom: 2upx solid rgba(0,0,0,0.1);width: 500upx;"></view>
 								</view>
 								
 							</view>
@@ -79,16 +79,16 @@
 					<swiper-item>
 						<view style="display: flex;justify-content: space-between;margin: 30upx;">
 							<view style="width: 230upx;display: flex;justify-content:center; align-items:center;">
-							<image src="../../static/image/home.png" style="height:20px;width:20px;margin-right:20upx;"></image>
+							<image src="../../static/image/home.png" style="height:40upx;width:40upx;margin-right:20upx;"></image>
 								回家
 							</view>
 							<view style="width: 230upx;display: flex;justify-content: center;
-							border-left:1px solid rgba(0,0,0,0.1);border-right:1px solid rgba(0,0,0,0.1);align-items:center;">
-							<image src="../../static/image/work.png" style="height:20px;width:20px;margin-right:20upx;"></image>
+							border-left:2upx solid rgba(0,0,0,0.1);border-right:2upx solid rgba(0,0,0,0.1);align-items:center;">
+							<image src="../../static/image/work.png" style="height:40upx;width:40upx;margin-right:20upx;"></image>
 							 公司
 							</view>
 							<view style="width: 230upx;display: flex;justify-content: center;align-items:center;">
-							<image src="../../static/image/school.png" style="height:20px;width:20px;margin-right:20upx;"></image>
+							<image src="../../static/image/school.png" style="height:40upx;width:40upx;margin-right:20upx;"></image>
 							 学校
 							</view>
 						</view>
@@ -231,7 +231,6 @@
 				var searchHistory= uni.getStorageSync('searchHistory');
 				console.log(searchHistory)
 				if(searchHistory!=''){
-					console.log(1111)
 					searchHistory=JSON.parse(searchHistory);
 					for(var index in searchHistory){
 						if(searchHistory[index].id==id){
@@ -416,8 +415,6 @@
 		position:relative;
 		height: 50upx;
 		width: 50upx;
-		/* margin-right: 10upx;
-		margin-bottom: 10upx; */
 		bottom:7upx;
 		right:10upx;
 		
@@ -426,11 +423,6 @@
 	.image3{
 		height: 70upx;
 		width: 70upx;
-		/* position:absolute;
-		right:10upx; */
-		/* bottom: 1upx;
-		right:194upx; */
-		
 	}
 	
 	.searchbox{
@@ -451,8 +443,7 @@
 		font-size: 32upx;
 		letter-spacing: 1upx;
 		border-radius: 20upx;
-		border: 3px outset;
-		/* border: 3px outset rgba(55,135,230,0.5); */
+		border: 6upx outset;
 	}
 	
 	.searchtext{
@@ -461,7 +452,6 @@
 		bottom:7upx;
 		font-size: 32upx;
 		color: rgba(102,205,170,1);
-		/* color: rgb(55,135,230); */
 		font-weight: 700;
 		padding: 20upx;
 		padding-left: 25upx;
@@ -473,7 +463,6 @@
 	}
 	
 	.historyview{
-		
 		margin-left: 30upx;
 		border-radius: 8upx;
 		font-size: 30upx;
@@ -482,7 +471,6 @@
 	}
 	
 	.commonview{
-		
 		margin-left: 50upx;
 		border-radius: 8upx;
 		font-size: 30upx;
@@ -491,13 +479,7 @@
 	}
 	
 	.modelSelected{
-		/* margin-left: 30upx; */
 		border-radius: 10upx;
-		/* height: 15upx;
-		width: 120upx; */
-		/* width: 300upx; */
-		/* background-color:rgba(102,205,170,1) ; */
-		/* background-color: rgb(55,135,230); */
 		transition: all .1s;
 	}
 	
@@ -525,9 +507,6 @@
 	
 	.storage{
 		margin-top: 10upx;
-		/* margin-bottom: 10upx; */
-		/* margin-left: 30upx;
-		margin-right: 30upx; */
 		padding: 15upx;
 		padding-left: 20upx;
 		padding-bottom: 5upx;
@@ -535,13 +514,11 @@
 		display: flex;
 		justify-content: space-between;
 		overflow: hidden;
-		/* border: 2px solid red; */
 	}
 	
 	.view5{
 		position: relative;
 		display: flex;
-		/* border: 2px solid red; */
 	}
 	
 	.text3{
@@ -555,21 +532,15 @@
 		font-size: 29upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
-		/* border: 2px solid red; */
-		/* border-bottom: 2px solid rgba(0,0,0,0.2); */
 	}
 	
 	.view4{
 		margin-top: 10upx;
 		margin-right: 20upx;
-		/* border: 2px solid red; */
 	}
 	
 	.suggestion{
-		/* background-color: rgb(255,255,255); */
 		margin-bottom: 10upx;
-		/* margin-left: 30upx;
-		margin-right: 30upx; */
 		border-radius: 10upx;
 		display: flex;
 		flex-direction: column;
@@ -585,16 +556,11 @@
 		font-size: 30upx;
 		font-weight: 700;
 		letter-spacing: 1upx;
-/* 		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis; */
 	}
 	
 	.text2{
 		background-color:rgba(102,205,170,0.2) ;
 		color: rgba(102,205,170,1);
-		/* background-color: rgba(55,135,230,0.2);
-		color: rgb(55,135,230); */
 		margin-left: 80upx;
 		padding: 10upx;
 		font-size: 20upx;
@@ -602,15 +568,12 @@
 	
 	.view3{
 		margin: 20upx;
-		/* margin-top: 30upx; */
 		margin-left: 82upx;
 	}
 	
 	.text6{
 		background-color:rgba(102,205,170,0.2) ;
 		color: rgba(102,205,170,1);
-		/* background-color: rgba(55,135,230,0.2);
-		color: rgb(55,135,230); */
 		margin-left: 100upx;
 		margin-bottom: 20upx;
 		padding: 10upx;
@@ -618,7 +581,7 @@
 		
 	}
 	.text1 {
-		border:1px red solid;
+		border:2upx red solid;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
