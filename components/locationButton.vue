@@ -1,7 +1,8 @@
 <template>
 	<view>
 		<view>
-			<image :src="src" mode="widthFix" style="width: 150upx;" @click="relocate"></image>
+			<image :src="src" mode="widthFix" style="width: 150upx;transition: opacity .3s;" 
+			:style="{'pointer-events':pointerEvents,'opacity':opacity}" @click="relocate"></image>
 		</view>
 	</view>
 </template>
@@ -11,7 +12,9 @@
 		name: "locationButton",
 		data() {
 			return {
-				src:"../static/image/location.png"
+				src:"../static/image/location.png",
+				pointerEvents:'auto',
+				opacity:1,
 			};
 		},
 		props:{
@@ -46,8 +49,10 @@
 			'isLow'(){
 				if(this.isLow){
 					this.pointerEvents='auto';
+					this.opacity=1;
 				}else{
 					this.pointerEvents='none';
+					this.opacity=0;
 				} 
 			}
 		}

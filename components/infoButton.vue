@@ -1,7 +1,8 @@
 <template>
 	<view>
 		<view >
-			<image :src="src" mode="widthFix" style="width: 150rpx;" :style="{'pointer-events':pointerEvents}" @click="info"></image>
+			<image :src="src" mode="widthFix" style="width: 150rpx;transition: opacity .3s;"
+			 :style="{'pointer-events':pointerEvents,'opacity':opacity}" @click="info"></image>
 		</view>
 	</view>
 </template>
@@ -13,6 +14,7 @@
 			return {
 				src:"../static/image/person.gif",
 				pointerEvents:'auto',
+				opacity:1,
 			};
 		},
 		props:{
@@ -49,8 +51,10 @@
 			'isLow'(){
 				if(this.isLow){
 					this.pointerEvents='auto';
+					this.opacity=1;
 				}else{
 					this.pointerEvents='none';
+					this.opacity=0;
 				} 
 			}
 		}

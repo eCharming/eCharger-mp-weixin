@@ -1,9 +1,9 @@
 <template>
 	<view>
 		
-		<mymap v-show='!isShown'></mymap>
-		<movablebox v-if='!isShown' :chargers="chargers"></movablebox>
-		<!-- <loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading> -->
+		<mymap ></mymap>
+		<movablebox :chargers="chargers"></movablebox>
+		<loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading>
 	</view>
 </template>
 

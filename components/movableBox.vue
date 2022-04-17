@@ -9,7 +9,7 @@
 					<view class="content">
 						
 						<view class="fixed-view">
-							<view :class="[isLow?'animationBtn':'stillBtn','flex-img']">
+							<view class='flex-img'>
 								<infobutton :isLow="isLow"></infobutton>
 								<locationbutton :isLow="isLow"></locationbutton>
 							</view>
@@ -381,19 +381,6 @@
 		position: relative;
 		width: 100%;
 		pointer-events: none;
-	}
-
-	.stillBtn {
-		opacity: 0;
-		transition-property: opacity;
-		transition-duration: .3s;
-
-	}
-
-	.animationBtn {
-		opacity: 1;
-		transition-property: opacity;
-		transition-duration: .3s;
 	}
 
 	.main {
