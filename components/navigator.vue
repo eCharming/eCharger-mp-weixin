@@ -11,7 +11,7 @@
 				</view>
 				
 			</view>
-			<view class="search-view" :style="{'width':width+'px'}">
+			<view class="search-view" :style="{'width':width+'px'}" @tap="navigate()">
 				<text class="search-text">易插</text>
 			</view>
 		</view>
@@ -96,6 +96,11 @@
 			}
 		},
 		methods:{
+			navigate(){
+				uni.navigateTo({
+					url: '../search/search',
+				});
+			},
 			tap(index){
 				if(index==this.selected){
 					if(index==0){
@@ -250,6 +255,7 @@
 		margin-left: 20upx;
 		font-weight: 700;
 		font-size: 32upx;
+		color: rgba(0,0,0,0.5);
 	}
 	
 	.bottom-border{

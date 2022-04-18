@@ -17,12 +17,9 @@
 				text1:'在附近搜索电桩',
 				text2:'',
 				color:'rgb(102,205,170)',
-				top:0,
+				top:-30,
 				opacity:0,
 			}
-		},
-		mounted() {
-			this.top=-30;
 		},
 		watch:{
 			'isLow'(){

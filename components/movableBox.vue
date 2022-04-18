@@ -4,7 +4,7 @@
 		<movable-area class="movable-area" :style="{'top':boxHeight+'px','height':areaLength+'px'}" @touchmove.prevent.stop>
 		
 			<movable-view class="main" :style="{'height':windowHeight+'px'}" direction="vertical" damping="30" out-of-bounds="true" :y="currentY"
-				@change="onchange($event)" @touchend="end()">
+				@change="onchange($event)" @touchend="end($event)">
 				<view>
 					<view class="content">
 						
@@ -20,7 +20,7 @@
 						</view>
 		
 						<hiddencard :isLow="isLow"></hiddencard>
-						<hiddendetail v-if="hiddenDetail" :percent="percent" @tap="detail"></hiddendetail>
+						<hiddendetail v-if="hiddenDetail" :isLow="isLow" @tap="detail"></hiddendetail>
 						
 						<card>
 							<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :isLow="isLow" :type="1"
@@ -159,8 +159,8 @@
 				this.liveY = e.detail.y;
 				this.percent = this.liveY / (this.windowHeight * (this.maxHeight - this.minHeight));
 			},
-			end() {
-
+			end(e) {
+				console.log(e)
 				if (this.isLow == true) { //初始在低位的情况
 					if ((1 - this.percent) >= 0.25) { //上拉超过上下限的25%则移向高位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
 						this.toHigh();

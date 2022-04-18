@@ -7,23 +7,27 @@
 <script>
 	export default{
 		props:{
-			percent:{
-				type:Number
+			isLow:{
+				type:Boolean
 			},
 		},
 		data(){
 			return{
+				top:-130,
+				opacity:1,
 			}
 		},
-		
-		computed:{
-			top(){
-				return -30-this.percent*100
+		watch:{
+			'isLow'(){
+				if(this.isLow){
+					this.top=-130;
+					this.opacity=1;
+				}else{
+					this.top=-30;
+					this.opacity=0;
+				}
 			},
-			opacity(){
-				return this.percent*this.percent*this.percent
-			}
-		},
+		}
 	}
 </script>
 
