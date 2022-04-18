@@ -2,43 +2,51 @@
 	<view style="position: relative;">
 		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
 		<view class="search-box" :style="{'background-color':backColor,'pointer-events':pointerEvents}">
-				<view class="position">成都</view>
-				<view class="search-view" :style="{'width':width+'px'}">
-					<text class="search-text">易插</text>
+			<view class="position">
+				<view>
+					<text>{{position}}</text>
 				</view>
+				<view style="font-weight: 500;font-size: 23upx;">
+					<text>{{weather}}</text>
+				</view>
+				
+			</view>
+			<view class="search-view" :style="{'width':width+'px'}">
+				<text class="search-text">易插</text>
+			</view>
 		</view>
 
-		<view class="bottom-border" 		:style="{'bottom':lastBottom+'px','background-color':secondColor}"></view>
+		<view class="bottom-border" 		:style="{'bottom':lastBottom+'rpx','background-color':secondColor}"></view>
 		
-		<view class="image-box" 			:style="{'bottom':bottom+'px','background-color':backColor}">
-			<view class="selected-box" 		:style="{'left':left+'px','background-color':secondColor}">
+		<view class="image-box" 			:style="{'bottom':bottom+'rpx','background-color':backColor}">
+			<view class="selected-box" 		:style="{'left':left+'rpx','background-color':secondColor}">
 				<view class="fill-left" 	:style="{'background-color':secondColor}"></view>
 				<view class="ball-left" 	:style="{'background-color':backColor}"></view>
 				<view class="fill-right" 	:style="{'background-color':secondColor}"></view>
 				<view class="ball-right" 	:style="{'background-color':backColor}"></view>
 				<view class="selected-ball" :style="{'background-color':backColor}"></view>
 			</view>
-			<view class="image-1" @click="tap(0)" :style="{'bottom':imageBottom[0]+'px'}">
+			<view class="image-1" @click="tap(0)" :style="{'bottom':imageBottom[0]+'rpx'}">
 				<image class="image" src="../static/image/scan.png"></image>
 			</view>
-			<view class="image-2" @click="tap(1)" :style="{'bottom':imageBottom[1]+'px'}">
+			<view class="image-2" @click="tap(1)" :style="{'bottom':imageBottom[1]+'rpx'}">
 				<image class="image" src="../static/image/connection2.png"></image>
 			</view>
-			<view class="image-3" @click="tap(2)" :style="{'bottom':imageBottom[2]+'px'}">
+			<view class="image-3" @click="tap(2)" :style="{'bottom':imageBottom[2]+'rpx'}">
 				<image class="image" src="../static/image/city.png"></image>
 			</view>
-			<view class="image-4" @click="tap(3)" :style="{'bottom':imageBottom[3]+'px'}">
+			<view class="image-4" @click="tap(3)" :style="{'bottom':imageBottom[3]+'rpx'}">
 				<image class="image" src="../static/image/my.png" :style="{'opacity':opacity}"></image>
 			</view>
 		</view>
 		
 		
-		<view class="text-box" :style="{'bottom':textBottom+'px','background-color':backColor}">
+		<view class="text-box" :style="{'bottom':textBottom+'rpx','background-color':backColor}">
 			<view :style="{'opacity':opacity}" style="transition: all .5s;">
-				<text class="text-1" :style="{'bottom':word[0].bottom+'px','opacity':word[0].opacity}">扫一扫</text>
-				<text class="text-2" :style="{'bottom':word[1].bottom+'px','opacity':word[1].opacity}">联系</text>
-				<text class="text-3" :style="{'bottom':word[2].bottom+'px','opacity':word[2].opacity}">全城</text>
-				<text class="text-4" :style="{'bottom':word[3].bottom+'px','opacity':word[3].opacity}">我的</text>
+				<text class="text-1" :style="{'bottom':word[0].bottom+'rpx','opacity':word[0].opacity}">扫一扫</text>
+				<text class="text-2" :style="{'bottom':word[1].bottom+'rpx','opacity':word[1].opacity}">联系</text>
+				<text class="text-3" :style="{'bottom':word[2].bottom+'rpx','opacity':word[2].opacity}">全城</text>
+				<text class="text-4" :style="{'bottom':word[3].bottom+'rpx','opacity':word[3].opacity}">我的</text>
 			</view>
 			
 		</view>
@@ -50,30 +58,32 @@
 	export default{
 		data(){
 			return{
+				position:'',
+				weather:'',
 				statusHeight:0,
 				width:0,
 				backColor:'rgb(102,205,170)',
 				secondColor:'rgb(166,236,146)',
-				bottom:0,
-				lastBottom:0,
-				textBottom:0,
-				imageBottom:[0,0,0,0],
+				bottom:-120,
+				lastBottom:-150,
+				textBottom:-30,
+				imageBottom:[-48,5,5,5],
 				word:[{
-					bottom:0,
+					bottom:-10,
 					opacity:1,
 				},{
-					bottom:0,
+					bottom:35,
 					opacity:0,
 				},{
-					bottom:0,
+					bottom:35,
 					opacity:0,
 				},{
-					bottom:0,
+					bottom:35,
 					opacity:0,
 				},],
 				opacity:1,
 				selected:0,
-				left:0,
+				left:25,
 				pointerEvents:'auto',
 			}
 		},
@@ -105,40 +115,40 @@
 					}
 				}else{
 					if(index==0){
-						this.left=uni.upx2px(25);
-						this.word[0].bottom=-uni.upx2px(10);
+						this.left=25;
+						this.word[0].bottom=-10;
 						this.word[0].opacity=1;
-						this.word[this.selected].bottom=uni.upx2px(35);
+						this.word[this.selected].bottom=35;
 						this.word[this.selected].opacity=0;
-						this.imageBottom[0]=-uni.upx2px(48);
-						this.imageBottom[this.selected]=uni.upx2px(5);
+						this.imageBottom[0]=-48;
+						this.imageBottom[this.selected]=5;
 						this.selected=0;
 					}else if(index==1){
-						this.left=uni.upx2px(210);
-						this.word[1].bottom=-uni.upx2px(10);
+						this.left=210;
+						this.word[1].bottom=-10;
 						this.word[1].opacity=1;
-						this.word[this.selected].bottom=uni.upx2px(35);
+						this.word[this.selected].bottom=35;
 						this.word[this.selected].opacity=0;
-						this.imageBottom[1]=-uni.upx2px(48);
-						this.imageBottom[this.selected]=uni.upx2px(5);
+						this.imageBottom[1]=-48;
+						this.imageBottom[this.selected]=5;
 						this.selected=1;
 					}else if(index==2){
-						this.left=uni.upx2px(400);
-						this.word[2].bottom=-uni.upx2px(10);
+						this.left=400;
+						this.word[2].bottom=-10;
 						this.word[2].opacity=1;
-						this.word[this.selected].bottom=uni.upx2px(35);
+						this.word[this.selected].bottom=35;
 						this.word[this.selected].opacity=0;
-						this.imageBottom[2]=-uni.upx2px(48);
-						this.imageBottom[this.selected]=uni.upx2px(5);
+						this.imageBottom[2]=-48;
+						this.imageBottom[this.selected]=5;
 						this.selected=2;
 					}else if(index==3){
-						this.left=uni.upx2px(590);
-						this.word[3].bottom=-uni.upx2px(10);
+						this.left=590;
+						this.word[3].bottom=-10;
 						this.word[3].opacity=1;
-						this.word[this.selected].bottom=uni.upx2px(35);
+						this.word[this.selected].bottom=35;
 						this.word[this.selected].opacity=0;
-						this.imageBottom[3]=-uni.upx2px(48);
-						this.imageBottom[this.selected]=uni.upx2px(5);
+						this.imageBottom[3]=-48;
+						this.imageBottom[this.selected]=5;
 						this.selected=3;
 					}
 				}
@@ -146,19 +156,29 @@
 		},
 		mounted() {
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight;
-			this.width=uni.getMenuButtonBoundingClientRect().left-30-20;
-			this.textBottom=-uni.upx2px(30);
-			this.bottom=-uni.upx2px(120);
-			this.lastBottom=-uni.upx2px(150);
-			this.left=uni.upx2px(25);
-			this.imageBottom[0]=-uni.upx2px(45);
-			this.imageBottom[1]=uni.upx2px(5);
-			this.imageBottom[2]=uni.upx2px(5);
-			this.imageBottom[3]=uni.upx2px(5);
-			this.word[0].bottom=-uni.upx2px(10);
-			this.word[1].bottom=uni.upx2px(35);
-			this.word[2].bottom=uni.upx2px(35);
-			this.word[3].bottom=uni.upx2px(35);
+			this.width=uni.getMenuButtonBoundingClientRect().left-80;
+			
+			uni.getLocation({
+				type: "gcj02",
+				success: res => {
+					uni.request({
+						url:'https://apis.map.qq.com/ws/geocoder/v1/?location='+res.latitude+','+res.longitude+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
+						success: (res) => {
+							console.log(res)
+							this.position=res.data.result.address_component.city;
+						}
+					})	
+					uni.request({
+						url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
+						success: (res) => {
+							console.log(res)
+							this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
+						}
+					})
+
+				},
+			});
+			
 		},
 		watch:{
 			'$store.state.buttonSelected'(){
@@ -173,15 +193,15 @@
 			},
 			'isLow'(){
 				if(this.isLow){
-					this.bottom=-uni.upx2px(120);
-					this.textBottom=-uni.upx2px(30);
-					this.lastBottom=-uni.upx2px(150);
+					this.bottom=-120;
+					this.textBottom=-30;
+					this.lastBottom=-150;
 					this.opacity=1;
 					this.pointerEvents='auto';
 				}else{ 
-					this.bottom=-uni.upx2px(0);
-					this.textBottom=uni.upx2px(90);
-					this.lastBottom=-uni.upx2px(30);
+					this.bottom=0;
+					this.textBottom=90;
+					this.lastBottom=-30;
 					this.opacity=0;
 					this.pointerEvents='none';
 					if(this.selected==3){
@@ -195,7 +215,7 @@
 
 <style scoped>
 	.search-box{
-		height: 50px;
+		height: 90upx;
 		display: flex;
 		align-items: center;
 		position: relative;
@@ -204,9 +224,15 @@
 	
 	.position{
 		color:#FFFFFF ;
+		font-weight: 700;
 		margin-left: 15upx;
 		margin-top: 25upx;
-		height:60upx;
+		margin-bottom: 15upx;
+		width: 100upx;
+		height:80upx;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}	
 	
 	.search-view{

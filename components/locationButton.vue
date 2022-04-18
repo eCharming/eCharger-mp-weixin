@@ -29,6 +29,10 @@
 					success: res => {
 						this.$store.commit('setLocationRes',res);
 						this.$store.commit('setDestination',null);
+						this.$store.commit('setCurrentLocation', {
+							latitude: res.latitude,
+							longitude: res.longitude
+						});
 					},
 					fail: () => {
 						this.$store.commit('setLocationRes',{});

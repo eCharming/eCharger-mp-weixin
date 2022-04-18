@@ -3,7 +3,7 @@
 		
 		<mymap ></mymap>
 		<movablebox :chargers="chargers"></movablebox>
-		<loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading>
+		<!-- <loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading> -->
 	</view>
 </template>
 
@@ -28,23 +28,23 @@
 		onLoad() {
 			wx.cloud.callFunction({   //uid获取
 				name:'wxlogin',
-				data:{
-				
-				}
 			}).then(
 				res=>{
-					this.$store.commit('setUid',res.result);
-					wx.cloud.callFunction({   //uid获取
-						name:'infoReturn',
-						data:{
-							uid: res.result
-						}
-					}).then(
-						res=>{
-							this.$store.commit('setUserName',res.result.userName);
-							this.$store.commit('setAvatarUrl',res.result.avatarUrl);
-						}
-					)
+					this.$store.commit('setUid',res.result.uid);
+					this.$store.commit('setLogInStatus',res.result.loginStatus);
+					if(res.result.loginStatus){
+						wx.cloud.callFunction({   //uid获取
+							name:'infoReturn',
+							data:{
+								uid: res.result
+							}
+						}).then(
+							res=>{
+								this.$store.commit('setUserName',res.result.userName);
+								this.$store.commit('setAvatarUrl',res.result.avatarUrl);
+							}
+						)
+					}
 				}
 			)
 			

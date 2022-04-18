@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
+		logInStatus:null,//登录状态
 		uid:null,//用户id
 		avatarUrl:null,//用户头像
 		userName:null,//用户名
@@ -26,6 +27,9 @@ export default new Vuex.Store({
 		
     },
     mutations: {
+		setLogInStatus(state,logInStatus) {
+			state.logInStatus=logInStatus;
+		},
 		setStartTime(state,startTime) {
 			state.startTime=startTime;
 		},

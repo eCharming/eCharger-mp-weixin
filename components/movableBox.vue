@@ -124,7 +124,7 @@
 				scrollTop:0,
 				areaLength:500,
 				minHeight:0.33,
-				maxHeight:0.9,
+				maxHeight:0.88,
 
 				imageFilter1: 0,
 				imageOpacity1: 1,

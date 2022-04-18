@@ -28,6 +28,7 @@
 				wx.getUserProfile({
 					desc:'获取微信头像以及昵称',
 					success: (res) => {
+						this.$store.commit('setLogInStatus',true);
 						wx.cloud.callFunction({   //uid获取
 							name:'updateUrl',
 							data:{
