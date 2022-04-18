@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<view>
-			<image :src="src" mode="widthFix" style="width: 150upx;transition: opacity .3s;" 
+			<image :src="src" style="width: 150rpx;height:150rpx;transition: opacity .3s;" 
 			:style="{'pointer-events':pointerEvents,'opacity':opacity}" @click="relocate"></image>
 		</view>
 	</view>
