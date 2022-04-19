@@ -369,7 +369,6 @@
 					})
 				}
 				this.getChargerLocation(this.longitude, this.latitude, null);
-				this.$store.commit('setLocationRes', null);
 				this.scale = 0;
 				this.$nextTick(() => {
 					this.scale = 16;
