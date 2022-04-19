@@ -2,7 +2,7 @@
 	<view style="position: relative;">
 		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
 		<view class="search-box" :style="{'background-color':backColor,'pointer-events':pointerEvents}">
-			<view class="position">
+			<view class="position" @click="tap(4)">
 				<view>
 					<text>{{position}}</text>
 				</view>
@@ -102,6 +102,11 @@
 				});
 			},
 			tap(index){
+				if(index==4){
+					uni.navigateTo({
+						url: '../selectCity/selectCity',
+					});
+				}
 				if(index==this.selected){
 					if(index==0){
 						uni.scanCode({
@@ -120,7 +125,7 @@
 						uni.navigateTo({
 							url: '../my/my',
 						});
-					}
+					} 
 				}else{
 					if(index==0){
 						this.left=25;
