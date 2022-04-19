@@ -116,7 +116,10 @@
 					}else if(index==2){
 
 					}else if(index==3){
-
+						console.log(3)
+						uni.navigateTo({
+							url: '../my/my',
+						});
 					}
 				}else{
 					if(index==0){

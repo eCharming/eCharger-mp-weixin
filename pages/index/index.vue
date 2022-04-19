@@ -1,6 +1,5 @@
 <template>
 	<view>
-		
 		<mymap ></mymap>
 		<movablebox :chargers="chargers"></movablebox>
 		<!-- <loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading> -->
@@ -31,17 +30,19 @@
 			}).then(
 				res=>{
 					this.$store.commit('setUid',res.result.uid);
-					this.$store.commit('setLogInStatus',res.result.loginStatus);
+					var logInStatus=res.result.loginStatus
+					
 					if(res.result.loginStatus){
 						wx.cloud.callFunction({   //uid获取
 							name:'infoReturn',
 							data:{
-								uid: res.result
+								uid: res.result.uid
 							}
 						}).then(
 							res=>{
 								this.$store.commit('setUserName',res.result.userName);
 								this.$store.commit('setAvatarUrl',res.result.avatarUrl);
+								this.$store.commit('setLogInStatus',logInStatus);
 							}
 						)
 					}
