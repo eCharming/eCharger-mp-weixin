@@ -165,6 +165,37 @@
 						this.selected=3;
 					}
 				}
+			},
+			updateInfo(res) {
+				uni.request({
+					url:'https://apis.map.qq.com/ws/geocoder/v1/?location='+res.latitude+','+res.longitude+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
+					success: (res) => {
+						console.log(res)
+						let position=res.data.result.address_component.city;
+						if(position.endsWith("市") || position.endsWith("盟")) {
+							position=position.substring(0,position.length - 1)
+						} else if(position.endsWith("地区")) {
+							position=position.substring(0,position.length - 2)
+						} else if(position.endsWith("自治州")) {
+							if(position=="西双版纳傣族自治州" || position=="博尔塔拉蒙古自治州" || position=="巴音郭楞蒙古自治州" ||position=="克孜勒苏柯尔克孜自治州") {
+								position=position.substring(0,4)
+							} else  {
+								position=position.substring(0,2)
+							}
+						}
+						this.position=position
+						this.$store.commit("setCity",this.position)
+					}
+				})	
+				uni.request({
+					url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
+					success: (res) => {
+						console.log(res)
+						if(res.data.now) {
+							this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
+						}
+					}
+				})
 			}
 		},
 		mounted() {
@@ -174,35 +205,7 @@
 			uni.getLocation({
 				type: "gcj02",
 				success: res => {
-					uni.request({
-						url:'https://apis.map.qq.com/ws/geocoder/v1/?location='+res.latitude+','+res.longitude+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
-						success: (res) => {
-							console.log(res)
-							let position=res.data.result.address_component.city;
-							if(position.endsWith("市") || position.endsWith("盟")) {
-								position=position.substring(0,position.length - 1)
-							} else if(position.endsWith("地区")) {
-								position=position.substring(0,position.length - 2)
-							} else if(position.endsWith("自治州")) {
-								if(position=="西双版纳傣族自治州" || position=="博尔塔拉蒙古自治州" || position=="巴音郭楞蒙古自治州" ||position=="克孜勒苏柯尔克孜自治州") {
-									position=position.substring(0,4)
-								} else  {
-									position=position.substring(0,2)
-								}
-							}
-							this.position=position
-							this.$store.commit("setCity",this.position)
-						}
-					})	
-					uni.request({
-						url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
-						success: (res) => {
-							console.log(res)
-							if(res.data.now) {
-								this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
-							}
-						}
-					})
+					this.updateInfo(res);
 
 				},
 			});
@@ -240,20 +243,7 @@
 			'$store.state.locationres'() {
 				let res = this.$store.state.locationres;
 				if (res && res != {} && res.errMsg == "getLocation:ok") {
-					uni.request({
-						url:'https://apis.map.qq.com/ws/geocoder/v1/?location='+res.latitude+','+res.longitude+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
-						success: (res) => {
-							console.log(res)
-							this.position=res.data.result.address_component.city;
-						}
-					})	
-					uni.request({
-						url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
-						success: (res) => {
-							console.log(res)
-							this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
-						}
-					})
+					this.updateInfo(res);
 				}
 
 			},
