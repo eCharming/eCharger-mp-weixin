@@ -13,7 +13,7 @@
 					<view class="nowcol">
 						<view class="popular">
 							<image src="../../static/image/landmark.png" style="height:40rpx;width:40upx;"></image>
-							<text class='populartext'>上海</text>
+							<text class='populartext'>{{city}}</text>
 						</view>
 					</view>
 			</view>
@@ -55,6 +55,7 @@
 		<view class="scroll_list">
 			<view style="display:flex;flex-direction: column;justify-content: space-around;"
 				:style="{'height':scrollHeight-100+'px'}">
+				<view id="now" class="scroll_list_item" @touchstart="getWords" @touchend="setWords">定位</view>
 				<view id="popular" class="scroll_list_item" @touchstart="getWords" @touchend="setWords">热门</view>
 				<view v-for="(item,index) in obj" :key="index" :id="index" class="scroll_list_item"
 					@touchstart="getWords" @touchend="setWords">{{index}}</view>
@@ -95,6 +96,8 @@
 				var id = e.target.id;
 				if(id=='popular')
 					id="热"
+				else if(id=='now')
+					id="定"
 				this.showwords = id;
 				this.hidden = 1;
 				console.log(e)
@@ -104,6 +107,15 @@
 				this.scrollTopId = id;
 				this.hidden = 0;
 
+			}
+		},
+		computed:{
+			city() {
+				let city=this.$store.state.city;
+				if(city=="") {
+					city="未定位";
+				}
+				return city;
 			}
 		},
 		mounted() {

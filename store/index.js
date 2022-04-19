@@ -24,6 +24,7 @@ export default new Vuex.Store({
 		color:"rgb(50,200,210)",
 		startTime:"起始时间",
 		endTime:"结束时间",
+		city:"",
 		
     },
     mutations: {
@@ -80,6 +81,9 @@ export default new Vuex.Store({
 		},
 		setColor(state,color){
 			state.color=color
+		},
+		setCity(state,city) {
+			state.city=city
 		}
     },
     actions: {},
