@@ -42,6 +42,10 @@
 							})
 						}
 					})
+				}else{
+					uni.navigateTo({
+						url: '../my/my',
+					});
 				}
 			}
 		},
