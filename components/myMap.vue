@@ -398,7 +398,23 @@
 					this.covers.splice(0);
 				}
 				this.pickerHandler(null, null)
+			},
+			'$store.state.cityLocation': {
+				deep: true, //必须深监听
+				handler(res) {
+					wx.stopLocationUpdate();
+					setTimeout(() => {
+						if (this.mapContext) {
+							this.mapContext.moveToLocation({
+								latitude: res.latitude,
+								longitude: res.longitude
+							})
+						}
+						this.getChargerLocation(res.longitude, res.latitude, res.name);
+					}, 500)
+				}
 			}
+
 		}
 	}
 </script>

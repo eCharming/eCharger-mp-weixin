@@ -32,7 +32,10 @@
 		},
 		methods:{
 			changeCity(item) {
-				
+				let poploc = item.location;
+				poploc.name = item.name;
+				this.$store.commit('setCityLocation',poploc)
+				uni.navigateBack({})
 			}
 		}
 	}

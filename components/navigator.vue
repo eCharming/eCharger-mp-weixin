@@ -3,8 +3,9 @@
 		<view :style="{'height':statusHeight+'px','background-color':backColor,'transition': 'all .3s'}"></view>
 		<view class="search-box" :style="{'background-color':backColor,'pointer-events':pointerEvents}">
 			<view class="position" @click="tap(4)">
-				<view>
-					<text>{{position}}</text>
+				<view style="display: flex;justify-content: space-between;align-items: center;">
+					<text style="overflow:hidden;white-space:nowrap;text-overflow:ellipsis;">{{position}}</text>
+					<image src="../static/image/select.png" style='width:20upx;height:20upx;flex-shrink:0;'></image>
 				</view>
 				<view style="font-weight: 500;font-size: 20upx;">
 					<text>{{weather}}</text>
@@ -58,7 +59,7 @@
 	export default{
 		data(){
 			return{
-				position:'',
+				position:'未定位',
 				weather:'',
 				statusHeight:0,
 				width:0,
@@ -245,8 +246,23 @@
 				if (res && res != {} && res.errMsg == "getLocation:ok") {
 					this.updateInfo(res);
 				}
-
 			},
+			'$store.state.cityLocation':{
+				deep:true,
+				handler(res) {
+					this.position=res.name
+					this.$store.commit("setCity",this.position)
+					uni.request({
+						url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
+						success: (res) => {
+							console.log(res)
+							if(res.data.now) {
+								this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
+							}
+						}
+					})
+				}
+			}
 		}
 	}
 </script>

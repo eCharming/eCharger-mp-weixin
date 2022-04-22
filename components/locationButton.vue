@@ -24,6 +24,7 @@
 		},
 		methods:{
 			relocate() {
+				wx.startLocationUpdate()
 				uni.getLocation({
 					type: "gcj02",
 					success: res => {

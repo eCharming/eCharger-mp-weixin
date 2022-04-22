@@ -10,37 +10,35 @@
 			:style="{'height':scrollHeight+'px'}">
 			<view class="poplularwrap" id="now">
 				<view class="labeltext">当前定位</view>
-					<view class="nowcol">
-						<view class="popular">
-							<image src="../../static/image/landmark.png" style="height:40rpx;width:40upx;"></image>
-							<text class='populartext'>{{city}}</text>
-						</view>
+				<view class="nowcol">
+					<view class="popular">
+						<image src="../../static/image/landmark.png" style="height:40rpx;width:40upx;"></image>
+						<text class='populartext'>{{city}}</text>
 					</view>
+				</view>
 			</view>
 			<view class="poplularwrap" id="popular">
 				<view class="labeltext">热门城市</view>
-				<view style="display:flex;justify-content: spa;flex-direction: column;">
-					<view class="popularcol">
-						<view class="popular">
-							<text class='populartext'>上海</text>
-						</view>
-						<view class="popular">
-							<text class='populartext'>北京</text>
-						</view>
-						<view class="popular">
-							<text class='populartext'>深圳</text>
-						</view>
+				<view class="popularcol">
+					<view class="popular" @tap="location(0)">
+						<text class='populartext'>上海</text>
 					</view>
-					<view class="popularcol">
-						<view class="popular">
-							<text class='populartext'>广州</text>
-						</view>
-						<view class="popular">
-							<text class='populartext'>成都</text>
-						</view>
-						<view class="popular">
-							<text class='populartext'>南京</text>
-						</view>
+					<view class="popular" @tap="location(1)">
+						<text class='populartext'>北京</text>
+					</view>
+					<view class="popular" @tap="location(2)">
+						<text class='populartext'>深圳</text>
+					</view>
+				</view>
+				<view class="popularcol">
+					<view class="popular" @tap="location(3)">
+						<text class='populartext'>广州</text>
+					</view>
+					<view class="popular" @tap="location(4)">
+						<text class='populartext'>成都</text>
+					</view>
+					<view class="popular" @tap="location(5)">
+						<text class='populartext'>南京</text>
 					</view>
 				</view>
 			</view>
@@ -86,6 +84,37 @@
 				scrollTopId: "",
 				hidden: 0,
 				showwords: "",
+				popluarLoc: [{
+						name:"上海",
+						lat: 31.23037,
+						lng: 121.4737
+					},
+					{
+						name:"北京",
+						lat: 39.90469,
+						lng: 116.40717
+					},
+					{
+						name:"深圳",
+						lat: 22.54286,
+						lng: 114.05956
+					},
+					{
+						name:"广州",
+						lat: 23.12908,
+						lng: 113.26436
+					},
+					{
+						name:"成都",
+						lat: 30.5702,
+						lng: 104.06476
+					},
+					{
+						name:"南京",
+						lat: 32.05838,
+						lng: 118.79647
+					}
+				]
 			}
 		},
 		methods: {
@@ -94,26 +123,30 @@
 			},
 			getWords(e) {
 				var id = e.target.id;
-				if(id=='popular')
-					id="热"
-				else if(id=='now')
-					id="定"
+				if (id == 'popular')
+					id = "热"
+				else if (id == 'now')
+					id = "定"
 				this.showwords = id;
 				this.hidden = 1;
-				console.log(e)
 			},
 			setWords(e) {
 				var id = e.target.id;
 				this.scrollTopId = id;
 				this.hidden = 0;
 
+			},
+			location(index) {
+				let poploc = this.popluarLoc[index];
+				this.$store.commit('setCityLocation',poploc)
+				uni.navigateBack({})
 			}
 		},
-		computed:{
+		computed: {
 			city() {
-				let city=this.$store.state.city;
-				if(city=="") {
-					city="未定位";
+				let city = this.$store.state.city;
+				if (city == "") {
+					city = "未定位";
 				}
 				return city;
 			}
@@ -179,7 +212,7 @@
 	}
 
 	.poplularwrap {
-		margin: 30rpx;
+		margin: 20rpx;
 		padding: 15upx;
 	}
 
@@ -202,9 +235,10 @@
 
 	.popularcol {
 		display: flex;
-		justify-content: space-around;
+		justify-content: space-between;
 		margin-top: 20rpx;
 	}
+
 	.nowcol {
 		display: flex;
 		justify-content: flex-start;

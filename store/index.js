@@ -25,7 +25,11 @@ export default new Vuex.Store({
 		startTime:"起始时间",
 		endTime:"结束时间",
 		city:"",
-		
+		cityLocation:{
+			longitude:null,
+			latitude:null,
+			name:null,
+		}
     },
     mutations: {
 		setLogInStatus(state,logInStatus) {
@@ -84,6 +88,11 @@ export default new Vuex.Store({
 		},
 		setCity(state,city) {
 			state.city=city
+		},
+		setCityLocation(state,location) {
+			state.cityLocation.latitude=location.lat;
+			state.cityLocation.longitude=location.lng;
+			state.cityLocation.name = location.name;
 		}
     },
     actions: {},
