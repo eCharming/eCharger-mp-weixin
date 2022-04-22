@@ -6,7 +6,7 @@
 				<view>
 					<text>{{position}}</text>
 				</view>
-				<view style="font-weight: 500;font-size: 23upx;">
+				<view style="font-weight: 500;font-size: 20upx;">
 					<text>{{weather}}</text>
 				</view>
 				

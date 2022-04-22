@@ -3,9 +3,12 @@
 		<scroll-view 
 			scroll-y="true" 
 			scroll-with-animation=true
+			refresher-enabled="true"
 			:scroll-top="scrollTop"
 			:style="{'height':height+'px'}"
+			:refresher-triggered="refreshTriggered"
 			@scrolltolower="emit"
+			@refresherrefresh="scrollToUpper()"
 		>
 			<slot></slot>
 		</scroll-view>
@@ -18,6 +21,7 @@
 		data(){
 			return{
 				height:0,
+				refreshTriggered:false,
 			}
 		},
 		props:{
@@ -28,6 +32,12 @@
 		methods:{
 			emit(){
 				this.$emit('scrolltolower');
+			},
+			scrollToUpper(){		//滚动到最上层刷新缓存
+				this.refreshTriggered=true;	//打开刷新触发
+				setTimeout(()=>{		//在0.8秒后关闭刷新的动画以及打开页面的滚动
+					this.refreshTriggered=false;
+				},800)
 			}
 		},
 		mounted() {

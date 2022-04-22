@@ -3,7 +3,7 @@
 		<navigator :isLow="isLow"></navigator>
 		<movable-area class="movable-area" :style="{'top':boxHeight+'px','height':areaLength+'px'}" @touchmove.prevent.stop>
 		
-			<movable-view class="main" :style="{'height':windowHeight+'px'}" direction="vertical" damping="30" out-of-bounds="true" :y="currentY"
+			<movable-view class="main" :style="{'height':windowHeight+'px'}" direction="vertical" damping="30" out-of-bounds="true" :y="currentY" :disabled="isScroll"
 				@touchstart="start($event)" @touchend="end($event)">
 				<view>
 					<view class="content">
@@ -41,7 +41,7 @@
 						transition-timing-function: cubic-bezier(.61,-0.38,.44,1.34);position: relative;" 
 						:style="{'transform':'rotateY('+rotate+'deg)'}">
 							<view style="position: absolute;width: 100%;transform:translateZ(10upx);" :class="isSelected1?'auto':'none'">
-								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
+								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop" @touchstart="scroll()">
 									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
 										:location="order.location" :distance="order.distance" :price="order.price"
 										:time="order.time" :detail="order.detail"
@@ -57,7 +57,7 @@
 							</view>
 							
 							<view style="transform: rotateY(180deg) translateZ(13upx);position: absolute;width: 100%;" :class="isSelected2?'auto':'none'">
-								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop">
+								<scroller>
 									<charger  v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 										:location="charger.location" :state="charger.isAvailable" :price="charger.price"
 										:time="charger.time"
@@ -120,6 +120,7 @@
 				windowHeight: 300, //本机的高度 单位px
 				windowWidth: 0, //本机的宽度 单位px
 				isLow: true, //滑动开始前上拉框处在低位则为真，在高位则为假
+				isScroll:false,
 				scrollTop:0,
 				areaLength:500,
 				minHeight:0.33,
@@ -154,36 +155,43 @@
 			}
 		},
 		methods: {
+			scroll(){
+				this.isScroll=true;
+			},
 			start(e){
+				
 				this.originY=e.changedTouches[0].pageY;
 			},
 			end(e) {
-				var lastY=e.changedTouches[0].pageY;
-				var moveHeight=this.windowHeight * (this.maxHeight - this.minHeight);
-				var liveY=this.isLow?moveHeight+lastY-this.originY:lastY-this.originY;
-				var percent=liveY / moveHeight;
-				if (this.isLow == true) { //初始在低位的情况
-					if ((1 - percent) >= 0.25) { //上拉超过上下限的25%则移向高位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
-						this.toHigh();
-					} else { //上拉未超过上下限的25%则回到低位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTickchangedTouches[0].pageY;
-						if (Math.abs(liveY - moveHeight) >
-							5) { //用于防止点击事件穿透触发touchend
+				if(!this.isScroll){
+					var lastY=e.changedTouches[0].pageY;
+					var moveHeight=this.windowHeight * (this.maxHeight - this.minHeight);
+					var liveY=this.isLow?moveHeight+lastY-this.originY:lastY-this.originY;
+					var percent=liveY / moveHeight;
+					if (this.isLow == true) { //初始在低位的情况
+						if ((1 - percent) >= 0.25) { //上拉超过上下限的25%则移向高位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
+							this.toHigh();
+						} else { //上拉未超过上下限的25%则回到低位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTickchangedTouches[0].pageY;
+							if (Math.abs(liveY - moveHeight) >
+								5) { //用于防止点击事件穿透触发touchend
+								this.currentY = liveY;
+								this.$nextTick(function() {
+									this.currentY = moveHeight;
+								})
+							}
+						}
+					} else { //初始在高位的情况
+						if (percent >= 0.25) { //下拉超过上下限的25%则移向低位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
+							this.toLow();
+						} else { //下拉未超过上下限的25%则回到高位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTick
 							this.currentY = liveY;
 							this.$nextTick(function() {
-								this.currentY = moveHeight;
+								this.currentY = 0;
 							})
 						}
 					}
-				} else { //初始在高位的情况
-					if (percent >= 0.25) { //下拉超过上下限的25%则移向低位 因为位置改变了也即currentY改变组件可以监听变化所以不用nextTick
-						this.toLow();
-					} else { //下拉未超过上下限的25%则回到高位 因为位置没有改变也即currentY没有改变组件无法监听变化所以使用nextTick
-						this.currentY = liveY;
-						this.$nextTick(function() {
-							this.currentY = 0;
-						})
-					}
-				}
+				}else this.isScroll=false
+				
 			},
 
 			tapButton1() {
@@ -252,6 +260,7 @@
 				}
 			},
 			scrolltolower() { //用于下拉刷新加载order
+				
 				if (this.isSelected1 == true && this.isFull == false) {
 					if (this.$store.state.orders.length - 1 - this.orderIndex <= 5) { //下拉刷新一次数量小于等于五
 						for (var index = this.orderIndex + 1; index <= this.$store.state.orders.length - 1; index++) {
