@@ -280,7 +280,7 @@
 		color:#FFFFFF ;
 		font-weight: 700;
 		margin-left: 15upx;
-		margin-top: 25upx;
+		margin-top: 35upx;
 		margin-bottom: 15upx;
 		width: 100upx;
 		height:80upx;

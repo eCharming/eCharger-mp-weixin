@@ -1,8 +1,9 @@
 <template>
 	<view style="position: relative;height: 300upx;margin:20upx;margin-bottom: 40upx;transform-style: preserve-3d; transition: .7s all;"
-	:style="{'transform':'rotateY('+rotate+'deg)'}">
+	:style="{'transform':'rotateY('+rotate+'deg)','height':height+'rpx'}">
 		<view class="card"
-			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow,'height':height + 'rpx'}"
+			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow}"
+			:animation="animationData"
 		>
 			<view style="display: flex;flex-direction: column;">
 				<view class="view1">
@@ -34,27 +35,55 @@
 			</view>
 		
 		</view>
-		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);
-		height: 300upx;width: 100%;display:flex;justify-content: center;flex-direction: column;
-		border-radius: 30upx;border-top: 9upx solid rgba(102,205,170,1);border-bottom: 9upx solid rgba(102,205,170,1);">
-			<view class="button">
-				<view class="smalldetailview">
-					<image src="../static/image/order.png" style="height: 125upx;width: 125upx;"></image>
-					<text class="smalldetail">预约</text>
+		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);width: 100%;
+		transition: .7s all;border-radius: 30upx;border-top: 10upx solid rgba(102,205,170,1);border-bottom: 10upx solid rgba(102,205,170,1);
+		transform-style: preserve-3d;overflow: hidden;" :style="{'height':height+'rpx'}">
+			<view style="position: relative;transition: .7s all;transform-style: preserve-3d;"
+			:style="{'transform':'rotateX('+buttonRotate+'deg)','height':height+'rpx'}">
+				<view class="button">
+					<view class="smalldetailview" @click.native.stop.prevent="book">
+						<image src="../static/image/order.png" style="height: 125upx;width: 125upx;"></image>
+						<text class="smalldetail">预约</text>
+					</view>
+					<view class="smalldetailview">
+						<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
+						<text class="smalldetail">联系</text>
+					</view>
+					<view class="smalldetailview" @click.native.stop.prevent="navigate">
+						<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
+						<text class="smalldetail">导航</text>
+					</view>
+					<view class="smalldetailview">
+						<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"></image>
+						<text class="smalldetail">详情</text>
+					</view>
 				</view>
-				<view class="smalldetailview">
-					<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
-					<text class="smalldetail">联系</text>
-				</view>
-				<view class="smalldetailview" @click.native.stop.prevent="navigate">
-					<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
-					<text class="smalldetail">导航</text>
-				</view>
-				<view class="smalldetailview">
-					<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"></image>
-					<text class="smalldetail">详情</text>
+				
+				<view class="book" style="transform-origin: center;transform:rotateX(180deg);position: absolute;transform-style: preserve-3d;
+				height: 100%;width: 100%;background-color: rgba(250,255,250,1);">
+					<view style="position: relative;height: 100%;width: 100%;transform-style: preserve-3d;perspective: 500px;transform:translateZ(300upx);">
+						<view style="height: 300upx;width: 100%;position: absolute;background-color: rgba(250,255,250,1);">
+							123141243
+						</view>
+						
+						<view style="height: 300upx;width: 100%;position: absolute;transform-origin: top;top: 300upx;
+						border-top: 2px solid red;transition: 1.2s all;background-color: rgba(250,255,250,1);
+						display: flex;flex-direction: column;justify-content: space-between;"
+						:style="{'transform':'rotateX('+bookRotate+'deg)'}">
+							<text>
+								起始时间
+							</text>
+							<view style="width: 100rpx;height: 100upx;background-color: #4CD964;">
+								确定预约
+							</view>
+						</view>
+					</view>
+					
 				</view>
 			</view>
+			
+			
+			
 				
 		</view>
 	</view>
@@ -86,6 +115,7 @@
 		},
 		data(){
 			return{
+				height:300,
 				borderleft:"10rpx solid rgba(102,205,170,0.6)",
 				borderright:"10rpx solid rgba(102,205,170,0.6)",
 				boxshadow:"",
@@ -93,9 +123,11 @@
 				checkOpacity:0,
 				opacity:0,
 				rotate:0,
-				height:300,
 				// bottom:200,可能无用
 				checkRight:100,
+				animationData:{},
+				buttonRotate:0,
+				bookRotate:-90,
 			}
 		},
 		computed:{
@@ -124,6 +156,33 @@
 					this.checkOpacity=1;
 					this.checkRight=10;
 				});
+				
+			// 	var animation = uni.createAnimation({
+			// 		duration: 100,
+			// 		timingFunction: 'ease',
+			// 	})	
+			// 	animation.rotateX(25).step()
+			
+			// 	this.animationData = animation.export()
+				
+			// 	setTimeout(() => {
+			// 		var animation2 = uni.createAnimation({
+			// 			duration: 200,
+			// 			timingFunction: 'ease',
+			// 		})	
+			// 		animation2.rotateX(-25).scale(1.1,1.1).step()
+								
+			// 		this.animationData = animation2.export()
+			// 	}, 100)
+			// 	setTimeout(() => {
+			// 		var animation3 = uni.createAnimation({
+			// 			duration: 100,
+			// 			timingFunction: 'ease',
+			// 		})	
+			// 		animation3.rotateX(0).scale(1.1,1.1).step()
+								
+			// 		this.animationData = animation3.export()
+			// 	}, 300)
 			},
 			untap(){
 				this.borderleft="10rpx solid rgba(102,205,170,0.6)";
@@ -140,16 +199,23 @@
 			navigate(){
 				this.$store.commit('setNavigateSelected',this.index);
 				this.$emit('toLow');
+			},
+			book(){
+				this.buttonRotate=180;
+				this.height=600;
+				this.bookRotate=0;			
 			}
 		},
 		watch:{
 			'detail'(){
 				if(this.detail==false){
 					this.$nextTick(function(){
-						this.height=300;
 						this.opacity=0;
 						// this.bottom=200;
 						this.rotate=0;
+						this.buttonRotate=0;
+						this.height=300;
+						this.bookRotate=-90;	
 					})
 					
 				}else if(this.detail==true){
@@ -171,6 +237,7 @@
 <style scoped>
 	.card{
 		width: 100%;
+		height: 300upx;
 		position: absolute;
 		transform: translateZ(300upx);
 		padding: 15upx;
@@ -258,8 +325,13 @@
 	}
 	
 	.button{
+		position: absolute;
+		width: 100%;
+		height: 300upx;
 		display: flex;
 		justify-content: space-around;
+		transform:translateZ(5upx);
+		background-color: rgba(250,255,250,1);
 	}
 	
 	.smalldetail{

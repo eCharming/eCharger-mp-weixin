@@ -38,10 +38,10 @@
 		
 		
 						<view style="transform-style: preserve-3d;transition:all .6s;
-						transition-timing-function: cubic-bezier(.61,-0.38,.44,1.34);position: relative;" 
+						transition-timing-function: cubic-bezier(.6,-0.5,.44,1.5);position: relative;" 
 						:style="{'transform':'rotateY('+rotate+'deg)'}">
 							<view style="position: absolute;width: 100%;transform:translateZ(10upx);" :class="isSelected1?'auto':'none'">
-								<scroller @scrolltolower="scrolltolower()" :scrollTop="scrollTop" @touchstart="scroll()">
+								<scroller @scrolltolower="scrolltolower()" @touchstart="scroll()">
 									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
 										:location="order.location" :distance="order.distance" :price="order.price"
 										:time="order.time" :detail="order.detail"

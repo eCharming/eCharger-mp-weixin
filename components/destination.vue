@@ -179,7 +179,7 @@
 	.text1{
 		transition: all .3s;
 		position: relative;
-		top:5upx;
+		top:10upx;
 	}
 	
 	.text2{
