@@ -4,6 +4,7 @@
 		<view class="card"
 			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow}"
 			:animation="animationData"
+			@tap="checkMap()"
 		>
 			<view style="display: flex;flex-direction: column;">
 				<view class="view1">
@@ -38,19 +39,24 @@
 		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);width: 100%;
 		transition: .7s all;border-radius: 30upx;border-top: 10upx solid rgba(102,205,170,1);border-bottom: 10upx solid rgba(102,205,170,1);
 		transform-style: preserve-3d;overflow: hidden;" :style="{'height':height+'rpx'}">
-			<view style="position: relative;transition: .7s all;transform-style: preserve-3d;"
+			<view style="position: relative;transition: .7s all;transform-style: preserve-3d;transform-origin: 50% 50% -150upx;"
 			:style="{'transform':'rotateX('+buttonRotate+'deg)','height':height+'rpx'}">
 				<view class="button">
-					<view class="smalldetailview" @click.native.stop.prevent="book">
-						<image src="../static/image/order.png" style="height: 125upx;width: 125upx;"></image>
+					<view style="position: absolute;right: 30upx;top: 20upx;">
+						<text style="color:rgba(102,205,170,1) ;letter-spacing: 2upx;font-size: 28upx;" @click.native.stop.prevent="unCheckDetail()">
+							返回
+						</text>
+					</view>
+					<view class="smalldetailview">
+						<image src="../static/image/order.png" style="height: 125upx;width: 125upx;" @click.native.stop.prevent="book"></image>
 						<text class="smalldetail">预约</text>
 					</view>
 					<view class="smalldetailview">
 						<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
 						<text class="smalldetail">联系</text>
 					</view>
-					<view class="smalldetailview" @click.native.stop.prevent="navigate">
-						<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;"></image>
+					<view class="smalldetailview">
+						<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;" @click.native.stop.prevent="navigate"></image>
 						<text class="smalldetail">导航</text>
 					</view>
 					<view class="smalldetailview">
@@ -60,22 +66,66 @@
 				</view>
 				
 				<view class="book" style="transform-origin: center;transform:rotateX(180deg);position: absolute;transform-style: preserve-3d;
-				height: 100%;width: 100%;background-color: rgba(250,255,250,1);">
-					<view style="position: relative;height: 100%;width: 100%;transform-style: preserve-3d;perspective: 500px;transform:translateZ(300upx);">
-						<view style="height: 300upx;width: 100%;position: absolute;background-color: rgba(250,255,250,1);">
-							123141243
+				height: 100%;width: 100%;">
+					<view style="position: relative;height: 100%;width: 100%;transform-style: preserve-3d;perspective: 500px;
+					transform:translateZ(300upx);">
+						<view style="height: 300upx;width: 100%;position: absolute;background-color: #edfdf6;
+						display: flex;flex-direction: column;justify-content: space-between;">
+							
+							<view style="margin-right:30upx;margin-top: 20upx;display:flex;justify-content: flex-end;">
+								<text style="color:rgba(102,205,170,1) ;letter-spacing: 2upx;font-size: 28upx;" @click.native.stop.prevent="unbook()">
+									返回
+								</text>
+								
+							</view>
+							
+							<view>
+								<view style="margin:30upx;margin-top: 0;width: 550upx;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+									<text style="font-size: 30upx;font-weight: 700;
+									">{{location}}</text>
+								</view>
+								<view style="margin-left:30upx;margin-top: 10upx;">
+									<image class="image" src="../static/image/arrow.png"></image>
+									<text style="color:rgba(102,205,170,1) ;font-size: 30upx;letter-spacing: 1upx;">距离您约{{distance}}km</text>
+								</view>
+								
+								
+							</view>
+							<view style="display: flex;justify-content: space-between;margin: 30upx;">
+								<view class="priceview">
+									<text>价格</text>
+									<text class="yuan">￥</text>
+									<text class="price">{{price}}</text>
+								</view>
+								<view class="timeview">
+									<text>可用时间：</text>
+									<text class="time">{{showTime}}</text>
+								</view>
+								
+							</view>
+							
 						</view>
 						
 						<view style="height: 300upx;width: 100%;position: absolute;transform-origin: top;top: 300upx;
-						border-top: 2px solid red;transition: 1.2s all;background-color: rgba(250,255,250,1);
+						border-top: 2px solid rgba(0,0,0,0.3);transition: 0.7s all;background-color: #edfdf6;
 						display: flex;flex-direction: column;justify-content: space-between;"
 						:style="{'transform':'rotateX('+bookRotate+'deg)'}">
-							<text>
-								起始时间
-							</text>
-							<view style="width: 100rpx;height: 100upx;background-color: #4CD964;">
-								确定预约
+							<view style="margin: 30upx;">
+								<text>
+									预约时间
+								</text>
+								
 							</view>
+							<view style="display: flex;justify-content: center;align-items: center;margin-bottom: 40upx;">
+								<view style="width: 150rpx;height: 70upx;background-color: rgba(102,205,170,1);
+								border-radius: 20upx;display: flex;justify-content: center;align-items: center;">
+									<text  style="color: white;font-size: 33upx;font-weight: 700;letter-spacing: 10upx;">
+										预约
+									</text>
+									
+								</view>
+							</view>
+							
 						</view>
 					</view>
 					
@@ -121,9 +171,7 @@
 				boxshadow:"",
 				check:false,
 				checkOpacity:0,
-				opacity:0,
 				rotate:0,
-				// bottom:200,可能无用
 				checkRight:100,
 				animationData:{},
 				buttonRotate:0,
@@ -192,9 +240,14 @@
 				this.checkOpacity=0;
 				this.checkRight=100;
 			},
+			checkMap(){
+				this.$emit('map');
+			},
 			checkDetail(){
-				this.$emit('emit');
-				this.check=false;
+				this.$emit('detail');
+			},
+			unCheckDetail(){
+				this.$emit('undetail');
 			},
 			navigate(){
 				this.$store.commit('setNavigateSelected',this.index);
@@ -202,29 +255,40 @@
 			},
 			book(){
 				this.buttonRotate=180;
-				this.height=600;
-				this.bookRotate=0;			
-			}
+				setTimeout(()=>{
+					this.height=600;
+				},200)
+				
+				setTimeout(()=>{
+					this.bookRotate=0;
+				},400)
+						
+			},
+			unbook(){
+				this.bookRotate=-90;
+				setTimeout(()=>{
+					this.height=300;
+				},100)
+				setTimeout(()=>{
+					this.buttonRotate=0;
+					
+				},400)
+				
+							
+			},
 		},
 		watch:{
 			'detail'(){
 				if(this.detail==false){
 					this.$nextTick(function(){
-						this.opacity=0;
-						// this.bottom=200;
 						this.rotate=0;
-						this.buttonRotate=0;
+						this.bookRotate=-90;
 						this.height=300;
-						this.bookRotate=-90;	
+						this.buttonRotate=0;
 					})
 					
 				}else if(this.detail==true){
 					this.$nextTick(function(){
-						this.check=false;
-						this.checkOpacity=0;
-						this.checkRight=100;
-						this.opacity=1;
-						// this.bottom=400;
 						this.rotate=-90;
 					})
 					

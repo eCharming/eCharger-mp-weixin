@@ -45,7 +45,7 @@
 									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
 										:location="order.location" :distance="order.distance" :price="order.price"
 										:time="order.time" :detail="order.detail"
-										@tap="tapOrder(index)" @emit="detail()" @toLow="toLow">
+										@map="tapOrder(index)" @detail="detail()" @undetail="undetail()" @toLow="toLow">
 									</order>
 									<view class="scrollerview">
 										<image :src="src1" style="width: 45rpx;height: 45rpx;" v-show="icontype=='download'"></image>
@@ -281,19 +281,10 @@
 			},
 			detail(){
 				this.orders[this.orderSelected].detail=true;
-				this.$nextTick(function(){
-					this.scrollTop=uni.upx2px(this.orderSelected*338);
-				})
-				
 				this.toHigh();
 			},
 			undetail(){
 				this.orders[this.orderSelected].detail=false;
-				this.$nextTick(function(){
-					this.scrollTop=uni.upx2px(this.orderSelected*338);
-				})
-				
-
 			},
 			toLow(){
 				this.isLow=true;
