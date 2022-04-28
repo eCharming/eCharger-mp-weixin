@@ -41,7 +41,7 @@
 		transform-style: preserve-3d;overflow: hidden;" :style="{'height':height+'rpx'}">
 			<view style="position: relative;transition: .7s all;transform-style: preserve-3d;transform-origin: 50% 50% -150upx;"
 			:style="{'transform':'rotateX('+buttonRotate+'deg)','height':height+'rpx'}">
-				<view class="button">
+				<view class="button" :style="{'opacity':buttonOpacitty}">
 					<view style="position: absolute;right: 30upx;top: 20upx;">
 						<text style="color:rgba(102,205,170,1) ;letter-spacing: 2upx;font-size: 28upx;" @click.native.stop.prevent="unCheckDetail()">
 							返回
@@ -175,6 +175,7 @@
 				checkRight:100,
 				animationData:{},
 				buttonRotate:0,
+				buttonOpacitty:1,
 				bookRotate:-90,
 			}
 		},
@@ -255,6 +256,7 @@
 			},
 			book(){
 				this.buttonRotate=180;
+				this.buttonOpacitty=0;
 				setTimeout(()=>{
 					this.height=600;
 				},200)
@@ -271,7 +273,7 @@
 				},100)
 				setTimeout(()=>{
 					this.buttonRotate=0;
-					
+					this.buttonOpacitty=1;
 				},400)
 				
 							
@@ -396,6 +398,7 @@
 		justify-content: space-around;
 		transform:translateZ(5upx);
 		background-color: rgba(250,255,250,1);
+		transition: all .7s;
 	}
 	
 	.smalldetail{
@@ -409,6 +412,7 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
+		
 	}
 </style>
 
