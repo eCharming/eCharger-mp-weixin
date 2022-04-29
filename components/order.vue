@@ -287,6 +287,7 @@
 						this.bookRotate=-90;
 						this.height=300;
 						this.buttonRotate=0;
+						this.buttonOpacitty=1;
 					})
 					
 				}else if(this.detail==true){
