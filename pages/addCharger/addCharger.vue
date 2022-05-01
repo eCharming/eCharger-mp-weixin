@@ -11,12 +11,12 @@
 			<addcard>
 				<view class="display">
 					<text class="labeltext">姓名</text>
-					<input class="input" placeholder="请输入姓名" type="text" v-model="name"></input>
+					<input class="input" placeholder="请输入姓名" type="text" v-model="name" maxlength="20"></input>
 				</view>
 				<view class="divLine"></view>
 				<view class="display">
 					<text class="labeltext">电话号码</text>
-					<input class="input" placeholder="请输入电话号码" type="number" v-model="phoneNumber"></input>
+					<input class="input" placeholder="请输入电话号码" type="number" v-model="phoneNumber" maxlength="11"></input>
 				</view>
 			</addcard>
 			<addcard style="position: relative;">
@@ -207,7 +207,7 @@
 				<view class="divLine"></view>
 				<view class="display">
 					<text class="labeltext">备注</text>
-					<textarea class="input" placeholder="备注" maxlength="140" auto-height="true">{{remarks}}</textarea>
+					<textarea class="input" placeholder="备注" maxlength="100" auto-height="true">{{remarks}}</textarea>
 				</view>
 			</addcard>
 			<button class="submit" @tap="submit">提交</button>
