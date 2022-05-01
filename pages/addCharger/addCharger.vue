@@ -54,7 +54,7 @@
 
 				<view class="display">
 					<text class="labeltext">电桩单价</text>
-					<input class="input" placeholder="请输入单价" type="digit" v-model="price"></input>
+					<input class="input" placeholder="请输入单价" type="digit" v-model="price" :maxlength="maxlength"></input>
 				</view>
 			</addcard>
 			<addcard>
@@ -232,6 +232,8 @@
 				location: "",
 				address: "",
 				price: "",
+				maxlength:999999999,
+				haveDDot:false,
 				text: ["起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间",
 					"起始时间", "结束时间"
 				],
@@ -414,6 +416,38 @@
 					})
 					return;
 				}
+				let isSet = false;
+				for(let i=0;i<this.text.length;i+=2) {
+					if(this.text[i]!='起始时间' || this.text[i+1]!='结束时间') {
+						isSet = true;
+						break;
+					}
+				}
+				if (isSet ==false) {
+					wx.showToast({
+						title: "请填写至少一个时间段！",
+						icon: 'none',
+					})
+					return;
+				}
+				let isFinish = true;
+				for(let i=0;i<this.text.length;i+=2) {
+					if(this.text[i]!='起始时间' && this.text[i+1]=='结束时间') {
+						isFinish = false;
+						break;
+					}
+					if(this.text[i]=='起始时间' && this.text[i+1]!='结束时间') {
+						isFinish = false;
+						break;
+					}
+				}
+				if (isFinish ==false) {
+					wx.showToast({
+						title: "请填写完整的时间段！",
+						icon: 'none',
+					})
+					return;
+				}
 				var time = new Array();
 				for (var i = 0; i < 14; i += 2) {
 					if (this.text[i] == "起始时间" || this.text[i + 1] == "结束时间") {
@@ -531,6 +565,17 @@
 						
 					}
 				})
+			}
+		},
+		watch:{
+			price() {
+				if(this.price.indexOf('.')!=-1 && !this.haveDot) {
+					this.maxlength = this.price.length+2
+					this.haveDot = true
+				} else if(this.price.indexOf('.')==-1 && this.haveDot) {
+					this.maxlength = 999999999
+					this.haveDot = false
+				}
 			}
 		}
 	}

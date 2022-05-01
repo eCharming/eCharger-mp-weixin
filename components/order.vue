@@ -114,11 +114,25 @@
 						border-top: 2px solid rgba(0,0,0,0.3);transition: 0.7s all;background-color: #edfdf6;
 						display: flex;flex-direction: column;justify-content: space-between;"
 						:style="{'transform':'rotateX('+bookRotate+'deg)'}">
-							<view style="margin: 30upx;">
+							<view style="margin: 30upx;display: flex;letter-spacing: 3upx;font-weight: 700;font-size: 31upx;align-items: center;">
 								<text>
 									预约时间
 								</text>
-								
+								<view class="time1" >
+									<picker mode="time" :start="minTime1" :end="maxTime1" @change="changetime1">
+										<text class="timetext1" :style="{'opacity':opacity1}">{{text1}}</text>
+									</picker>
+								</view>
+								<view class="line">-</view>
+								<view class="time2" >
+									<picker mode="time" :start="minTime2" :end="maxTime2" @change="changetime2">
+										<text class="timetext2" :style="{'opacity':opacity2}">{{text2}}</text>
+									</picker>
+								</view>
+							</view>
+							<view class="priceview">
+								<text>预估价格：</text>
+								<text class="time">￥{{possiblePrice}}</text>
 							</view>
 							<view style="display: flex;justify-content: center;align-items: center;margin-bottom: 40upx;">
 								<view style="width: 150rpx;height: 70upx;background-color: rgba(102,205,170,1);
@@ -193,6 +207,16 @@
 				buttonRotate:0,
 				buttonOpacitty:1,
 				bookRotate:-90,
+				
+				minTime1:'00:00',
+				maxTime1:'24:00',
+				minTime2:'00:00',
+				maxTime2:'24:00',
+				text1:'起始时间',
+				text2:'结束时间',
+				opacity1:0.5,
+				opacity2:0.5,
+				possiblePrice:'0'
 			}
 		},
 		computed:{
@@ -212,6 +236,32 @@
 			}
 		},
 		methods:{
+			changetime1(e){
+				var time1=e.detail.value;
+				this.text1=time1;
+				this.minTime2=time1;
+				this.opacity1=1;
+				if (this.text2!="结束时间") {
+					var sp1 = this.text1.split(":")
+					var sp2 = this.text2.split(":")
+					var time1 = Number(sp1[0]) * 60 + Number(sp1[1])
+					var time2 = Number(sp2[0]) * 60 + Number(sp2[1])
+					this.possiblePrice = ((time2-time1)/60*this.price).toFixed(2)
+				}
+			},
+			changetime2(e){
+				var time2=e.detail.value;
+				this.text2=time2;
+				this.maxTime1=time2;
+				this.opacity2=1;
+				if (this.text1!="起始时间") {
+					var sp1 = this.text1.split(":")
+					var sp2 = this.text2.split(":")
+					var time1 = Number(sp1[0]) * 60 + Number(sp1[1])
+					var time2 = Number(sp2[0]) * 60 + Number(sp2[1])
+					this.possiblePrice = ((time2-time1)/60*this.price).toFixed(2)
+				}
+			},
 			tap(){
 				this.borderleft="12rpx solid rgba(102,205,170,1)";
 				this.borderright="12rpx solid rgba(102,205,170,1)";
@@ -406,6 +456,20 @@
 					
 				}
 			}
+		},
+		mounted(){
+			var tempDate = new Date();
+			var days = tempDate.getDay();
+			if(days==0) {
+				days=7;
+			}
+			if(this.time[days-1]!="") {
+				var showTime=this.time[days-1].split("-")
+				this.minTime1=this.minTime2=showTime[0]
+				this.maxTime1=this.maxTime2=showTime[1]
+				console.log(this.minTime1)
+				console.log(this.maxTime1)
+			}
 		}
 	}
 </script>
@@ -525,6 +589,56 @@
 		flex-direction: column;
 		justify-content: center;
 		
+	}
+	
+	.time1{
+		height:56upx;
+		width:144upx;
+		border-radius: 12upx;
+		position: relative;
+		bottom:1upx;
+		left:30upx;
+		background-color: rgb(230,230,230);
+	}
+	
+	.timetext1{
+		position: relative;
+		top:10upx;
+		left:18upx;
+		font-size: 27upx;
+		letter-spacing: 1upx;
+	}
+	
+	.timetext2{
+		position: relative;
+		top:10upx;
+		left:18upx;
+		font-size: 27upx;
+		letter-spacing: 1upx;
+	}
+	
+	.line{
+		position: relative;
+		top:2upx;
+		left:45upx;
+	}
+	
+	.time2{
+		height:56upx;
+		width:144upx;
+		border-radius: 12upx;
+		position: relative;
+		bottom:1upx;
+		left:60upx;
+		background-color: rgb(230,230,230);
+	}
+	
+	.priceview{
+		margin-right: 30upx;
+		margin-bottom: 30upx;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
 	}
 </style>
 
