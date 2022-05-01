@@ -65,7 +65,7 @@
 						var timeStamp = charger.timeStamp;
 						if (timeStamp[2 * days - 2] >= startTime && timeStamp[2 * days - 1] <= endTime) {
 							this.covers.push({
-								title: charger.location,
+								title: charger.address,
 								id: charger._id,
 								latitude: charger.geoPoint.coordinates[1],
 								longitude: charger.geoPoint.coordinates[0],
@@ -73,7 +73,7 @@
 								width: 40,
 								height: 40,
 								callout: {
-									content: charger.location,
+									content: charger.address,
 									color: "#333333",
 									fontSize: 13,
 									borderRadius: 20,
@@ -85,7 +85,9 @@
 
 							var distance = (charger.Distance / 1000).toFixed(1);
 							this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
+								address:charger.address,
 								location: charger.location,
+								uid:charger.uid,
 								id: charger._id,
 								latitude: charger.geoPoint.coordinates[1],
 								longitude: charger.geoPoint.coordinates[0],
@@ -133,7 +135,7 @@
 							if (tle != null) { //为了防止异步问题，所以放在这里
 								this.covers.push({
 									title: tle,
-									id: 1027368,
+									id: 0,
 									latitude: lat,
 									longitude: lon,
 									iconPath: "/static/image/landmarksolid.png",
@@ -161,7 +163,7 @@
 							if (chargerList.length != 0) {
 								for (let charger of chargerList) {
 									this.covers.push({
-										title: charger.location,
+										title: charger.address,
 										id: charger._id,
 										latitude: charger.geoPoint.coordinates[1],
 										longitude: charger.geoPoint.coordinates[0],
@@ -169,7 +171,7 @@
 										width: 40,
 										height: 40,
 										callout: {
-											content: charger.location,
+											content: charger.address,
 											color: "#333333",
 											fontSize: 13,
 											borderRadius: 20,
@@ -181,7 +183,9 @@
 
 									var distance = (charger.Distance / 1000).toFixed(1);
 									this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
+										address:charger.address,
 										location: charger.location,
+										uid:charger.uid,
 										id: charger._id,
 										latitude: charger.geoPoint.coordinates[1],
 										longitude: charger.geoPoint.coordinates[0],
@@ -190,6 +194,7 @@
 										distance: distance,
 										detail: false,
 									});
+									
 								}
 							}
 							this.$store.commit('setOrders', this.ordersCopy);
@@ -198,7 +203,7 @@
 							if (tle != null) { //为了防止异步问题，所以放在这里
 								this.covers.push({
 									title: tle,
-									id: 1027368,
+									id: 0,
 									latitude: lat,
 									longitude: lon,
 									iconPath: "/static/image/landmarksolid.png",
@@ -276,7 +281,8 @@
 						number = index;
 					}
 				}
-
+				if(this.covers[0].id==0)
+					number--;
 				if (this.markerSelected == number) { //第二次点击再生效
 					this.$store.commit('setMarkerSelected', number);
 					this.MoveLocation(this.covers[number].latitude, this.covers[number].longitude);

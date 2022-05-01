@@ -43,8 +43,8 @@
 							<view style="position: absolute;width: 100%;transform:translateZ(10upx);" :class="isSelected1?'auto':'none'">
 								<scroller @scrolltolower="scrolltolower()" @touchstart="scroll()">
 									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
-										:location="order.location" :distance="order.distance" :price="order.price"
-										:time="order.time" :detail="order.detail"
+										:cid="order.id" :uid="order.uid" :address="order.address" :location="order.location" 
+										:distance="order.distance" :price="order.price" :time="order.time" :detail="order.detail"
 										@map="tapOrder(index)" @detail="detail()" @undetail="undetail()" @toLow="toLow">
 									</order>
 									<view class="scrollerview">

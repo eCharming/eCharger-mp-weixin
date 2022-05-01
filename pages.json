@@ -49,6 +49,13 @@
 				"navigationBarTitleText": "易插eCharger"
 			}
 			
+		},
+		{
+			"path" : "pages/detail/detail",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+			
 		}
     ],
 	"globalStyle": {

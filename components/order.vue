@@ -3,12 +3,11 @@
 	:style="{'transform':'rotateY('+rotate+'deg)','height':height+'rpx'}">
 		<view class="card"
 			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow}"
-			:animation="animationData"
 			@tap="checkMap()"
 		>
 			<view style="display: flex;flex-direction: column;">
 				<view class="view1">
-					<text class="location">{{location}}</text>
+					<text class="location">{{address}}</text>
 					<view>
 						<image class="image" src="../static/image/arrow.png"></image>
 						<text class="distance">{{distance}}km</text>
@@ -43,24 +42,24 @@
 			:style="{'transform':'rotateX('+buttonRotate+'deg)','height':height+'rpx'}">
 				<view class="button" :style="{'opacity':buttonOpacitty}">
 					<view style="position: absolute;right: 30upx;top: 20upx;">
-						<text style="color:rgba(102,205,170,1) ;letter-spacing: 2upx;font-size: 28upx;" @click.native.stop.prevent="unCheckDetail()">
+						<text style="color:rgba(102,205,170,1) ;letter-spacing: 2upx;font-size: 28upx;" @tap="unCheckDetail()">
 							返回
 						</text>
 					</view>
-					<view class="smalldetailview">
-						<image src="../static/image/order.png" style="height: 125upx;width: 125upx;" @click.native.stop.prevent="book"></image>
+					<view class="smalldetailview" :animation="animationBook">
+						<image src="../static/image/order.png" style="height: 125upx;width: 125upx;" @tap="book"></image>
 						<text class="smalldetail">预约</text>
 					</view>
-					<view class="smalldetailview">
-						<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;"></image>
+					<view class="smalldetailview" :animation="animationContact">
+						<image src="../static/image/connection.png" style="height: 125upx;width: 125upx;" @tap="chat"></image>
 						<text class="smalldetail">联系</text>
 					</view>
-					<view class="smalldetailview">
-						<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;" @click.native.stop.prevent="navigate"></image>
+					<view class="smalldetailview" :animation="animationNavigate">
+						<image src="../static/image/navigation.png" style="height: 125upx;width: 125upx;" @tap="navigate"></image>
 						<text class="smalldetail">导航</text>
 					</view>
-					<view class="smalldetailview">
-						<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"></image>
+					<view class="smalldetailview" :animation="animationDetail">
+						<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;" @tap="orderDetail"></image>
 						<text class="smalldetail">详情</text>
 					</view>
 				</view>
@@ -73,7 +72,7 @@
 						display: flex;flex-direction: column;justify-content: space-between;">
 							
 							<view style="margin-right:30upx;margin-top: 20upx;display:flex;justify-content: flex-end;">
-								<text style="color:rgba(102,205,170,1) ;letter-spacing: 2upx;font-size: 28upx;" @click.native.stop.prevent="unbook()">
+								<text style="color:rgba(102,205,170,1) ;letter-spacing: 2upx;font-size: 28upx;" @tap="unbook()">
 									返回
 								</text>
 								
@@ -84,9 +83,14 @@
 									<text style="font-size: 30upx;font-weight: 700;
 									">{{location}}</text>
 								</view>
-								<view style="margin-left:30upx;margin-top: 10upx;">
-									<image class="image" src="../static/image/arrow.png"></image>
-									<text style="color:rgba(102,205,170,1) ;font-size: 30upx;letter-spacing: 1upx;">距离您约{{distance}}km</text>
+								<view style="margin-left:30upx;margin-right:30upx;margin-top: 10upx;display: flex;justify-content: space-between;">
+									<view>
+										<image class="image" src="../static/image/arrow.png"></image>
+										<text style="color:rgba(102,205,170,1) ;font-size: 30upx;letter-spacing: 1upx;">距离您约{{distance}}km</text>
+									</view>
+									<view style="color:rgba(102,205,170,1) ;font-size: 30upx;letter-spacing: 1upx;" @tap="bookDetail()">
+										详情
+									</view>
 								</view>
 								
 								
@@ -146,6 +150,15 @@
 			index:{
 				type:Number
 			},
+			cid:{
+				type:Number
+			},
+			uid:{
+				type:Number
+			},
+			address:{
+				type:String
+			},
 			location:{
 				type:String
 			},
@@ -173,7 +186,10 @@
 				checkOpacity:0,
 				rotate:0,
 				checkRight:100,
-				animationData:{},
+				animationBook:{},
+				animationContact:{},
+				animationNavigate:{},
+				animationDetail:{},
 				buttonRotate:0,
 				buttonOpacitty:1,
 				bookRotate:-90,
@@ -251,12 +267,44 @@
 				this.$emit('undetail');
 			},
 			navigate(){
-				this.$store.commit('setNavigateSelected',this.index);
-				this.$emit('toLow');
+				var animation = uni.createAnimation({
+					duration: 100,
+					timingFunction: 'ease',
+				})	
+				animation.scale(0.8).step()
+				this.animationNavigate = animation.export()
+				setTimeout(() => {
+					var animation2 = uni.createAnimation({
+						duration: 100,
+						timingFunction: 'ease',
+					})	
+					animation2.scale(1).step()
+								
+					this.animationNavigate = animation2.export();
+					this.$store.commit('setNavigateSelected',this.index);
+					this.$emit('toLow');
+				}, 100)
+				
+				
 			},
 			book(){
 				this.buttonRotate=180;
 				this.buttonOpacitty=0;
+				var animation = uni.createAnimation({
+					duration: 100,
+					timingFunction: 'ease',
+				})	
+				animation.scale(0.8).step()
+				this.animationBook = animation.export()
+				setTimeout(() => {
+					var animation2 = uni.createAnimation({
+						duration: 100,
+						timingFunction: 'ease',
+					})	
+					animation2.scale(1).step()
+								
+					this.animationBook = animation2.export();
+				}, 100)
 				setTimeout(()=>{
 					this.height=600;
 				},200)
@@ -274,13 +322,58 @@
 				setTimeout(()=>{
 					this.buttonRotate=0;
 					this.buttonOpacitty=1;
-				},400)
-				
-							
+				},400)		
 			},
+			orderDetail(){
+				var animation = uni.createAnimation({
+					duration: 100,
+					timingFunction: 'ease',
+				})	
+				animation.scale(0.8).step()
+				this.animationDetail = animation.export()
+				setTimeout(() => {
+					var animation2 = uni.createAnimation({
+						duration: 100,
+						timingFunction: 'ease',
+					})	
+					animation2.scale(1).step()
+								
+					this.animationDetail = animation2.export();
+					uni.navigateTo({
+						url: '../detail/detail?cid='+this.cid,
+					})
+				}, 100)
+				
+			},
+			chat(){
+				var animation = uni.createAnimation({
+					duration: 100,
+					timingFunction: 'ease',
+				})	
+				animation.scale(0.8).step()
+				this.animationContact= animation.export()
+				setTimeout(() => {
+					var animation2 = uni.createAnimation({
+						duration: 100,
+						timingFunction: 'ease',
+					})	
+					animation2.scale(1).step()
+								
+					this.animationContact = animation2.export();
+					uni.navigateTo({
+						url:'../communication/chat?toUid='+this.uid,
+					})
+				}, 100)
+			},
+			bookDetail(){
+				uni.navigateTo({
+					url: '../detail/detail?cid='+this.cid,
+				})
+			}
 		},
 		watch:{
 			'detail'(){
+				console.log(1)
 				if(this.detail==false){
 					this.$nextTick(function(){
 						this.rotate=0;
@@ -396,6 +489,7 @@
 		width: 100%;
 		height: 300upx;
 		display: flex;
+		align-items: center;
 		justify-content: space-around;
 		transform:translateZ(5upx);
 		background-color: rgba(250,255,250,1);
@@ -410,6 +504,7 @@
 		bottom: 10upx;
 	}
 	.smalldetailview {
+		height: 180upx;
 		display: flex;
 		flex-direction: column;
 		justify-content: center;

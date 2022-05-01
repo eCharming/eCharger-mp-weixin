@@ -122,7 +122,6 @@
 					}else if(index==2){
 
 					}else if(index==3){
-						console.log(3)
 						uni.navigateTo({
 							url: '../my/my',
 						});
@@ -171,7 +170,6 @@
 				uni.request({
 					url:'https://apis.map.qq.com/ws/geocoder/v1/?location='+res.latitude+','+res.longitude+'&key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL',
 					success: (res) => {
-						console.log(res)
 						let position=res.data.result.address_component.city;
 						if(position.endsWith("市") || position.endsWith("盟")) {
 							position=position.substring(0,position.length - 1)
@@ -191,7 +189,6 @@
 				uni.request({
 					url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
 					success: (res) => {
-						console.log(res)
 						if(res.data.now) {
 							this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
 						}

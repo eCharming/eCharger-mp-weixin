@@ -70,7 +70,6 @@
 						if(res.result!=null && res.result) {
 							this.chargers.splice(0)
 							this.chargers.push(...res.result)
-							console.log(this.chargers)
 						}
 					}
 				)
