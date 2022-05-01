@@ -261,7 +261,23 @@
 				this.$emit('map');
 			},
 			checkDetail(){
-				this.$emit('detail');
+				if (!this.$store.state.logInStatus) {
+					wx.getUserProfile({
+						desc: '获取微信头像以及昵称',
+						success: (res) => {
+							this.$store.commit('setUserName', res.userInfo.nickName, );
+							this.$store.commit('setAvatarUrl', res.userInfo.avatarUrl);
+							this.$store.commit('setLogInStatus', true);
+							wx.cloud.callFunction({ //uid获取
+								name: 'updateUrl',
+								data: {
+									userName: res.userInfo.nickName,
+									avatarUrl: res.userInfo.avatarUrl,
+								}
+							})
+						}
+					})
+				}else this.$emit('detail');
 			},
 			unCheckDetail(){
 				this.$emit('undetail');

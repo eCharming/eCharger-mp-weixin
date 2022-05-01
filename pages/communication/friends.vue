@@ -188,32 +188,33 @@
 			}
 		},
 		onShow() {
-			// this.friends.splice(0);   //正式版
+			this.friends.splice(0);   //正式版
 			var reminder=uni.getStorageSync(this.uid+'friends');		//获取好友列表缓存
 			if(reminder!=''){
 				reminder=JSON.parse(reminder);
 				var keys=Object.keys(reminder);
-				// for(var index in keys){   //正式版
-				// 	this.friends.push({
-				// 		uid:keys[index],
-				// 		name:reminder[[keys[index]]].name,
-				// 		lastWord:reminder[[keys[index]]].message,
-				// 		lastTime:this.timeObject(reminder[[keys[index]]].time),
-				// 		newMessageNum:0,//新消息数量
-				// 		hasNew:false//是否有新消息
-				// 	})
-				// }
-				
-				for(var index in keys){ //临时测试用
-					for(var i in this.friends){
-						if(this.friends[i].uid==keys[index]){
-							this.friends[i].name=reminder[[keys[index]]].name;
-							this.friends[i].avatarUrl=reminder[[keys[index]]].avatarUrl;
-							this.friends[i].lastWord=reminder[[keys[index]]].message;
-							this.friends[i].lastTime=this.timeObject(reminder[[keys[index]]].time);
-						}
-					}
+				for(var index in keys){   //正式版
+					this.friends.push({
+						uid:keys[index],
+						name:reminder[[keys[index]]].name,
+						avatarUrl:reminder[[keys[index]]].avatarUrl,
+						lastWord:reminder[[keys[index]]].message,
+						lastTime:this.timeObject(reminder[[keys[index]]].time),
+						newMessageNum:0,//新消息数量
+						hasNew:false//是否有新消息
+					})
 				}
+				
+				// for(var index in keys){ //临时测试用
+				// 	for(var i in this.friends){
+				// 		if(this.friends[i].uid==keys[index]){
+				// 			this.friends[i].name=reminder[[keys[index]]].name;
+				// 			this.friends[i].avatarUrl=reminder[[keys[index]]].avatarUrl;
+				// 			this.friends[i].lastWord=reminder[[keys[index]]].message;
+				// 			this.friends[i].lastTime=this.timeObject(reminder[[keys[index]]].time);
+				// 		}
+				// 	}
+				// }
 				
 			}else reminder={};
 			if(this.socketTask==null){

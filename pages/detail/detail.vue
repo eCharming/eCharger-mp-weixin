@@ -262,7 +262,7 @@
 	.time{
 		display: flex;
 		justify-content: space-between;
-		margin-bottom: 15upx;
+		margin-bottom: 20upx;
 	}
 	
 	.availabeTime{

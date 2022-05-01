@@ -280,8 +280,27 @@
 				}
 			},
 			detail(){
-				this.orders[this.orderSelected].detail=true;
-				this.toHigh();
+				if (!this.$store.state.logInStatus) {
+					wx.getUserProfile({
+						desc: '获取微信头像以及昵称',
+						success: (res) => {
+							this.$store.commit('setUserName', res.userInfo.nickName, );
+							this.$store.commit('setAvatarUrl', res.userInfo.avatarUrl);
+							this.$store.commit('setLogInStatus', true);
+							wx.cloud.callFunction({ //uid获取
+								name: 'updateUrl',
+								data: {
+									userName: res.userInfo.nickName,
+									avatarUrl: res.userInfo.avatarUrl,
+								}
+							})
+						}
+					})
+				}else{
+					this.orders[this.orderSelected].detail=true;
+					this.toHigh();
+				}
+				
 			},
 			undetail(){
 				this.orders[this.orderSelected].detail=false;
@@ -296,9 +315,28 @@
 				this.currentY = 0;
 			},
 			addCharger() {
-				uni.navigateTo({
-					url: '../addCharger/addCharger',
-				});
+				if (!this.$store.state.logInStatus) {
+					wx.getUserProfile({
+						desc: '获取微信头像以及昵称',
+						success: (res) => {
+							this.$store.commit('setUserName', res.userInfo.nickName, );
+							this.$store.commit('setAvatarUrl', res.userInfo.avatarUrl);
+							this.$store.commit('setLogInStatus', true);
+							wx.cloud.callFunction({ //uid获取
+								name: 'updateUrl',
+								data: {
+									userName: res.userInfo.nickName,
+									avatarUrl: res.userInfo.avatarUrl,
+								}
+							})
+						}
+					})
+				}else{
+					uni.navigateTo({
+						url: '../addCharger/addCharger',
+					});
+				}
+				
 			}
 		},
 		mounted() {

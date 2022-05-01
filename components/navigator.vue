@@ -97,6 +97,26 @@
 			}
 		},
 		methods:{
+			info() {
+				if (!this.$store.state.logInStatus) {
+					wx.getUserProfile({
+						desc: '获取微信头像以及昵称',
+						success: (res) => {
+							this.$store.commit('setUserName', res.userInfo.nickName, );
+							this.$store.commit('setAvatarUrl', res.userInfo.avatarUrl);
+							this.$store.commit('setLogInStatus', true);
+							wx.cloud.callFunction({ //uid获取
+								name: 'updateUrl',
+								data: {
+									userName: res.userInfo.nickName,
+									avatarUrl: res.userInfo.avatarUrl,
+								}
+							})
+						}
+					})
+					return false;
+				}else return true;
+			},
 			navigate(){
 				uni.navigateTo({
 					url: '../search/search',
@@ -110,21 +130,27 @@
 				}
 				if(index==this.selected){
 					if(index==0){
-						uni.scanCode({
-							success: (res) => {
-								console.log(res)
-							}
-						})
+						if(this.info()){
+							uni.scanCode({
+								success: (res) => {
+									console.log(res)
+								}
+							})
+						}
 					}else if(index==1){
-						uni.navigateTo({
-							url: '../communication/friends',
-						});
+						if(this.info()){
+							uni.navigateTo({
+								url: '../communication/friends',
+							});
+						}
 					}else if(index==2){
 
 					}else if(index==3){
-						uni.navigateTo({
-							url: '../my/my',
-						});
+						if(this.info()){
+							uni.navigateTo({
+								url: '../my/my',
+							});
+						}
 					} 
 				}else{
 					if(index==0){
