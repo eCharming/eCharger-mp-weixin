@@ -29,7 +29,8 @@ export default new Vuex.Store({
 			longitude:null,
 			latitude:null,
 			name:null,
-		}
+		},
+		refresh:null	//用于添加电桩后更新地图和电桩信息
     },
     mutations: {
 		setLogInStatus(state,logInStatus) {
@@ -93,6 +94,9 @@ export default new Vuex.Store({
 			state.cityLocation.latitude=location.lat;
 			state.cityLocation.longitude=location.lng;
 			state.cityLocation.name = location.name;
+		},
+		setRefresh(state,item) {
+			state.refresh = item
 		}
     },
     actions: {},

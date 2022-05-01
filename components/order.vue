@@ -22,7 +22,7 @@
 				
 			</view>
 			<view class="view2">
-				<view class="priceview">
+				<view>
 					<text>价格</text>
 					<text class="yuan">￥</text>
 					<text class="price">{{price}}</text>

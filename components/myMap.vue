@@ -328,6 +328,9 @@
 			}
 		},
 		watch: {
+			'$store.state.refresh'() {	//仅仅用于更新电桩信息
+				this.getChargerLocation(this.longitude,this.latitude,null)
+			},
 			'$store.state.destination'() { //监听destination变化 变化就在地图上加入标记点并且移动到该位置
 				if (this.$store.state.destination != null) { //按下locationbutton重置回到自己位置，destination置为空
 					this.$store.state.relocate = false;

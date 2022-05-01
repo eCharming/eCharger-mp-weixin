@@ -232,7 +232,7 @@
 				location: "",
 				address: "",
 				price: "",
-				maxlength:999999999,
+				maxlength:5,
 				haveDDot:false,
 				text: ["起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间",
 					"起始时间", "结束时间"
@@ -530,6 +530,7 @@
 								}
 							})
 						}
+						this.$store.commit('setRefresh',{a:'1'})	//占位对象，无意义，仅仅用于更新
 						wx.showToast({
 							title: "提交成功！",
 							icon: 'success',
@@ -573,7 +574,7 @@
 					this.maxlength = this.price.length+2
 					this.haveDot = true
 				} else if(this.price.indexOf('.')==-1 && this.haveDot) {
-					this.maxlength = 999999999
+					this.maxlength = 5
 					this.haveDot = false
 				}
 			}
