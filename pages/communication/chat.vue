@@ -25,7 +25,9 @@
 							<image style="width: 90upx;height: 90upx;" :src="yourAvatarUrl"></image>
 						</view>
 						
-						<text :class="text.fromMe?'myText':'otherText'" selectable="true" space="nbsp">{{text.message}}</text>
+						<text v-if="!text.isOrder" :class="text.fromMe?'myText':'otherText'" selectable="true" space="nbsp">{{text.message}}</text>
+						<book v-if="text.isOrder" :class="text.fromMe?'myOrder':'otherOrder'" :message="text.message"
+						@changeOrderStatus="changeOrderStatus($event,index)" @orderText="orderText($event)"></book>
 						<view class="avatarView" v-if="text.fromMe">
 							<image style="width: 90upx;height: 90upx;"  :src="myAvatarUrl"></image>
 						</view>
@@ -52,7 +54,12 @@
 </template>
 
 <script>
+	import book from'../../components/book.vue'
+	
 	export default{
+		components:{
+			book,
+		},
 		data(){
 			return{
 				name:'',
@@ -81,6 +88,8 @@
 				
 				storageNum:100,//最大存储历史数据数量
 				storage:[],//缓存的所有历史数据
+				
+				firstCall:true,//用来记录是否是第一次打开，若是则onshow不运行
 			}
 		},
 		methods:{
@@ -158,6 +167,7 @@
 				var timeObject=this.timeObject(time,showTime);
 				
 				this.texts.push({					//将数据加入texts数组显示在scroll中
+					isOrder:false,//查看是否是订单消息
 					fromMe:true,//是否是我发出的
 					time:timeObject,
 					showTime:showTime,
@@ -165,6 +175,7 @@
 				});
 				this.textIndex="index"+(this.texts.length-1);//移动到这条数据
 				var data={
+					isOrder:false,//查看是否是订单消息
 					uid:this.uid,
 					toUid:this.toUid,
 					time:time,
@@ -190,7 +201,7 @@
 					}
 				});
 				this.socketTask.onMessage((res)=>{
-					console.log(res)
+					
 					var data=JSON.parse(res.data);		//将数据对象化
 					var num=data.num;
 					var messages=data.message;
@@ -203,6 +214,7 @@
 						var showTime=this.judgeTime(text.time);
 						var timeObject=this.timeObject(text.time,showTime);
 						this.texts.push({
+							isOrder:text.isOrder,//查看是否是订单消息
 							fromMe:false,//是否是我发出的
 							time:timeObject,
 							showTime:showTime,
@@ -210,6 +222,12 @@
 						})
 					}
 					
+					if(this.texts.length!=0){	//如果屏幕上有消息 那么移动到最下一条消息
+						this.$nextTick(function(){
+							this.textIndex='index'+(this.texts.length-1)
+						})
+					}	
+						
 				});
 				this.socketTask.onClose((res)=>{	//连接关闭
 					console.log(res)
@@ -221,14 +239,13 @@
 				this.refreshTriggered=true;	//打开刷新触发
 				
 				if(this.historyIndex!=0){	//如果缓存中的历史纪录不是最后一条那么刷新更多消息
-					console.log(1)
 					setTimeout(() => {		//一秒后再刷新
 						var length=this.storage.length;
 						var lastIndex=this.historyIndex-1;
 						if(this.historyIndex>15)	//如果历史记录还有超过15条那么减少15 如果小于15那么直接变为零
 							this.historyIndex-=15;
 						else this.historyIndex=0;
-						var textsCopy=[];	//利用副本 避免一条一条加入texts数组
+					var textsCopy=[];	//利用副本 避免一条一条加入texts数组
 						for(var i=this.historyIndex;i<=lastIndex;i++){		//将缓存中的数据推入texts数组来显示在屏幕上
 							var text= JSON.parse(this.storage[i]);		
 							var fromMe=false;
@@ -269,6 +286,75 @@
 					this.refreshTriggered=false;
 					this.scrollStatus=true;	
 				},800)
+			},
+			sendNewOrder(orderDetail){		//发送新的预约order
+				var message=orderDetail;
+				var time=new Date().getTime();
+				var showTime=this.judgeTime(time);
+				var timeObject=this.timeObject(time,showTime);
+				
+				this.texts.push({					//将数据加入texts数组显示在scroll中
+					isOrder:true,//查看是否是订单消息
+					fromMe:true,//是否是我发出的
+					time:timeObject,
+					showTime:showTime,
+					message:message,
+				});
+				this.textIndex="index"+(this.texts.length-1);//移动到这条数据
+				var data={
+					isOrder:true,//查看是否是订单消息
+					uid:this.uid,
+					toUid:this.toUid,
+					time:time,
+					message:message
+				}
+				data=JSON.stringify(data);	//将这条数据json字符串化
+				this.storage.push(data);	//放入storage数组 一会儿一起放入缓存
+				if(this.storage.length>=this.storageNum)	//如果缓存的数量大于最大缓存数量，那么就直接删除第一条数据
+					this.storage.splice(0,1);
+				this.socketTask.send({ 		//发送到服务器
+					data:data,
+					success: () => {
+				
+					}
+				});
+			},
+			changeOrderStatus(e,index){ 		//变更order的状态
+				this.texts[index].message.status=e;
+				var data=JSON.parse(this.storage[index]);
+				data.message.status=e;
+				this.storage[index]=JSON.stringify(data);
+			},
+			orderText(e){
+				var time=new Date().getTime();
+				var showTime=this.judgeTime(time);
+				var timeObject=this.timeObject(time,showTime);
+				
+				this.texts.push({					//将数据加入texts数组显示在scroll中
+					isOrder:false,//查看是否是订单消息
+					fromMe:true,//是否是我发出的
+					time:timeObject,
+					showTime:showTime,
+					message:e,
+				});
+				this.textIndex="index"+(this.texts.length-1);//移动到这条数据
+				var data={
+					isOrder:false,//查看是否是订单消息
+					uid:this.uid,
+					toUid:this.toUid,
+					time:time,
+					message:e
+				}
+				data=JSON.stringify(data);	//将这条数据json字符串化
+				this.storage.push(data);	//放入storage数组 一会儿一起放入缓存
+				if(this.storage.length>=this.storageNum)	//如果缓存的数量大于最大缓存数量，那么就直接删除第一条数据
+					this.storage.splice(0,1);
+				this.socketTask.send({ 		//发送到服务器
+					data:data,
+					success: () => {
+				
+					}
+				});
 			}
 		},
 		computed:{
@@ -289,13 +375,11 @@
 				data:{
 					uid: Number(this.toUid)
 				}
-			}).then(
-				res=>{
+			}).then(res=>{
 					this.name=res.result.userName;
 					this.yourAvatarUrl=res.result.avatarUrl;
 				}
 			)
-			
 			this.storage=uni.getStorageSync(this.uid+'ChatWith'+this.toUid);	//将所有的历史记录缓存存入storage缓存
 			if(this.storage==''){	//如果缓存为空那么显式声明为数组
 				this.storage=[];
@@ -312,14 +396,63 @@
 				var showTime=this.judgeTime(text.time);
 				var timeObject=this.timeObject(text.time,showTime);
 				this.texts.push({
+					isOrder:text.isOrder,//查看是否是订单消息
 					fromMe:fromMe,//是否是我发出的
 					time:timeObject,
 					showTime:showTime,
 					message:text.message,
 				})
 			}
+			
 			if(this.texts.length!=0)	//如果屏幕上有消息 那么移动到最下一条消息
 				this.textIndex='index'+(this.texts.length-1)
+				
+			if(this.socketTask==null){	//打开页面打开链接
+				this.connect();
+			}
+			
+			const eventChannel = this.getOpenerEventChannel();//从order组件中传来的订单消息
+			eventChannel.on('bookOrder', (data)=> {
+				var cid=data.data.cid;
+				var longitude=data.data.longitude;
+				var latitude=data.data.latitude;
+				var address=data.data.address;
+				var location=data.data.location;
+				var price=data.data.price;
+				var timeStamp=data.data.timeStamp;
+				var startTime=data.data.startTime;
+				var endTime=data.data.endTime;
+				wx.cloud.callFunction({   //输入订单
+					name:'orderInput',
+					data:{
+						status:0,
+						uid:Number(this.uid),
+						toUid:Number(this.toUid),
+						cid:Number(cid),
+						timeStamp:timeStamp,
+						startTime:startTime,
+						endTime:endTime
+					}
+				}).then(
+					res=>{
+						this.sendNewOrder({
+							status:0,
+							oid:res.result,
+							uid:Number(this.uid),
+							toUid:Number(this.toUid),
+							cid:Number(cid),
+							longitude:longitude,
+							latitude:latitude,
+							address:address,
+							location:location,
+							price:price,
+							timeStamp:timeStamp,
+							startTime:startTime,
+							endTime:endTime
+						})
+					}
+				)
+			})
 		},
 		onUnload() {	
 			if(this.socketTask!=null){		//页面关闭那么关闭链接
@@ -336,20 +469,45 @@
 					reminder=JSON.parse(reminder);
 				}else reminder={};
 				var last=JSON.parse(this.storage[this.storage.length-1]);	//将好友uid、最新的头像、名字以及最后一条消息的文字和时间存入缓存持久化
-				reminder[this.toUid]={
-					name:this.name,
-					avatarUrl:this.yourAvatarUrl,
-					time:last.time,
-					message:last.message
-				};
+				if(last.isOrder==false){	//不是订单消息
+					reminder[this.toUid]={
+						name:this.name,
+						avatarUrl:this.yourAvatarUrl,
+						time:last.time,
+						message:last.message
+					};
+				}else{ 	//是订单消息
+					if(last.uid==this.uid){		//消息是我发出的也即我发出的预约
+						reminder[this.toUid]={
+							name:this.name,
+							avatarUrl:this.yourAvatarUrl,
+							time:last.time,
+							message:"你发起了一个预约"
+						};
+					}else{		//消息是对方发出的也即对方发出的预约
+						reminder[this.toUid]={
+							name:this.name,
+							avatarUrl:this.yourAvatarUrl,
+							time:last.time,
+							message:"对方发来了一个预约"
+						};
+					}
+				}
+				
 				uni.setStorageSync(this.uid+'friends',JSON.stringify(reminder));
 			}
 				
 		},
 		onShow() {
-			if(this.socketTask==null){	//打开页面打开链接
-				this.connect();
+			if(!this.firstCall){	//如果不是第一次打开页面
+				if(this.socketTask==null){	//打开页面打开链接
+					this.connect();
+				}
+			}else {
+				this.firstCall=false;
+				console.log(1)
 			}
+			
 		},
 		onHide() {	//页面隐藏关闭链接
 			if(this.socketTask!=null){
@@ -458,6 +616,16 @@
 		word-break:break-all;
 		word-wrap:break-word; 
 		max-width: 520upx;
+	}
+	
+	.myOrder{
+		margin: 20upx;
+		margin-right: 0;
+	}
+	
+	.otherOrder{
+		margin: 20upx;
+		margin-left: 0;
 	}
 	
 	.backimg {

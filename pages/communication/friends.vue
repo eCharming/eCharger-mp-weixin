@@ -68,7 +68,11 @@
 						var time=this.timeObject(text.time);
 						for(var i in this.friends){		
 							if(fromUid==this.friends[i].uid){	//匹配到好友的uid之后修正数据
-								this.friends[i].lastWord=text.message;
+								if(!text.isOrder){	//不是订单
+									this.friends[i].lastWord=text.message;
+								}else{
+									this.friends[i].lastWord="对方发来了一个预约";
+								}
 								this.friends[i].newMessageNum=num;
 								this.friends[i].hasNew=true;
 								this.friends[i].lastTime=time;

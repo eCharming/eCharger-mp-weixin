@@ -30,25 +30,28 @@
 			}).then(
 				res=>{
 					this.$store.commit('setUid',res.result.uid);
+					// this.$store.commit('setUid',1);
 					var logInStatus=res.result.loginStatus
 					if(res.result.loginStatus){
 						wx.cloud.callFunction({   //uid获取
 							name:'infoReturn',
 							data:{
 								uid: res.result.uid
+								// uid:1
 							}
 						}).then(
 							res=>{
 								this.$store.commit('setUserName',res.result.userName);
 								this.$store.commit('setAvatarUrl',res.result.avatarUrl);
 								this.$store.commit('setLogInStatus',logInStatus);
+								
 							}
 						)
 					}
 				}
 			)
 			
-			// this.$store.commit('setUid',2);	
+				
 			
 			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;
 			this.$store.commit('setWindowHeight',windowHeight);

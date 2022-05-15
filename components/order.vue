@@ -137,7 +137,7 @@
 							<view style="display: flex;justify-content: center;align-items: center;margin-bottom: 40upx;">
 								<view style="width: 150rpx;height: 70upx;background-color: rgba(102,205,170,1);
 								border-radius: 20upx;display: flex;justify-content: center;align-items: center;">
-									<text  style="color: white;font-size: 33upx;font-weight: 700;letter-spacing: 10upx;">
+									<text  style="color: white;font-size: 33upx;font-weight: 700;letter-spacing: 10upx;" @tap="bookOrder">
 										预约
 									</text>
 									
@@ -169,6 +169,12 @@
 			},
 			uid:{
 				type:Number
+			},
+			longitude:{
+				type:String
+			},
+			latitude:{
+				type:String
 			},
 			address:{
 				type:String
@@ -435,6 +441,27 @@
 				uni.navigateTo({
 					url: '../detail/detail?cid='+this.cid,
 				})
+			},
+			bookOrder(){
+				var time=new Date().getTime();
+				uni.navigateTo({
+					url: '../communication/chat?toUid='+this.uid,
+					success: (res) => {
+						res.eventChannel.emit('bookOrder', { 
+							data: {
+								cid:this.cid,
+								longitude:this.longitude,
+								latitude:this.latitude,
+								address:this.address,
+								location:this.location,
+								price:this.possiblePrice,
+								timeStamp:time,
+								startTime:this.text1,
+								endTime:this.text2,
+							}
+						})
+					}
+				})
 			}
 		},
 		watch:{
@@ -467,8 +494,6 @@
 				var showTime=this.time[days-1].split("-")
 				this.minTime1=this.minTime2=showTime[0]
 				this.maxTime1=this.maxTime2=showTime[1]
-				console.log(this.minTime1)
-				console.log(this.maxTime1)
 			}
 		}
 	}
