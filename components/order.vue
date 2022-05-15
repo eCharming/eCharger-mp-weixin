@@ -466,7 +466,6 @@
 		},
 		watch:{
 			'detail'(){
-				console.log(1)
 				if(this.detail==false){
 					this.$nextTick(function(){
 						this.rotate=0;
@@ -482,6 +481,25 @@
 					})
 					
 				}
+			},
+			'cid': {	//监听cid，用于实时更新预约picker
+				immediate:true,
+				handler() {
+					this.text1='起始时间'
+					this.text2='结束时间'
+					var tempDate = new Date();
+					var days = tempDate.getDay();
+					if(days==0) {
+						days=7;
+					}
+					if(this.time[days-1]!="") {
+						var minMinutes = tempDate.getHours()*60+tempDate.getMinutes()+30
+						var minHours = minMinutes/60+':'+minMinutes%60
+						var showTime=this.time[days-1].split("-")
+						this.minTime1=this.minTime2=minHours
+						this.maxTime1=this.maxTime2=showTime[1]
+					}
+				}
 			}
 		},
 		mounted(){
@@ -491,8 +509,10 @@
 				days=7;
 			}
 			if(this.time[days-1]!="") {
+				var minMinutes = tempDate.getHours()*60+tempDate.getMinutes()+30
+				var minHours = minMinutes/60+':'+minMinutes%60
 				var showTime=this.time[days-1].split("-")
-				this.minTime1=this.minTime2=showTime[0]
+				this.minTime1=this.minTime2=minHours
 				this.maxTime1=this.maxTime2=showTime[1]
 			}
 		}

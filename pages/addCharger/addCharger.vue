@@ -448,6 +448,24 @@
 					})
 					return;
 				}
+				let isLong = true;
+				for(let i=0;i<this.text.length;i+=2) {
+					if(this.text[i]!='起始时间' && this.text[i+1]!='结束时间') {
+						let first = this.text[i].split(':')
+						let second = this.text[i+1].split(':')
+						if (second[0]*60+second[1]-first[0]*60-first[1]<60) {
+							isLong = false;
+							break;
+						}
+					}
+				}
+				if (isLong ==false) {
+					wx.showToast({
+						title: "时间段请大于1小时！",
+						icon: 'none',
+					})
+					return;
+				}
 				var time = new Array();
 				for (var i = 0; i < 14; i += 2) {
 					if (this.text[i] == "起始时间" || this.text[i + 1] == "结束时间") {
