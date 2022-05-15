@@ -56,6 +56,13 @@
 				"navigationBarTitleText": "易插eCharger"
 			}
 			
+		},
+		{
+			"path" : "pages/addFrePlace/addFrePlace",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+			
 		}
     ],
 	"globalStyle": {

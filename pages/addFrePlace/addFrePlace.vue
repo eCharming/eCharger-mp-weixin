@@ -36,7 +36,7 @@
 					
 					<view style="display: flex;position: relative;transition: all .1s;" :style="{'left':buttonLeft+'rpx'}">
 						<view class="clear" :style="{'opacity':buttonOpacity1}" @tap="clear">清空历史记录</view>
-						<view class="add" :style="{'opacity':buttonOpacity2 }" @tap="addFrePlace">添加常用地点</view>
+						<view class="add" :style="{'opacity':buttonOpacity2 }">添加常用地点</view>
 					</view> 
 					
 				</view>
@@ -357,11 +357,6 @@
 					this.color="rgba("+(50+52*percent)+","+(200+5*percent)+","+(210-40*percent)+",1)";
 					this.doubleColor="linear-gradient(to right bottom,rgb(102,205,170) 0% "+percent*100+"%,"+this.$store.state.color+")";
 				}
-			},
-			addFrePlace() {
-				uni.navigateTo({
-						url: '../addFrePlace/addFrePlace',
-					})
 			}
 		}, 
 		mounted(){
