@@ -444,24 +444,52 @@
 			},
 			bookOrder(){
 				var time=new Date().getTime();
-				uni.navigateTo({
-					url: '../communication/chat?toUid='+this.uid,
-					success: (res) => {
-						res.eventChannel.emit('bookOrder', { 
-							data: {
-								cid:this.cid,
-								longitude:this.longitude,
-								latitude:this.latitude,
-								address:this.address,
-								location:this.location,
-								price:this.possiblePrice,
-								timeStamp:time,
-								startTime:this.text1,
-								endTime:this.text2,
+				wx.cloud.callFunction({ //查询order的状态
+					name: 'orderNum',
+					data: {
+						uid:this.$store.state.uid,
+					}
+				}).then(res=>{
+					console.log(res)
+					if(res.result){
+						wx.showToast({
+							title: "预约成功！",
+							icon: 'success',
+							complete: () => {
+								setTimeout(() => {
+									uni.navigateTo({
+										url: '../communication/chat?toUid='+this.uid,
+										success: (res) => {
+											res.eventChannel.emit('bookOrder', { 
+												data: {
+													cid:this.cid,
+													longitude:this.longitude,
+													latitude:this.latitude,
+													address:this.address,
+													location:this.location,
+													price:this.possiblePrice,
+													timeStamp:time,
+													startTime:this.text1,
+													endTime:this.text2,
+												}
+											})
+										}
+									});
+								}, 500)
+							}
+						})
+					}else{
+						wx.showToast({
+							title: "有未处理的订单",
+							icon: 'error',
+							complete: () => {
 							}
 						})
 					}
 				})
+				
+				
+				
 			}
 		},
 		watch:{
