@@ -494,7 +494,7 @@
 					}
 					if(this.time[days-1]!="") {
 						var minMinutes = tempDate.getHours()*60+tempDate.getMinutes()+30
-						var minHours = minMinutes/60+':'+minMinutes%60
+						var minHours = Math.floor(minMinutes/60)+':'+minMinutes%60
 						var showTime=this.time[days-1].split("-")
 						this.minTime1=this.minTime2=minHours
 						this.maxTime1=this.maxTime2=showTime[1]
@@ -510,7 +510,7 @@
 			}
 			if(this.time[days-1]!="") {
 				var minMinutes = tempDate.getHours()*60+tempDate.getMinutes()+30
-				var minHours = minMinutes/60+':'+minMinutes%60
+				var minHours = Math.floor(minMinutes/60)+':'+minMinutes%60
 				var showTime=this.time[days-1].split("-")
 				this.minTime1=this.minTime2=minHours
 				this.maxTime1=this.maxTime2=showTime[1]
