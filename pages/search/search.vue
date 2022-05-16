@@ -387,6 +387,10 @@
 					this.tapStorage(this.frePlace.freCompany.title, this.frePlace.freCompany.location)
 				} else if (type == 2 && JSON.stringify(this.frePlace.freSchool) != '{}') {
 					this.tapStorage(this.frePlace.freSchool.title, this.frePlace.freSchool.location)
+				} else {
+					uni.navigateTo({
+						url: '../addFrePlace/addFrePlace',
+					})
 				}
 			},
 			clear() {
