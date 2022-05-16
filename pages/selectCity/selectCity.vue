@@ -1,9 +1,10 @@
 <template>
 	<view style="display: flex;flex-direction:column">
 		<view :style="{'height':statusHeight+'px','width':'100%','top':0,'z-index':9999}">
-			<view :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
+			<view class="cityNavi" :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
 				<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}"
 					@tap="back"></image>
+				<text :style="{'margin-bottom':cityHeight+'px'}">地点</text>
 			</view>
 		</view>
 		<scroll-view scroll-y="true" scroll-with-animation="true" :scroll-into-view="scrollTopId"
@@ -76,6 +77,7 @@
 			return {
 				statusHeight: uni.getSystemInfoSync().statusBarHeight + 50,
 				statusBarHeight: uni.getSystemInfoSync().statusBarHeight,
+				cityHeight:0,
 				scrollHeight: 0,
 				color: 'rgba(102,205,170,1)',
 				obj: JSON.parse(String
@@ -152,6 +154,7 @@
 			}
 		},
 		mounted() {
+			this.cityHeight=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			uni.getSystemInfo({
 				success: (res) => {
 					this.scrollHeight = res.windowHeight - this.statusHeight;
@@ -162,6 +165,16 @@
 </script>
 
 <style scoped>
+	.cityNavi{
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+		color: #FFFFFF;
+		font-size: 35upx;
+		font-weight: 700;
+		letter-spacing: 2upx;
+	}
+	
 	.backimg {
 		position: absolute;
 		left: 8px;

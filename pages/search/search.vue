@@ -1,8 +1,8 @@
 <template>
 	<view>
-		<view :style="{'height':statusHeight+'px','background':doubleColor}">
-			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}"
-				@tap="back"></image>
+		<view class="searchNavi" :style="{'height':statusHeight+'px','background':doubleColor}">
+			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}" @tap="back"></image>
+			<text :style="{'margin-bottom':searchHeight+'px'}">搜索</text>
 		</view>
 		<view class="searchbox">
 			<view class="textareaview">
@@ -238,6 +238,7 @@
 			return {
 				statusHeight: uni.getSystemInfoSync().statusBarHeight + 50,
 				statusBarHeight: uni.getSystemInfoSync().statusBarHeight,
+				searchHeight:0,
 				position: "",
 				suggestions: [],
 				storageHeight: this.$store.state.windowHeight * 0.8,
@@ -484,6 +485,7 @@
 			}
 		},
 		mounted() {
+			this.searchHeight=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			var searchHistory = uni.getStorageSync('searchHistory');
 			if (searchHistory) {
 				searchHistory = JSON.parse(searchHistory);
@@ -501,6 +503,16 @@
 </script>
 
 <style scoped>
+	.searchNavi{
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+		color: #FFFFFF;
+		font-size: 35upx;
+		font-weight: 700;
+		letter-spacing: 2upx;
+	}
+	
 	.image1 {
 		position: absolute;
 		height: 70upx;

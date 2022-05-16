@@ -1,9 +1,10 @@
 <template>
 	<view style="display: flex;flex-direction:column">
 		<view :style="{'height':statusHeight+'px','width':'100%','top':0,'z-index':9999}">
-			<view :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
+			<view class="addChargerNavi" :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
 				<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}"
 					@tap="back"></image>
+				<text :style="{'margin-bottom':addChargerHeight+'px'}">添加电桩</text>
 			</view>
 		</view>
 
@@ -225,6 +226,7 @@
 			return {
 				statusHeight: uni.getSystemInfoSync().statusBarHeight + 50,
 				windowWidth: uni.getSystemInfoSync().windowWidth,
+				addChargerHeight:0,
 				color: 'rgba(50,200,210,1)',
 				statusBarHeight: uni.getSystemInfoSync().statusBarHeight,
 				name: "",
@@ -573,6 +575,7 @@
 			}
 		},
 		mounted() {
+			this.addChargerHeight=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			if(this.$store.state.currentLocation==null) {
 				wx.showToast({
 					title: "请打开定位！",
@@ -601,6 +604,16 @@
 </script>
 
 <style scoped>
+	.addChargerNavi{
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+		color: #FFFFFF;
+		font-size: 35upx;
+		font-weight: 700;
+		letter-spacing: 2upx;
+	}
+	
 	.backimg {
 		position: absolute;
 		left: 8px;

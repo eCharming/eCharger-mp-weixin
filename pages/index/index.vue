@@ -29,15 +29,15 @@
 				name:'wxlogin',
 			}).then(
 				res=>{
-					this.$store.commit('setUid',res.result.uid);
-					// this.$store.commit('setUid',1);
+					// this.$store.commit('setUid',res.result.uid);
+					this.$store.commit('setUid',1);
 					var logInStatus=res.result.loginStatus
 					if(res.result.loginStatus){
 						wx.cloud.callFunction({   //uid获取
 							name:'infoReturn',
 							data:{
-								uid: res.result.uid
-								// uid:1
+								// uid: res.result.uid
+								uid:1
 							}
 						}).then(
 							res=>{

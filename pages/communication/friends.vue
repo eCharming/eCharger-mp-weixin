@@ -2,7 +2,7 @@
 	<view>
 		<view class="navigator" :style="{'height':statusHeight+'px'}">
 			<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}" @tap="back"></image>
-			<text class="contacter" :style="{'margin-bottom':contacterBottom+'px'}">联系人</text>
+			<text :style="{'margin-bottom':contacterBottom+'px'}">联系人</text>
 		</view>
 		<scroll-view
 			scroll-y="true"
@@ -88,18 +88,24 @@
 								}
 							}).then(
 								res=>{
+									var message='';
+									if(!text.isOrder){	//不是订单
+										message=text.message;
+									}else{
+										message="对方发来了一个预约";
+									}
 									reminder[fromUid]={			//将传入的reminder参数增加该好友
 										name:res.result.userName,
 										avatarUrl:res.result.avatarUrl,
 										time:time,
-										message:text.message
+										message:message
 									};
 									uni.setStorageSync(this.uid+'friends',JSON.stringify(reminder)); 	//存入缓存持久化该好友 用于下一次打开时可以找到该好友
 									this.friends.unshift({		//向好友列表当中推入该好友
 										uid:fromUid,
 										name:res.result.userName,
 										avatarUrl:res.result.avatarUrl,
-										lastWord:text.message,
+										lastWord:message,
 										lastTime:time,
 										newMessageNum:num,//新消息数量
 										hasNew:true//是否有新消息
@@ -155,31 +161,6 @@
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			this.contacterBottom=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			this.scrollHeight=uni.getSystemInfoSync().windowHeight-this.statusHeight;
-			this.friends.push({			//测试版使用
-				uid:1,
-				name:'',
-				avatarUrl:'',
-				lastWord:'',
-				lastTime:'',
-				newMessageNum:0,//新消息数量
-				hasNew:false//是否有新消息
-			},{
-				uid:2,
-				name:'',
-				avatarUrl:'',
-				lastWord:'',
-				lastTime:'',
-				newMessageNum:0,//新消息数量
-				hasNew:false//是否有新消息
-			},{
-				uid:3,
-				name:'',
-				avatarUrl:'',
-				lastWord:'',
-				lastTime:'',
-				newMessageNum:0,//新消息数量
-				hasNew:false//是否有新消息
-			});
 	
 		},
 		onUnload() {		//页面关闭则断开连接

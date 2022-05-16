@@ -1,9 +1,10 @@
 <template>
 	<view style="display: flex;flex-direction:column">
 		<view :style="{'height':statusHeight+'px','width':'100%','top':0,'z-index':9999}">
-			<view :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
+			<view class="detailNavi" :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
 				<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}"
 					@tap="back"></image>
+				<text :style="{'margin-bottom':detailHeight+'px'}">电桩详情</text>
 			</view>
 		</view>
 
@@ -90,6 +91,7 @@
 		data() {
 			return {
 				statusHeight: uni.getSystemInfoSync().statusBarHeight + 50,
+				detailHeight:0,
 				windowWidth: uni.getSystemInfoSync().windowWidth,
 				color: '#66CDAA',
 				statusBarHeight: uni.getSystemInfoSync().statusBarHeight,
@@ -167,6 +169,7 @@
 			}
 		},
 		onLoad(option) {
+			this.detailHeight=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			wx.cloud.callFunction({
 				name:'chargerDetail',
 				data: {
@@ -223,6 +226,16 @@
 </script>
 
 <style scoped>
+	.detailNavi{
+		display: flex;
+		justify-content: center;
+		align-items: flex-end;
+		color: #FFFFFF;
+		font-size: 35upx;
+		font-weight: 700;
+		letter-spacing: 2upx;
+	}
+	
 	.backimg {
 		position: absolute;
 		left: 8px;

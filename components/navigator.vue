@@ -44,7 +44,7 @@
 		
 		<view class="text-box" :style="{'bottom':textBottom+'rpx','background-color':backColor}">
 			<view :style="{'opacity':opacity}" style="transition: all .5s;">
-				<text class="text-1" :style="{'bottom':word[0].bottom+'rpx','opacity':word[0].opacity}">扫一扫</text>
+				<text class="text-1" :style="{'bottom':word[0].bottom+'rpx','opacity':word[0].opacity}">订单</text>
 				<text class="text-2" :style="{'bottom':word[1].bottom+'rpx','opacity':word[1].opacity}">联系</text>
 				<text class="text-3" :style="{'bottom':word[2].bottom+'rpx','opacity':word[2].opacity}">全城</text>
 				<text class="text-4" :style="{'bottom':word[3].bottom+'rpx','opacity':word[3].opacity}">我的</text>
@@ -441,7 +441,7 @@
 	.text-1{
 		position: absolute;
 		text-align: center;
-		left: 52upx;
+		left: 65upx;
 		color: #FFFFFF;
 		font-size: 30upx;
 		font-weight: 700;
