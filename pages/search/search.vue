@@ -77,20 +77,20 @@
 					<swiper-item>
 						<view style="display: flex;justify-content: space-between;margin: 30upx;">
 							<view style="width: 230upx;display: flex;justify-content:center; align-items:center;"
-								@tap="tapStorageIcon(0)" @longpress="delIcon(0)">
+								@tap="tapStorageIcon(0)">
 								<image src="../../static/image/home.png"
 									style="height:40upx;width:40upx;margin-right:20upx;"></image>
 								回家
 							</view>
 							<view style="width: 230upx;display: flex;justify-content: center;
 							border-left:2upx solid rgba(0,0,0,0.1);border-right:2upx solid rgba(0,0,0,0.1);align-items:center;"
-								@tap="tapStorageIcon(1)" @longpress="delIcon(1)">
+								@tap="tapStorageIcon(1)">
 								<image src="../../static/image/work.png"
 									style="height:40upx;width:40upx;margin-right:20upx;"></image>
 								公司
 							</view>
 							<view style="width: 230upx;display: flex;justify-content: center;align-items:center;"
-								@tap="tapStorageIcon(2)" @longpress="delIcon(2)">
+								@tap="tapStorageIcon(2)">
 								<image src="../../static/image/school.png"
 									style="height:40upx;width:40upx;margin-right:20upx;"></image>
 								学校
@@ -99,7 +99,70 @@
 						<scroll-view scroll-y="true"
 							style="margin: 30upx;background-color: #FFFFFF;border-radius: 40upx;width:690upx"
 							:style="{'height': (storageHeight-50)+'px'}">
-							<view v-for="(storage,index) in otherFrePlace" :key="index"
+							<view style="display: flex;flex-direction: column;" v-if="JSON.stringify(frePlace.freHome) != '{}'">
+								<view class="storage" @tap="tapStorage(frePlace.freHome.title,frePlace.freHome.location)">
+							
+									<view class="view5">
+										<image src="../../static/image/search_blue.png" class="image3"></image>
+										<text class="text3">{{frePlace.freHome.title}}</text>
+									</view>
+							
+									<view class="view4" @tap.stop.prevent="delFreIcon(0)">
+										<icon type="cancel" color="rgb(50,200,210,1)" style="margin-top: 5upx;"></icon>
+									</view>
+								</view>
+								<view class="view6">
+									<text class="text6_blue">{{frePlace.freHome.category}}</text>
+									<text class="text6_blue_2">家</text>
+								</view>
+								<view style="display: flex;justify-content: center;margin-top: 20upx;">
+									<view style="border-bottom: 2upx solid rgba(0,0,0,0.1);width: 500upx;"></view>
+								</view>
+							</view>
+							
+							<view style="display: flex;flex-direction: column;" v-if="JSON.stringify(frePlace.freCompany) != '{}'">
+								<view class="storage" @tap="tapStorage(frePlace.freCompany.title,frePlace.freCompany.location)">
+							
+									<view class="view5">
+										<image src="../../static/image/search_blue.png" class="image3"></image>
+										<text class="text3">{{frePlace.freCompany.title}}</text>
+									</view>
+							
+									<view class="view4" @tap.stop.prevent="delFreIcon(1)">
+										<icon type="cancel" color="rgb(50,200,210,1)" style="margin-top: 5upx;"></icon>
+									</view>
+								</view>
+								<view class="view6">
+									<text class="text6_blue">{{frePlace.freCompany.category}}</text>
+									<text class="text6_blue_2">公司</text>
+								</view>
+								<view style="display: flex;justify-content: center;margin-top: 20upx;">
+									<view style="border-bottom: 2upx solid rgba(0,0,0,0.1);width: 500upx;"></view>
+								</view>
+							</view>
+							
+							<view style="display: flex;flex-direction: column;" v-if="JSON.stringify(frePlace.freSchool) != '{}'">
+								<view class="storage" @tap="tapStorage(frePlace.freSchool.title,frePlace.freSchool.location)">
+							
+									<view class="view5">
+										<image src="../../static/image/search_blue.png" class="image3"></image>
+										<text class="text3">{{frePlace.freSchool.title}}</text>
+									</view>
+							
+									<view class="view4" @tap.stop.prevent="delFreIcon(2)">
+										<icon type="cancel" color="rgb(50,200,210,1)" style="margin-top: 5upx;"></icon>
+									</view>
+								</view>
+								<view class="view6">
+									<text class="text6_blue">{{frePlace.freSchool.category}}</text>
+									<text class="text6_blue_2">学校</text>
+								</view>
+								<view style="display: flex;justify-content: center;margin-top: 20upx;">
+									<view style="border-bottom: 2upx solid rgba(0,0,0,0.1);width: 500upx;"></view>
+								</view>
+							</view>
+							
+							<view v-for="(storage,index) in frePlace.freOther" :key="index"
 								style="display: flex;flex-direction: column;">
 								<view class="storage" @tap="tapStorage(storage.title,storage.location)">
 
@@ -114,6 +177,7 @@
 								</view>
 								<view class="view6">
 									<text class="text6_blue">{{storage.category}}</text>
+									<text class="text6_blue_2">其他</text>
 								</view>
 								<view style="display: flex;justify-content: center;margin-top: 20upx;">
 									<view style="border-bottom: 2upx solid rgba(0,0,0,0.1);width: 500upx;"></view>
@@ -180,7 +244,7 @@
 				suggestionHeight: this.$store.state.windowHeight * 0.85,
 				index: 0,
 				storages: [],
-				otherFrePlace: [],
+				frePlace:{},
 				isInput: false,
 				modelWidth: 120,
 				modelHeight: 15,
@@ -317,19 +381,13 @@
 				this.$store.commit('addIsLow');
 			},
 			tapStorageIcon(type) {
-				var frePlace;
-				if (type == 0) {
-					frePlace = uni.getStorageSync('freHome');
-				} else if (type == 1) {
-					frePlace = uni.getStorageSync('freCompany');
-				} else if (type == 2) {
-					frePlace = uni.getStorageSync('freSchool');
+				if (type == 0 && JSON.stringify(this.frePlace.freHome) != '{}') {
+					this.tapStorage(this.frePlace.freHome.title, this.frePlace.freHome.location)
+				} else if (type == 1 && JSON.stringify(this.frePlace.freCompany) != '{}') {
+					this.tapStorage(this.frePlace.freCompany.title, this.frePlace.freCompany.location)
+				} else if (type == 2 && JSON.stringify(this.frePlace.freSchool) != '{}') {
+					this.tapStorage(this.frePlace.freSchool.title, this.frePlace.freSchool.location)
 				}
-				if (frePlace != '') {
-					frePlace = JSON.parse(frePlace);
-					this.tapStorage(frePlace.title, frePlace.location)
-				}
-
 			},
 			clear() {
 				uni.removeStorageSync('searchHistory');
@@ -346,48 +404,19 @@
 				} else uni.removeStorageSync('searchHistory');
 
 			},
-			delIcon(type) {
-				var frePlace
-				var storage = ""
-				if (type == 0) {
-					frePlace = uni.getStorageSync('freHome')
-					storage = 'freHome'
-				} else if (type == 1) {
-					frePlace = uni.getStorageSync('freCompany')
-					storage = 'freCompany'
-				} else if (type == 2) {
-					frePlace = uni.getStorageSync('freSchool')
-					storage = 'freSchool'
-				}
-				if (frePlace != '') {
-					wx.showModal({
-						title: '提示',
-						content: '确认删除？',
-						success: function(res) {
-							if (res.confirm) {
-								uni.removeStorageSync(storage);
-								wx.showToast({
-									title: "删除成功！",
-									icon: 'success',
-								})
-							} else if (res.cancel) {
-								// do nothing
-							}
-						}
-					})
-				}
-
-			},
 			delFre(index) {
-				this.otherFrePlace.splice(index, 1);
-				var otherFrePlace = JSON.parse(uni.getStorageSync('otherFrePlace'));
-
-				if (otherFrePlace.length != 1) {
-					var otherFrePlaceIndex = otherFrePlace.length - 1 - index;
-					otherFrePlace.splice(otherFrePlaceIndex, 1);
-					uni.setStorageSync('otherFrePlace', JSON.stringify(otherFrePlace));
-				} else uni.removeStorageSync('otherFrePlace');
-
+				this.frePlace.freOther.splice(index, 1);
+				uni.setStorageSync('frePlace', JSON.stringify(this.frePlace));
+			},
+			delFreIcon(type) {
+				if (type ==0) {
+					this.frePlace.freHome={}
+				} else if(type ==1) {
+					this.frePlace.freCompany={}
+				} else if(type==2) {
+					this.frePlace.freSchool={}
+				}
+				uni.setStorageSync('frePlace', JSON.stringify(this.frePlace));
 			},
 			change(e) {
 				this.changeImg = e.detail.current;
@@ -459,26 +488,10 @@
 					this.storages.push(searchHistory[length - 1 - index]);
 				}
 			}
-			this.otherFrePlace.splice(0)
-			var otherFrePlace = uni.getStorageSync('otherFrePlace');
-			if (otherFrePlace) {
-				otherFrePlace = JSON.parse(otherFrePlace);
-				var length = otherFrePlace.length;
-				for (var index in otherFrePlace) {
-					this.otherFrePlace.push(otherFrePlace[length - 1 - index]);
-				}
-			}
+			this.frePlace = JSON.parse(uni.getStorageSync('frePlace'));
 		},
 		onShow() {
-			this.otherFrePlace.splice(0)
-			var otherFrePlace = uni.getStorageSync('otherFrePlace');
-			if (otherFrePlace) {
-				otherFrePlace = JSON.parse(otherFrePlace);
-				var length = otherFrePlace.length;
-				for (var index in otherFrePlace) {
-					this.otherFrePlace.push(otherFrePlace[length - 1 - index]);
-				}
-			}
+			this.frePlace = JSON.parse(uni.getStorageSync('frePlace'));
 		}
 	}
 </script>
@@ -680,9 +693,17 @@
 		margin-bottom: 20upx;
 		padding: 10upx;
 		font-size: 20upx;
-
 	}
 
+	.text6_blue_2 {
+		background-color: rgba(102, 205, 170, 0.2);
+		color: rgb(50, 200, 210, 1);
+		margin-left: 10upx;
+		margin-bottom: 20upx;
+		padding: 10upx;
+		font-size: 20upx;
+
+	}
 	.text1 {
 		border: 2upx red solid;
 		white-space: nowrap;

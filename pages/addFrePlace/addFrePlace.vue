@@ -130,76 +130,68 @@
 					return title;
 				}
 			},
-			setOtherFreStorage(id,title,location,category){
-				var otherFrePlace= uni.getStorageSync('otherFrePlace');
-				if(otherFrePlace!=''){
-					otherFrePlace=JSON.parse(otherFrePlace);
-					for(var index in otherFrePlace){
-						if(otherFrePlace[index].id==id){
-							otherFrePlace.splice(index,1);
-							break;
-						}
+			setOtherFreStorage(id, title, location, category) {
+				var otherFrePlace = uni.getStorageSync('frePlace');
+				otherFrePlace = JSON.parse(otherFrePlace);
+				for (var index in otherFrePlace.freOther) {
+					if (otherFrePlace.freOther[index].id == id) {
+						otherFrePlace.freOther.splice(index, 1);
+						break;
 					}
-					otherFrePlace.push({
-						id:id,
-						title:title,
-						location:location,
-						category:category
-					});
-					uni.setStorageSync('otherFrePlace',JSON.stringify(otherFrePlace));
-				}else{
-					otherFrePlace=[];
-					otherFrePlace.push({
-						id:id,
-						title:title,
-						location:location,
-						category:category
-					});
-					uni.setStorageSync('otherFrePlace',JSON.stringify(otherFrePlace));
 				}
+				otherFrePlace.freOther.push({
+					id: id,
+					title: title,
+					location: location,
+					category: category
+				});
+				uni.setStorageSync('frePlace', JSON.stringify(otherFrePlace));
 			},
-			setFreStorage(id,title,location,category,type){
+			setFreStorage(id, title, location, category, type) {
+				var otherFrePlace = uni.getStorageSync('frePlace');
+				otherFrePlace = JSON.parse(otherFrePlace);
 				var frePlace = {
-					id:id,
-					title:title,
-					location:location,
-					category:category
+					id: id,
+					title: title,
+					location: location,
+					category: category
 				}
-				if(type==0) {
-					uni.setStorageSync('freHome',JSON.stringify(frePlace));
-				} else if (type==1) {
-					uni.setStorageSync('freCompany',JSON.stringify(frePlace));
-				} else if(type ==2) {
-					uni.setStorageSync('freSchool',JSON.stringify(frePlace));
+				if (type == 0) {
+					otherFrePlace.freHome = frePlace
+				} else if (type == 1) {
+					otherFrePlace.freCompany = frePlace
+				} else if (type == 2) {
+					otherFrePlace.freSchool = frePlace
 				}
+				uni.setStorageSync('frePlace', JSON.stringify(otherFrePlace));
 			},
 			tap(id, title, location, category) {
 				uni.showActionSheet({
-					itemList:['家','公司','学校','其他'],
-					success: (res)=> {
-						if (res.tapIndex==3) {
+					itemList: ['家', '公司', '学校', '其他'],
+					success: (res) => {
+						if (res.tapIndex == 3) {
 							this.setOtherFreStorage(id, title, location, category);
 						} else {
-							this.setFreStorage(id,title,location,category,res.tapIndex);
+							this.setFreStorage(id, title, location, category, res.tapIndex);
 						}
 						wx.showToast({
 							title: "添加成功！",
 							icon: 'success',
-							complete:()=>{
-								setTimeout(()=>{
+							complete: () => {
+								setTimeout(() => {
 									uni.navigateBack({})
-								},500)
+								}, 500)
 							}
 						})
 					},
-					fail:(res)=> {
+					fail: (res) => {
 						wx.showToast({
 							title: "添加失败！",
 							icon: 'error',
-							complete:()=>{
-								setTimeout(()=>{
+							complete: () => {
+								setTimeout(() => {
 									uni.navigateBack({})
-								},500)
+								}, 500)
 							}
 						})
 					}
