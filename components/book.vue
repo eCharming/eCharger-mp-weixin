@@ -7,6 +7,15 @@
 				<view style="width: 400upx;overflow : hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 2;
 				-webkit-box-orient: vertical;margin-bottom: 25upx;color: rgba(0,0,0,0.5);">{{location}}</view>
 				<image style="width: 420upx;height: 315upx;margin-bottom: 25upx;" :src="imageUrl"></image>
+				
+				<view style="display: flex;margin-bottom: 25upx;">
+					<view style="color: rgba(0,0,0,0.5);">下单时间：</view>
+					<view style="font-weight: 600;color:rgba(0,0,0,0.5) ;letter-spacing: 1upx;">{{bookTimeText}}</view>
+				</view>
+				<view style="display: flex;margin-bottom: 25upx;" v-if="status==0">
+					<view style="color: rgba(0,0,0,0.5);">剩余时间：</view>
+					<view style="font-weight: 600;color:rgba(0,0,0,0.5) ;letter-spacing: 1upx;">{{timeRemain}}</view>
+				</view>
 				<view style="display: flex;margin-bottom: 25upx;">
 					<view style="color: rgba(0,0,0,0.5);">预约时间：</view>
 					<view style="font-size: 35upx;font-weight: 700;color:rgba(102,205,170,1) ;letter-spacing: 3upx;">{{startTime}}-{{endTime}}</view>
@@ -60,6 +69,8 @@
 				endTime:'',
 				imageUrl:'',
 				statusText:'',
+				bookTimeText:'',
+				timeRemain:'',
 				color:'rgba(102,205,170,1)',
 				timeCount:'',//倒计时计时器
 				socketTask:null,
@@ -72,7 +83,7 @@
 				})
 			},
 			check(){
-				
+				console.log('check')
 				
 				if(this.status==0){		//状态码为0 也即预约订单正在等待桩主确定
 					if(this.uid==this.$store.state.uid){	//我向对方发起预约 电桩是对方的 按下则为取消预约
@@ -156,7 +167,14 @@
 			this.endTime=this.message.endTime;
 			this.imageUrl='https://apis.map.qq.com/ws/staticmap/v2/?key=ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL&size=200x150&center='
 				+this.latitude+','+this.longitude+'&markers='+this.latitude+','+this.longitude+'&zoom=14';
-				
+			var time=new Date(Number(this.timeStamp));
+			var year = time.getFullYear();
+			var month =time.getMonth() + 1 < 10? "0" + (time.getMonth() + 1): time.getMonth() + 1;
+			var date =time.getDate() < 10? "0" + time.getDate(): time.getDate();
+			var hh =time.getHours() < 10? "0" + time.getHours(): time.getHours();
+			var mm =time.getMinutes() < 10? "0" + time.getMinutes(): time.getMinutes();
+			var ss =time.getSeconds() < 10? "0" + time.getSeconds(): time.getSeconds();
+			this.bookTimeText=month+'月'+date+'日'+hh+':'+mm+':'+ss;
 			if(this.status==-2){		//状态码为-2 也即预约订单超时
 				this.statusText='预约已过期';
 				this.color='rgba(0,0,0,0.6)';
@@ -283,6 +301,9 @@
 									if(this.status==0){
 										var currentTime=new Date().getTime();
 										var count=1800-((currentTime-this.timeStamp)/1000).toFixed(0);
+										var mm=parseInt(count/60);
+										var ss=count%60;
+										this.timeRemain=(mm<10?'0'+mm:mm)+':'+(ss<10?'0'+ss:ss);
 										if(count<=0){
 											this.$emit('changeOrderStatus',-2);
 											this.status=-2;

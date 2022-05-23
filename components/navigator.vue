@@ -131,11 +131,11 @@
 				if(index==this.selected){
 					if(index==0){
 						if(this.info()){
-							uni.scanCode({
-								success: (res) => {
-									console.log(res)
-								}
-							})
+							console.log(1)
+							uni.navigateTo({
+								// url: '../selectCity/selectCity',
+								url: '../orders/ordersHistory',
+							});
 						}
 					}else if(index==1){
 						if(this.info()){

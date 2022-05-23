@@ -98,7 +98,7 @@
 						</view>
 						<scroll-view scroll-y="true"
 							style="margin: 30upx;background-color: #FFFFFF;border-radius: 40upx;width:690upx"
-							:style="{'height': (storageHeight-50)+'px'}">
+							:style="{'height': (storageHeight-40)+'px'}">
 							<view style="display: flex;flex-direction: column;" v-if="JSON.stringify(frePlace.freHome) != '{}'">
 								<view class="storage" @tap="tapStorage(frePlace.freHome.title,frePlace.freHome.location)">
 							

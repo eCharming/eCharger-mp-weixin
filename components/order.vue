@@ -1,40 +1,48 @@
 <template>
 	<view style="position: relative;height: 300upx;margin:20upx;margin-bottom: 40upx;transform-style: preserve-3d; transition: .7s all;"
 	:style="{'transform':'rotateY('+rotate+'deg)','height':height+'rpx'}">
-		<view class="card"
-			:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow}"
-			@tap="checkMap()"
-		>
-			<view style="display: flex;flex-direction: column;">
-				<view class="view1">
-					<text class="location">{{address}}</text>
-					<view>
-						<image class="image" src="../static/image/arrow.png"></image>
-						<text class="distance">{{distance}}km</text>
+	
+		<view id="box" style="border-radius: 40upx;height: 300upx;width: 100%;position: absolute;transform: translateZ(300upx);
+		background:linear-gradient(to right bottom,rgb(102,205,170),#d4fce9) ;overflow: hidden;">
+			<view style="position: absolute;background-color: #219779;border-radius: 40upx;height: 300upx;width:100%;left: 8upx;top: 8upx;transition: all .3s;"
+			:style="{'transform':translate}"></view>
+			
+			<view class="card"
+				:style="{'width':width+'px'}"
+				@tap="checkMap()"
+			>
+				<view style="display: flex;flex-direction: column;">
+					<view class="view1">
+						<text class="location">{{address}}</text>
+						<view>
+							<image class="image" src="../static/image/arrow.png"></image>
+							<text class="distance">{{distance}}km</text>
+						</view>
+						
+					</view>
+					<view style="display: flex;justify-content: space-between;position: relative;">
+						<text class="text">{{location}}</text>
+						<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight+'rpx'}" src='../static/image/checkdetail.png' v-if="check" 
+						@click.native.stop.prevent="checkDetail"></image>
 					</view>
 					
 				</view>
-				<view style="display: flex;justify-content: space-between;position: relative;">
-					<text class="text">{{location}}</text>
-					<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight+'rpx'}" src='../static/image/checkdetail.png' v-if="check" 
-					@click.native.stop.prevent="checkDetail"></image>
+				<view class="view2">
+					<view>
+						<text>价格</text>
+						<text class="yuan">￥</text>
+						<text class="price">{{price}}</text>
+					</view>
+					<view class="timeview">
+						<text>可用时间：</text>
+						<text class="time">{{showTime}}</text>
+					</view>
+					
 				</view>
-				
+			
 			</view>
-			<view class="view2">
-				<view>
-					<text>价格</text>
-					<text class="yuan">￥</text>
-					<text class="price">{{price}}</text>
-				</view>
-				<view class="timeview">
-					<text>可用时间：</text>
-					<text class="time">{{showTime}}</text>
-				</view>
-				
-			</view>
-		
 		</view>
+		
 		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);width: 100%;
 		transition: .7s all;border-radius: 30upx;border-top: 10upx solid rgba(102,205,170,1);border-bottom: 10upx solid rgba(102,205,170,1);
 		transform-style: preserve-3d;overflow: hidden;" :style="{'height':height+'rpx'}">
@@ -194,6 +202,9 @@
 			},
 			detail:{
 				type:Boolean
+			},
+			windowWidth:{
+				type:Number
 			}
 		},
 		data(){
@@ -202,6 +213,7 @@
 				borderleft:"10rpx solid rgba(102,205,170,0.6)",
 				borderright:"10rpx solid rgba(102,205,170,0.6)",
 				boxshadow:"",
+				translate:'translate('+(this.windowWidth-uni.upx2px(160)+10)+'px,-'+uni.upx2px(300)+'px)',
 				check:false,
 				checkOpacity:0,
 				rotate:0,
@@ -239,7 +251,10 @@
 					showTime=this.time[days-1]
 				}
 				return showTime;
-			}
+			},
+			width(){
+				return (this.windowWidth-uni.upx2px(160))
+			},
 		},
 		methods:{
 			changetime1(e){
@@ -269,9 +284,34 @@
 				}
 			},
 			tap(){
-				this.borderleft="12rpx solid rgba(102,205,170,1)";
-				this.borderright="12rpx solid rgba(102,205,170,1)";
-				this.boxshadow="0rpx 60rpx 28rpx -60rpx rgba(102,205,170,0.5)";
+				// this.borderleft="12rpx solid rgba(102,205,170,1)";
+				// this.borderright="12rpx solid rgba(102,205,170,1)";
+				// this.boxshadow="0rpx 60rpx 28rpx -60rpx rgba(102,205,170,0.5)";
+				
+				// let info = uni.createSelectorQuery().in(this).select("#box");
+				// info.boundingClientRect(function(data) { 
+				// 	//	data - 包含元素的高度等信息
+				// 	// 	console.log(data.height)  // 获取元素宽度
+				// 	console.log(data)
+					
+				// }).exec(function(res){
+				// 	// 注意：exec方法必须执行，即便什么也不做，否则不会获取到任何数据
+				// })
+				// console.log(uni.upx2px(16))
+				// console.log(this.windowWidth)
+				// console.log(this.windowWidth-uni.upx2px(144))
+				
+				this.translate='translate(0rpx,-300rpx)';
+				setTimeout(()=>{
+					this.translate='translate('+(-this.width)+'px,0px)';
+				},300);
+				setTimeout(()=>{
+					this.translate='translate(0rpx,284rpx)';
+				},600);
+				setTimeout(()=>{
+					this.translate='translate(0rpx,0rpx)';
+				},900);
+				
 				this.check=true;
 				this.$nextTick(function(){
 					this.checkOpacity=1;
@@ -306,9 +346,21 @@
 			// 	}, 300)
 			},
 			untap(){
-				this.borderleft="10rpx solid rgba(102,205,170,0.6)";
-				this.borderright="10rpx solid rgba(102,205,170,0.6)";
-				this.boxshadow="";
+				// this.borderleft="10rpx solid rgba(102,205,170,0.6)";
+				// this.borderright="10rpx solid rgba(102,205,170,0.6)";
+				// this.boxshadow="";
+				
+				this.translate='translate(0rpx,284rpx)';
+				setTimeout(()=>{
+					this.translate='translate('+(-this.width)+'px,0px)';
+				},300);
+				setTimeout(()=>{
+					this.translate='translate(0rpx,-300rpx)';
+				},600);
+				setTimeout(()=>{
+					this.translate='translate('+(this.width+10)+'px,-'+uni.upx2px(300)+'px)';
+				},900);
+				
 				this.check=false;
 				this.checkOpacity=0;
 				this.checkRight=100;
@@ -549,17 +601,19 @@
 
 <style scoped>
 	.card{
-		width: 100%;
-		height: 300upx;
 		position: absolute;
-		transform: translateZ(300upx);
+		
 		padding: 15upx;
-		background-color: rgba(253,255,253,1);
-		border-radius: 40upx;
+		background-color: white;
+		border-radius: 37upx;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		transition: all .5s;
+		
+		top: 8upx;
+		left:8upx;
+		height: 284upx;
 	}
 	
 	.view1{

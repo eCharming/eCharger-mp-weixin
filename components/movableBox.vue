@@ -5,6 +5,7 @@
 		
 			<movable-view class="main" :style="{'height':windowHeight+'px'}" direction="vertical" damping="30" out-of-bounds="true" :y="currentY" :disabled="isScroll"
 				@touchstart="start($event)" @touchend="end($event)">
+				
 				<view>
 					<view class="content">
 						
@@ -44,8 +45,8 @@
 								<scroller @scrolltolower="scrolltolower()" @touchstart="scroll()">
 									<order v-for="(order,index) in orders" :ref="'orderRef'+index" :key="index" :index="index"
 										:cid="order.id" :uid="order.uid" :longitude="order.longitude" :latitude="order.latitude"
-										:address="order.address" :location="order.location" 
-										:distance="order.distance" :price="order.price" :time="order.time" :detail="order.detail"
+										:address="order.address" :location="order.location" :distance="order.distance" 
+										:price="order.price" :time="order.time" :detail="order.detail" :windowWidth="windowWidth"
 										@map="tapOrder(index)" @detail="detail()" @undetail="undetail()" @toLow="toLow">
 									</order>
 									<view class="scrollerview">

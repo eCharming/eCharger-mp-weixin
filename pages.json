@@ -63,6 +63,13 @@
 				"navigationBarTitleText": "易插eCharger"
 			}
 			
+		},
+		{
+			"path" : "pages/orders/ordersHistory",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+			
 		}
     ],
 	"globalStyle": {

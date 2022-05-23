@@ -90,6 +90,12 @@
 				storage:[],//缓存的所有历史数据
 				
 				firstCall:true,//用来记录是否是第一次打开，若是则onshow不运行
+				
+				orderStatusChange:'',//当订单页面改变了order的状态 传值给chat页面在onload时发送消息，此时socketTask很可能还未初始化完成所以无法发送消息。因此用该变量记录
+				
+				hasNew:false,
+				timeCount:null,
+				
 			}
 		},
 		methods:{
@@ -191,6 +197,7 @@
 				
 					}
 				});
+				this.hasNew=true;
 			},
 			connect(){
 				this.socketTask=uni.connectSocket({		//打开链接
@@ -200,6 +207,12 @@
 						
 					}
 				});
+				this.socketTask.onOpen(()=>{
+					if(this.orderStatusChange!=''){
+						this.orderText(this.orderStatusChange);
+						this.orderStatusChange='';
+					}
+				})
 				this.socketTask.onMessage((res)=>{
 					
 					var data=JSON.parse(res.data);		//将数据对象化
@@ -227,7 +240,7 @@
 							this.textIndex='index'+(this.texts.length-1)
 						})
 					}	
-						
+					this.hasNew=true;	
 				});
 				this.socketTask.onClose((res)=>{	//连接关闭
 					console.log(res)
@@ -318,12 +331,13 @@
 				
 					}
 				});
+				this.hasNew=true;
 			},
 			changeOrderStatus(e,index){ 		//变更order的状态
 				this.texts[index].message.status=e;
-				var data=JSON.parse(this.storage[index]);
+				var data=JSON.parse(this.storage[index+this.historyIndex]);
 				data.message.status=e;
-				this.storage[index]=JSON.stringify(data);
+				this.storage[index+this.historyIndex]=JSON.stringify(data);
 			},
 			orderText(e){
 				var time=new Date().getTime();
@@ -355,6 +369,43 @@
 				
 					}
 				});
+				this.hasNew=true;
+			},
+			saveData(){
+				var reminder=uni.getStorageSync(this.uid+'friends');	//获取friends页面好友列表的缓存
+				if(this.storage!=''){
+					uni.setStorageSync(this.uid+'ChatWith'+this.toUid,JSON.stringify(this.storage));	//页面关闭时将storage数组存入缓存以达到持久化并且最小化设备压力的目的
+					if(reminder!=''){
+						reminder=JSON.parse(reminder);
+					}else reminder={};
+					var last=JSON.parse(this.storage[this.storage.length-1]);	//将好友uid、最新的头像、名字以及最后一条消息的文字和时间存入缓存持久化
+					if(last.isOrder==false){	//不是订单消息
+						reminder[this.toUid]={
+							name:this.name,
+							avatarUrl:this.yourAvatarUrl,
+							time:last.time,
+							message:last.message
+						};
+					}else{ 	//是订单消息
+						if(last.uid==this.uid){		//消息是我发出的也即我发出的预约
+							reminder[this.toUid]={
+								name:this.name,
+								avatarUrl:this.yourAvatarUrl,
+								time:last.time,
+								message:"你发起了一个预约"
+							};
+						}else{		//消息是对方发出的也即对方发出的预约
+							reminder[this.toUid]={
+								name:this.name,
+								avatarUrl:this.yourAvatarUrl,
+								time:last.time,
+								message:"对方发来了一个预约"
+							};
+						}
+					}
+					
+					uni.setStorageSync(this.uid+'friends',JSON.stringify(reminder));
+				}
 			}
 		},
 		computed:{
@@ -411,6 +462,15 @@
 				this.connect();
 			}
 			
+			if(this.timeCount==null){
+				this.timeCount=setInterval(()=>{
+					if(this.hasNew){
+						this.saveData();
+						this.hasNew=false;
+					}
+				},5000);
+			}
+			
 			const eventChannel = this.getOpenerEventChannel();//从order组件中传来的订单消息
 			eventChannel.on('bookOrder', (data)=> {
 				var cid=data.data.cid;
@@ -452,7 +512,10 @@
 						})
 					}
 				)
-			})
+			});
+			eventChannel.on('sendStatus', (data)=> {
+				this.orderStatusChange=data.data.message
+			});
 		},
 		onUnload() {	
 			if(this.socketTask!=null){		//页面关闭那么关闭链接
@@ -461,7 +524,11 @@
 						this.socketTask=null;
 					}
 				});
-			}
+			};
+			if(this.timeCount!=null){
+				clearInterval(this.timeCount);
+				this.timeCount=null;
+			};
 			var reminder=uni.getStorageSync(this.uid+'friends');	//获取friends页面好友列表的缓存
 			if(this.storage!=''){
 				uni.setStorageSync(this.uid+'ChatWith'+this.toUid,JSON.stringify(this.storage));	//页面关闭时将storage数组存入缓存以达到持久化并且最小化设备压力的目的
@@ -503,9 +570,17 @@
 				if(this.socketTask==null){	//打开页面打开链接
 					this.connect();
 				}
+				if(this.timeCount==null){
+					this.timeCount=setInterval(()=>{
+						if(this.hasNew){
+							this.saveData();
+							this.hasNew=false;
+						}
+					},5000);
+				}
+				
 			}else {
 				this.firstCall=false;
-				console.log(1)
 			}
 			
 		},
@@ -516,6 +591,10 @@
 						this.socketTask=null;
 					}
 				});
+			}
+			if(this.timeCount!=null){
+				clearInterval(this.timeCount);
+				this.timeCount=null;
 			}
 		}
 	}

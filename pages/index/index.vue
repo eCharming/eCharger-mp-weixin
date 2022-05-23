@@ -31,6 +31,7 @@
 				res=>{
 					this.$store.commit('setUid',res.result.uid);
 					// this.$store.commit('setUid',1);
+	
 					var logInStatus=res.result.loginStatus
 					if(res.result.loginStatus){
 						wx.cloud.callFunction({   //uid获取
