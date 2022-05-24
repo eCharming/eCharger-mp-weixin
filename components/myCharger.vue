@@ -36,6 +36,9 @@
 			price:{
 				type:String
 			},
+			cid:{
+				type:String
+			},
 			time:{
 				type:Array,
 				default:()=>[]
@@ -78,7 +81,7 @@
 			},
 			editCharger() {
 				uni.navigateTo({
-					url: '../editCharger/editCharger',
+					url: '../editCharger/editCharger?cid='+this.cid,
 				});
 			}
 		}

@@ -62,7 +62,7 @@
 								<scroller>
 									<charger  v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 										:location="charger.location" :state="charger.isAvailable" :price="charger.price"
-										:time="charger.time"
+										:time="charger.time" :cid="charger.cid"
 										@tap="tapCharger(index)">
 									</charger>
 									<view class="scrollerview">
