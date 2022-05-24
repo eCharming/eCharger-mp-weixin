@@ -1,7 +1,7 @@
 <template>
 	<view class="card" 
 		:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow}"
-	>
+	@tap='editCharger'>
 		<view class="view1">
 			<text class="location">{{location}}</text>
 			<text class="state1" v-if="state">空闲中</text>
@@ -76,6 +76,11 @@
 				this.borderright="10rpx solid rgba(50,200,210,0.6)";
 				this.boxshadow="";
 			},
+			editCharger() {
+				uni.navigateTo({
+					url: '../editCharger/editCharger',
+				});
+			}
 		}
 	}
 </script>

@@ -70,6 +70,13 @@
 				"navigationBarTitleText": "易插eCharger"
 			}
 			
+		},
+		{
+			"path" : "pages/editCharger/editCharger",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+			
 		}
     ],
 	"globalStyle": {
