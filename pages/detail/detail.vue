@@ -60,6 +60,19 @@
 				</view>
 				
 			</addcard>
+			<addcard>
+				<view style="margin: 28upx;">
+					<view class="labeltext">图片</view>
+					<view class='content'>
+						<view class='img-view' v-for='(item,index) in imgUrl' :key='index'>
+							<image :src='item' @tap='showPic(item)'
+								style="width:200upx;height:200upx;margin-left: 3.9upx;margin-right: 3.9upx;"
+								mode='aspectFill'>
+							</image>
+						</view>
+					</view>
+				</view>
+			</addcard>
 			
 			<addcard style="position: relative;">
 				<view style="margin: 28upx;">
@@ -114,6 +127,7 @@
 				locationList: [],
 				center_latitude:this.$store.state.currentLocation == null ? 39.909 : this.$store.state.currentLocation.latitude,
 				center_longitude:this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation.longitude,
+				imgUrl:[],
 			}
 		},
 		methods: {
@@ -166,6 +180,21 @@
 				uni.navigateTo({
 					url:'../communication/chat?toUid='+this.uid+'&name='+this.name+'&avatarUrl='+this.avatarUrl,
 				})
+			},
+			showPic(item) {
+				wx.previewImage({
+					current: item,
+					urls: this.imgUrl,
+				})
+			},
+			getPic(cid) {
+				wx.request({
+					url:'https://ws.healtool.cn/downloadPic/'+cid,
+					method: "GET",
+					success:res=>{
+						this.imgUrl = res.data.data.resUrl
+					}
+				})
 			}
 		},
 		onLoad(option) {
@@ -207,6 +236,7 @@
 						}
 					});
 					this.navigate();
+					this.getPic(option.cid);
 				}
 			)
 			if(this.$store.state.currentLocation==null) {
