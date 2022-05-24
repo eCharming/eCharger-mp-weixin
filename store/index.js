@@ -30,7 +30,8 @@ export default new Vuex.Store({
 			latitude:null,
 			name:null,
 		},
-		refresh:null	//用于添加电桩后更新地图和电桩信息
+		refresh:null	,//用于添加电桩后更新地图和电桩信息
+		isWholeCity:0,
     },
     mutations: {
 		setLogInStatus(state,logInStatus) {
@@ -97,6 +98,9 @@ export default new Vuex.Store({
 		},
 		setRefresh(state,item) {
 			state.refresh = item
+		},
+		setIsWholeCity(state) {
+			state.isWholeCity++;
 		}
     },
     actions: {},

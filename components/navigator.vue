@@ -144,7 +144,7 @@
 							});
 						}
 					}else if(index==2){
-
+						this.$store.commit('setIsWholeCity')
 					}else if(index==3){
 						if(this.info()){
 							uni.navigateTo({

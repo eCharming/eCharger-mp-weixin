@@ -113,6 +113,71 @@
 					}
 				});
 			},
+			getWholeCity(lon,lat) {
+				this.scale = 0;
+				this.$nextTick(() => {
+					this.scale = 9;
+				})
+				wx.cloud.callFunction({
+					name: 'wholeCity',
+					data: {
+						longitude: lon,
+						latitude: lat,
+					}
+				}).then(res => {
+					let chargerList = res.result;
+					this.chargerList.splice(0);
+					this.chargerList = res.result;
+					
+					if (this.$store.state.startTime == "" && this.$store.state.endTime == "") {
+						this.ordersCopy.splice(0);
+						this.polyline.splice(0);
+						this.covers.splice(0);
+						this.markerSelected = -1;
+						if (chargerList.length != 0) {
+							for (let charger of chargerList) {
+								this.covers.push({
+									title: charger.address,
+									id: charger._id,
+									latitude: charger.geoPoint.coordinates[1],
+									longitude: charger.geoPoint.coordinates[0],
+									iconPath: "/static/image/charger.png",
+									width: 40,
+									height: 40,
+									callout: {
+										content: charger.address,
+										color: "#333333",
+										fontSize: 13,
+										borderRadius: 20,
+										bgColor: "#e7ffed",
+										textAlign: "center",
+										padding: 10,
+									}
+								});
+					
+								var distance = (charger.Distance / 1000).toFixed(1);
+								this.ordersCopy.push({ //为解决每次插入后界面都刷新使用了副本记录 最后一次性赋给store中的order
+									address:charger.address,
+									location: charger.location,
+									uid:charger.uid,
+									id: charger._id,
+									latitude: charger.geoPoint.coordinates[1],
+									longitude: charger.geoPoint.coordinates[0],
+									price: charger.price,
+									time: charger.time,
+									distance: distance,
+									detail: false,
+								});
+								
+							}
+						}
+						this.$store.commit('setOrders', this.ordersCopy);
+					} else {
+						this.covers.splice(0);
+						this.pickerHandler(lon, lat)
+					}
+				})
+			},
 			getChargerLocation(lon, lat, tle) {
 				wx.cloud.callFunction({
 					name: 'getSurround',
@@ -422,6 +487,9 @@
 						this.getChargerLocation(res.longitude, res.latitude, res.name);
 					}, 500)
 				}
+			},
+			'$store.state.isWholeCity'() {
+				this.getWholeCity(this.longitude,this.latitude)
 			}
 
 		}
