@@ -1,7 +1,8 @@
 <template>
 	<view style="display: flex;flex-direction:column">
 		<view :style="{'height':statusHeight+'px','width':'100%','top':0,'z-index':9999}">
-			<view class="addChargerNavi" :style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
+			<view class="addChargerNavi"
+				:style="{'height':statusHeight+'px','background':color,'position':'fixed','width':'100%','top':0}">
 				<image src="../../static/image/back.png" class="backimg" :style="{'top':statusBarHeight+12.5+'px'}"
 					@tap="back"></image>
 				<text :style="{'margin-bottom':addChargerHeight+'px'}">修改电桩</text>
@@ -17,7 +18,8 @@
 				<view class="divLine"></view>
 				<view class="display">
 					<text class="labeltext">电话号码</text>
-					<input class="input" placeholder="请输入电话号码" type="number" v-model="phoneNumber" maxlength="11"></input>
+					<input class="input" placeholder="请输入电话号码" type="number" v-model="phoneNumber"
+						maxlength="11"></input>
 				</view>
 			</addcard>
 			<addcard style="position: relative;">
@@ -55,7 +57,8 @@
 
 				<view class="display">
 					<text class="labeltext">电桩单价</text>
-					<input class="input" placeholder="请输入单价" type="digit" v-model="price" :maxlength="maxlength"></input>
+					<input class="input" placeholder="请输入单价" type="digit" v-model="price"
+						:maxlength="maxlength"></input>
 				</view>
 			</addcard>
 			<addcard>
@@ -224,9 +227,10 @@
 		},
 		data() {
 			return {
+				cid: "",
 				statusHeight: uni.getSystemInfoSync().statusBarHeight + 50,
 				windowWidth: uni.getSystemInfoSync().windowWidth,
-				addChargerHeight:0,
+				addChargerHeight: 0,
 				color: 'rgba(50,200,210,1)',
 				statusBarHeight: uni.getSystemInfoSync().statusBarHeight,
 				name: "",
@@ -234,8 +238,8 @@
 				location: "",
 				address: "",
 				price: "",
-				maxlength:5,
-				haveDDot:false,
+				maxlength: 5,
+				haveDDot: false,
 				text: ["起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间", "起始时间", "结束时间",
 					"起始时间", "结束时间"
 				],
@@ -248,14 +252,17 @@
 				opacity: [0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7, 0.7],
 				remarks: "",
 				avatarUrl: [],
+				rawUrl: [], //初始照片，用于对比
 				covers: [],
 				geopoint: {
 					latitude: 39.909,
 					longitude: 116.39742,
 				},
 				locationList: [],
-				center_latitude:this.$store.state.currentLocation == null ? 39.909 : this.$store.state.currentLocation.latitude,
-				center_longitude:this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation.longitude,
+				center_latitude: this.$store.state.currentLocation == null ? 39.909 : this.$store.state.currentLocation
+					.latitude,
+				center_longitude: this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation
+					.longitude,
 			}
 		},
 		computed: {
@@ -266,7 +273,7 @@
 				return 6 - this.avatarUrl.length;
 			}
 		},
-		methods:{
+		methods: {
 			back() {
 				uni.navigateBack({})
 			},
@@ -378,73 +385,360 @@
 			},
 			getPic(cid) {
 				wx.request({
-					url:'https://ws.healtool.cn/downloadPic/'+cid,
+					url: 'https://ws.healtool.cn/downloadPic/' + cid,
 					method: "GET",
-					success:res=>{
+					success: res => {
 						this.avatarUrl = res.data.data.resUrl
+						this.rawUrl = JSON.parse(JSON.stringify(this.avatarUrl))
 					}
 				})
-			}
+			},
+			updateCharge(timestamp,time) {
+				console.log(this.cid)
+				wx.cloud.callFunction({
+					name: 'chargerUpdate',
+					data: {
+						cid:Number(this.cid),
+						userName: this.name,
+						phoneNumber: this.phoneNumber,
+						address: this.address,
+						location: this.location,
+						geoPoint: {
+							coordinates: [this.geopoint.longitude, this.geopoint.latitude],
+							type: "Point",
+						},
+						timeStamp: timestamp,
+						time: time,
+						price: this.price,
+						remarks: this.remarks,
+					}
+				}).then(
+					res => {
+						this.$store.commit('setRefresh', {
+							a: '1'
+						}) //占位对象，无意义，仅仅用于更新
+						wx.showToast({
+							title: "提交成功！",
+							icon: 'success',
+							complete: () => {
+								setTimeout(() => {
+									uni.navigateBack({})
+								}, 1500)
+							}
+						})
+					}
+				)
+			},
+			delPic(deleteList,timestamp,time) {
+				for (let i = 0; i < deleteList.length; i++) {
+					let fileName = deleteList[i].split("/")[4];
+					wx.request({
+						url: "https://ws.healtool.cn/deletePic/" + this.cid + "/" + fileName,
+						method: "POST",
+						success: res => {
+							if(Object.prototype.toString.call(res.data) === '[object String]'){
+								if (res.data.startsWith("<html>")) {
+									wx.showToast({
+										title: "图片上传失败！",
+										icon: 'none',
+									})
+									return;
+								}
+							}
+							var res = res.data //无需parse，原因未知
+							if (res.code != 200) {
+								wx.showToast({
+									title: "图片上传失败！",
+									icon: 'none',
+								})
+								return;
+							} else {
+								this.updateCharge()
+							}
+						},
+						fail: res => {
+							wx.showToast({
+								title: "图片上传失败！",
+								icon: 'none',
+							})
+							return;
+							//不会回滚
+						}
+					})
+				}
+			},
+			uplPic(uploadList, deleteList, type,timestamp,time) {
+				for (let i = 0; i < uploadList.length; i++) {
+					wx.uploadFile({
+						url: "https://ws.healtool.cn/updatePic/" + this.cid,
+						filePath: uploadList[i],
+						name: 'file',
+						success: res => {
+							if(Object.prototype.toString.call(res.data) === '[object String]'){
+								if (res.data.startsWith("<html>")) {
+									wx.showToast({
+										title: "图片上传失败！",
+										icon: 'none',
+									})
+									return;
+								}
+							}
+							var res = JSON.parse(res.data)
+							if (res.code != 200) {
+								wx.showToast({
+									title: "图片上传失败！",
+									icon: 'none',
+								})
+								let fileNames = this.rawUrl.map((item) => {
+									return item.split("/")[4];
+								})
+								wx.request({
+									url: "https://ws.healtool.cn/rollbackPic/",
+									method: "POST",
+									data: {
+										cid: this.cid,
+										fileNames: fileNames
+									}
+								})
+								return;
+							} else {
+								if (type == 1) {
+									this.delPic(deleteList)
+								} else if (type == 2) {
+									this.updateCharge()
+								}
+
+							}
+						},
+						fail: res => {
+							wx.showToast({
+								title: "图片上传失败！",
+								icon: 'none',
+							})
+							wx.request({
+								url: "https://ws.healtool.cn/rollbackPic/",
+								method: "POST",
+								data: {
+									cid: this.cid,
+									fileNames: fileNames
+								},
+							})
+							return;
+						}
+					})
+				}
+			},
+			submit() {
+				let uploadList = this.avatarUrl.filter((item) => {
+					return this.rawUrl.indexOf(item) == -1
+				});
+				let deleteList = this.rawUrl.filter((item) => {
+					return this.avatarUrl.indexOf(item) == -1
+				});
+				var reg_tel = /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/;
+				if (this.name == "") {
+					wx.showToast({
+						title: "请输入名字！",
+						icon: 'none',
+					})
+					return;
+				}
+				if (this.phoneNumber == "") {
+					wx.showToast({
+						title: "请输入电话号码！",
+						icon: 'none',
+					})
+					return;
+				}
+				if (!reg_tel.test(this.phoneNumber)) {
+					wx.showToast({
+						title: "请输入正确的手机号！",
+						icon: 'none',
+					})
+					return;
+				}
+				if (this.location == "") {
+					wx.showToast({
+						title: "请输入电桩位置！",
+						icon: 'none',
+					})
+					return;
+				}
+				if (this.geopoint.longitude == -1 || this.geopoint.latitude == -1) {
+					wx.showToast({
+						title: "请在地图上标注电桩位置！",
+						icon: 'none',
+					})
+					return;
+				}
+				if (this.price == "") {
+					wx.showToast({
+						title: "请输入电桩单价！",
+						icon: 'none',
+					})
+					return;
+				}
+				if (this.listLength == 6) {
+					wx.showToast({
+						title: "请上传照片！",
+						icon: 'none',
+					})
+					return;
+				}
+				let isSet = false;
+				for (let i = 0; i < this.text.length; i += 2) {
+					if (this.text[i] != '起始时间' || this.text[i + 1] != '结束时间') {
+						isSet = true;
+						break;
+					}
+				}
+				if (isSet == false) {
+					wx.showToast({
+						title: "请填写至少一个时间段！",
+						icon: 'none',
+					})
+					return;
+				}
+				let isFinish = true;
+				for (let i = 0; i < this.text.length; i += 2) {
+					if (this.text[i] != '起始时间' && this.text[i + 1] == '结束时间') {
+						isFinish = false;
+						break;
+					}
+					if (this.text[i] == '起始时间' && this.text[i + 1] != '结束时间') {
+						isFinish = false;
+						break;
+					}
+				}
+				if (isFinish == false) {
+					wx.showToast({
+						title: "请填写完整的时间段！",
+						icon: 'none',
+					})
+					return;
+				}
+				let isLong = true;
+				for (let i = 0; i < this.text.length; i += 2) {
+					if (this.text[i] != '起始时间' && this.text[i + 1] != '结束时间') {
+						let first = this.text[i].split(':')
+						let second = this.text[i + 1].split(':')
+						if (second[0] * 60 + second[1] - first[0] * 60 - first[1] < 60) {
+							isLong = false;
+							break;
+						}
+					}
+				}
+				if (isLong == false) {
+					wx.showToast({
+						title: "时间段请大于1小时！",
+						icon: 'none',
+					})
+					return;
+				}
+				var time = new Array();
+				for (var i = 0; i < 14; i += 2) {
+					if (this.text[i] == "起始时间" || this.text[i + 1] == "结束时间") {
+						time.push("")
+					} else {
+						time.push(this.text[i] + "-" + this.text[i + 1])
+					}
+				}
+				var timestamp = new Array();
+				for (var i = 0; i < 14; i++) {
+					if (this.text[i] == "起始时间" || this.text[i] == "结束时间") {
+						timestamp.push(-1)
+					} else {
+						var sp = this.text[i].split(":")
+						timestamp.push(Number(sp[0]) * 60 + Number(sp[1]))
+					}
+				}
+				// 用于回滚
+				let fileNames = this.rawUrl.map((item) => {
+					return item.split("/")[4];
+				})
+				if (uploadList.length != 0 && deleteList.length != 0) {
+					this.uplPic(uploadList, deleteList, 1,timestamp,time)
+				} else if (uploadList.length != 0 && deleteList.length == 0) {
+					this.uplPic(uploadList, deleteList, 2,timestamp,time)
+				} else if (uploadList.length == 0 && deleteList.length != 0) {
+					this.delePic(deleteList,timestamp,time)
+				} else if (uploadList.length == 0 && deleteList.length == 0) {
+					this.updateCharge(timestamp,time)
+				}
+			},
 		},
 		onLoad(option) {
-			this.addChargerHeight=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
+			this.cid = option.cid
+			this.addChargerHeight = (this.statusHeight - uni.getMenuButtonBoundingClientRect().bottom);
 			wx.cloud.callFunction({
-				name:'chargerDetail',
+				name: 'chargerDetail',
 				data: {
-					cid:Number(option.cid)
+					cid: Number(option.cid)
 				}
-			}).then(res=>{
-				console.log(res)
-					this.uid=res.result.uid;
-					this.address=res.result.address;
-					this.location=res.result.location;
-					this.geopoint.latitude=res.result.geoPoint.coordinates[1];
-					this.geopoint.longitude=res.result.geoPoint.coordinates[0];
-					this.name=res.result.userName;
-					this.phoneNumber=res.result.phoneNumber;
-					this.price=res.result.price;
-					this.time=res.result.time;
-					
-					this.covers.push({
-						title: this.address,
-						id: Number(option.cid),
-						latitude: this.geopoint.latitude,
-						longitude: this.geopoint.longitude,
-						iconPath: "/static/image/charger.png",
-						width: 40,
-						height: 40,
-						callout: {
-							content: this.address,
-							color: "#333333",
-							fontSize: 13,
-							borderRadius: 20,
-							bgColor: "#e7ffed",
-							textAlign: "center",
-							padding: 10,
-						}
-					});
-					this.getPic(option.cid);
+			}).then(res => {
+				this.uid = res.result.uid;
+				this.address = res.result.address;
+				this.location = res.result.location;
+				this.geopoint.latitude = res.result.geoPoint.coordinates[1];
+				this.center_latitude = res.result.geoPoint.coordinates[1];
+				this.geopoint.longitude = res.result.geoPoint.coordinates[0];
+				this.center_longitude =  res.result.geoPoint.coordinates[0];
+				this.name = res.result.userName;
+				this.phoneNumber = res.result.phoneNumber;
+				this.price = res.result.price;
+				let time = res.result.time;
+				for (let i = 0; i < time.length; i++) {
+					if (time[i] != "") {
+						let minMaxTime = time[i].split('-')
+						this.text[2 * i] = minMaxTime[0]
+						this.text[2 * i + 1] = minMaxTime[1]
+						this.opacity[2 * i] = 1
+						this.opacity[2 * i + 1] = 1
+						this.minTime[i] = minMaxTime[0]
+						this.maxTime[i] = minMaxTime[1]
+					}
+
 				}
-			)
-			if(this.$store.state.currentLocation==null) {
+
+				this.covers.push({
+					title: this.address,
+					id: Number(option.cid),
+					latitude: this.geopoint.latitude,
+					longitude: this.geopoint.longitude,
+					iconPath: "/static/image/charger.png",
+					width: 40,
+					height: 40,
+					callout: {
+						content: this.address,
+						color: "#333333",
+						fontSize: 13,
+						borderRadius: 20,
+						bgColor: "#e7ffed",
+						textAlign: "center",
+						padding: 10,
+					}
+				});
+				this.getPic(option.cid);
+			})
+			if (this.$store.state.currentLocation == null) {
 				wx.showToast({
 					title: "请打开定位！",
 					icon: 'error',
-					complete:()=>{
-						setTimeout(()=>{
+					complete: () => {
+						setTimeout(() => {
 							uni.navigateBack({})
-						},1500)
-						
+						}, 1500)
+
 					}
 				})
 			};
 		},
-		watch:{
+		watch: {
 			price() {
-				if(this.price.indexOf('.')!=-1 && !this.haveDot) {
-					this.maxlength = this.price.length+2
+				if (this.price.indexOf('.') != -1 && !this.haveDot) {
+					this.maxlength = this.price.length + 2
 					this.haveDot = true
-				} else if(this.price.indexOf('.')==-1 && this.haveDot) {
+				} else if (this.price.indexOf('.') == -1 && this.haveDot) {
 					this.maxlength = 5
 					this.haveDot = false
 				}
@@ -454,7 +748,7 @@
 </script>
 
 <style scoped>
-	.addChargerNavi{
+	.addChargerNavi {
 		display: flex;
 		justify-content: center;
 		align-items: flex-end;
@@ -463,47 +757,47 @@
 		font-weight: 700;
 		letter-spacing: 2upx;
 	}
-	
+
 	.backimg {
 		position: absolute;
 		left: 8px;
 		width: 25px;
 		height: 25px;
 	}
-	
+
 	.labeltext {
 		letter-spacing: 2upx;
 		font-weight: 700;
 	}
-	
+
 	.display {
 		display: flex;
 		justify-content: space-between;
 		margin: 28upx;
 	}
-	
+
 	.divLine {
 		width: 100%;
 		height: 3upx;
 		background-color: #E0E3DA;
 	}
-	
+
 	.input {
 		width: 500upx;
 		text-align: right;
 	}
-	
+
 	.line {
 		margin-left: 10upx;
 		margin-right: 10upx;
 	}
-	
+
 	.timer1 {
 		width: 110upx;
 		display: flex;
 		justify-content: center;
 	}
-	
+
 	.add-img {
 		width: 200upx;
 		height: 200upx;
@@ -511,7 +805,7 @@
 		margin-left: 3.9upx;
 		margin-right: 3.9upx;
 	}
-	
+
 	.content {
 		display: flex;
 		justify-content: flex-start;
@@ -520,13 +814,13 @@
 		margin-right: 28upx;
 		margin-bottom: 28upx;
 	}
-	
+
 	.close {
 		position: absolute;
 		margin-left: -45upx;
 		margin-top: 10upx;
 	}
-	
+
 	.submit {
 		background-color: rgb(50, 200, 210);
 		color: white;
@@ -535,20 +829,20 @@
 		margin: 20upx;
 		border-radius: 20upx;
 	}
-	
+
 	.textareainput {
 		height: 100upx;
 		width: 500upx;
 		text-align: right;
 	}
-	
+
 	.scroll {
 		position: absolute;
 		height: 300upx;
 		width: 680upx;
 		top: 110upx;
 	}
-	
+
 	.scrollview {
 		background-color: rgba(250, 255, 250, 1);
 		height: 300upx;
@@ -557,7 +851,7 @@
 		border-bottom-left-radius: 20upx;
 		box-shadow: -16upx 16upx 20upx -8upx rgba(116, 118, 116, 0.2), 16upx 16upx 20upx -8upx rgba(116, 118, 116, 0.2);
 	}
-	
+
 	.scroll-innerview {
 		margin: 28upx;
 	}

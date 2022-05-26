@@ -511,6 +511,19 @@
 								filePath: this.avatarUrl[i],
 								name: 'file',
 								success: res => {
+									if (res.data.startsWith("<html>")) {
+										wx.showToast({
+											title: "图片上传失败！",
+											icon: 'none',
+										})
+										wx.cloud.callFunction({
+											name: 'chargerDelete',
+											data: {
+												_id: id
+											},
+										})
+										return;
+									}
 									var res = JSON.parse(res.data)
 									if (res.code != 200) {
 										wx.showToast({
@@ -522,16 +535,22 @@
 											data: {
 												_id: id
 											},
-										}).then(
-											result => {
-												console.log(result)
-											}
-										)
+										})
 										return;
+									} else {
+										this.$store.commit('setRefresh',{a:'1'})	//占位对象，无意义，仅仅用于更新
+										wx.showToast({
+											title: "提交成功！",
+											icon: 'success',
+											complete:()=>{
+												setTimeout(()=>{
+													uni.navigateBack({})
+												},1500)
+											}
+										})
 									}
 								},
 								fail: res => {
-									console.log("fail")
 									wx.showToast({
 										title: "图片上传失败！",
 										icon: 'none',
@@ -541,26 +560,11 @@
 										data: {
 											_id: id
 										},
-									}).then(
-										result => {
-											console.log(result)
-										}
-									)
+									})
 									return;
 								}
 							})
 						}
-						this.$store.commit('setRefresh',{a:'1'})	//占位对象，无意义，仅仅用于更新
-						wx.showToast({
-							title: "提交成功！",
-							icon: 'success',
-							complete:()=>{
-								setTimeout(()=>{
-									uni.navigateBack({})
-								},1500)
-								
-							}
-						})
 					}
 				)
 			},
