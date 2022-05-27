@@ -34,6 +34,14 @@
 		</view>
 		<view style="margin-bottom: 15upx;">
 			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
+				预估价格：
+			</text>
+			<text style="font-size: 32upx;font-weight: 700;color:rgb(50,200,210) ;letter-spacing: 1upx;">
+				￥{{predictedPrice}}
+			</text>
+		</view>
+		<view style="margin-bottom: 15upx;">
+			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
 				状态：
 			</text>
 			<text style="font-size: 32upx;font-weight: 700;letter-spacing: 1upx;" :style="{'color':statusColor}">
@@ -99,6 +107,9 @@
 				type:String
 			},
 			timeStamp:{
+				type:String
+			},
+			predictedPrice:{
 				type:String
 			},
 			statusContext:{

@@ -32,7 +32,7 @@
 						:style="{'height': storageHeight+'px'}">
 						
 						<myOrderHistotry v-for="(order,index) in myOrder" :key="index" :cid="order.cid" :uid="order.uid"
-						:toUid="order.toUid" :oid="order.oid" :startTime="order.startTime" :endTime="order.endTime" 
+						:toUid="order.toUid" :oid="order.oid" :startTime="order.startTime" :endTime="order.endTime" :predictedPrice="order.predictedPrice"
 						:timeStamp="order.timeStamp" :statusContext="order.status" :address="order.address" :location="order.location"></myOrderHistotry>
 						
 					</scroll-view>
@@ -43,7 +43,7 @@
 						:style="{'height': (storageHeight)+'px'}">
 						
 						<borrowOrderHistory v-for="(order,index) in borrowOrder" :key="index" :cid="order.cid" :uid="order.uid"
-						:toUid="order.toUid" :oid="order.oid" :startTime="order.startTime" :endTime="order.endTime" 
+						:toUid="order.toUid" :oid="order.oid" :startTime="order.startTime" :endTime="order.endTime"  :predictedPrice="order.predictedPrice"
 						:timeStamp="order.timeStamp" :statusContext="order.status" :address="order.address" :location="order.location"></borrowOrderHistory>
 						
 					</scroll-view>

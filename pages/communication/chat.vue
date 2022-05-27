@@ -92,6 +92,7 @@
 				firstCall:true,//用来记录是否是第一次打开，若是则onshow不运行
 				
 				orderStatusChange:'',//当订单页面改变了order的状态 传值给chat页面在onload时发送消息，此时socketTask很可能还未初始化完成所以无法发送消息。因此用该变量记录
+				newOrder:null,
 				
 				hasNew:false,
 				timeCount:null,
@@ -211,6 +212,10 @@
 					if(this.orderStatusChange!=''){
 						this.orderText(this.orderStatusChange);
 						this.orderStatusChange='';
+					}
+					if(this.newOrder!=null){
+						this.sendNewOrder(this.newOrder);
+						this.newOrder=null;
 					}
 				})
 				this.socketTask.onMessage((res)=>{
@@ -473,6 +478,7 @@
 			
 			const eventChannel = this.getOpenerEventChannel();//从order组件中传来的订单消息
 			eventChannel.on('bookOrder', (data)=> {
+				var oid=data.data.oid;
 				var cid=data.data.cid;
 				var longitude=data.data.longitude;
 				var latitude=data.data.latitude;
@@ -482,36 +488,22 @@
 				var timeStamp=data.data.timeStamp;
 				var startTime=data.data.startTime;
 				var endTime=data.data.endTime;
-				wx.cloud.callFunction({   //输入订单
-					name:'orderInput',
-					data:{
-						status:0,
-						uid:Number(this.uid),
-						toUid:Number(this.toUid),
-						cid:Number(cid),
-						timeStamp:timeStamp,
-						startTime:startTime,
-						endTime:endTime
-					}
-				}).then(
-					res=>{
-						this.sendNewOrder({
-							status:0,
-							oid:res.result,
-							uid:Number(this.uid),
-							toUid:Number(this.toUid),
-							cid:Number(cid),
-							longitude:longitude,
-							latitude:latitude,
-							address:address,
-							location:location,
-							price:price,
-							timeStamp:timeStamp,
-							startTime:startTime,
-							endTime:endTime
-						})
-					}
-				)
+				
+				this.newOrder={
+					status:0,
+					oid:oid,
+					uid:Number(this.uid),
+					toUid:Number(this.toUid),
+					cid:Number(cid),
+					longitude:longitude,
+					latitude:latitude,
+					address:address,
+					location:location,
+					price:price,
+					timeStamp:timeStamp,
+					startTime:startTime,
+					endTime:endTime
+				};
 			});
 			eventChannel.on('sendStatus', (data)=> {
 				this.orderStatusChange=data.data.message

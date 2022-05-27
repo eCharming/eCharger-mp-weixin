@@ -34,6 +34,14 @@
 		</view>
 		<view style="margin-bottom: 15upx;">
 			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
+				预估价格：
+			</text>
+			<text style="font-size: 32upx;font-weight: 700;color:rgb(102,205,170) ;letter-spacing: 1upx;">
+				￥{{predictedPrice}}
+			</text>
+		</view>
+		<view style="margin-bottom: 15upx;">
+			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
 				状态：
 			</text>
 			<text style="font-size: 32upx;font-weight: 700;letter-spacing: 1upx;" :style="{'color':statusColor}">
@@ -101,6 +109,9 @@
 			timeStamp:{
 				type:String
 			},
+			predictedPrice:{
+				type:String
+			},
 			statusContext:{
 				type:String
 			},
@@ -120,52 +131,71 @@
 					this.statusText='预约已取消';
 					this.statusColor='#be0e0e';
 					
-					wx.cloud.callFunction({ //更改order的状态
-						name: 'orderStatusChange',
-						data: {
+					wx.cloud.callFunction({
+						name:'orderRefund',
+						data:{
 							oid:this.oid,
-							status:-1,
-						}
-					}).then(res => {
-						console.log(res)
-						var data={
-							oid:this.oid,
-							uid:this.uid,
-							toUid:this.toUid,
-							message:'-1'
-						};
-						data=JSON.stringify(data);
-						this.socketTask.send({
-							data:data,
-							success: () => {
-								
-								
-								this.socketTask.close({
-									success: () => {
-										this.socketTask=null;
-										wx.showToast({
-											title: "已取消预约",
-											icon: 'success',
-											complete: () => {
-												setTimeout(() => {
-													uni.navigateTo({
-														url: '../communication/chat?toUid='+this.toUid,
-														success: (res) => {
-															res.eventChannel.emit('sendStatus', { 
-																data: {
-																	message:'已取消预约'
-																}
-															})
-														}
-													});
-												}, 500)
-											}
-										})
+							refundPrice:this.predictedPrice,
+						},
+						success:(res)=>{
+							if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
+								wx.cloud.callFunction({ //更改order的状态
+									name: 'orderStatusChange',
+									data: {
+										oid:this.oid,
+										status:-1,
 									}
-								});			
+								}).then(res => {
+									var data={
+										oid:this.oid,
+										uid:this.uid,
+										toUid:this.toUid,
+										message:'-1'
+									};
+									data=JSON.stringify(data);
+									this.socketTask.send({
+										data:data,
+										success: () => {
+											
+											
+											this.socketTask.close({
+												success: () => {
+													this.socketTask=null;
+													wx.showToast({
+														title: "已取消预约",
+														icon: 'success',
+														complete: () => {
+															setTimeout(() => {
+																uni.navigateTo({
+																	url: '../communication/chat?toUid='+this.toUid,
+																	success: (res) => {
+																		res.eventChannel.emit('sendStatus', { 
+																			data: {
+																				message:'已取消预约'
+																			}
+																		})
+																	}
+																});
+															}, 500)
+														}
+													})
+												}
+											});			
+										}
+									})
+									
+								})
+							}else{
+								wx.showToast({
+									title: "预约取消失败！",
+									icon: 'error',
+									complete: () => {
+										
+									}
+								})
 							}
-						})
-						
+							
+						}
 					})
 					
 				}

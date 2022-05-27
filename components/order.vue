@@ -495,40 +495,89 @@
 				})
 			},
 			bookOrder(){
-				var time=new Date().getTime();
+				
 				wx.cloud.callFunction({ //查询order的状态
 					name: 'orderNum',
 					data: {
 						uid:this.$store.state.uid,
 					}
 				}).then(res=>{
-					console.log(res)
 					if(res.result){
-						wx.showToast({
-							title: "预约成功！",
-							icon: 'success',
-							complete: () => {
-								setTimeout(() => {
-									uni.navigateTo({
-										url: '../communication/chat?toUid='+this.uid,
-										success: (res) => {
-											res.eventChannel.emit('bookOrder', { 
-												data: {
-													cid:this.cid,
-													longitude:this.longitude,
-													latitude:this.latitude,
-													address:this.address,
-													location:this.location,
-													price:this.possiblePrice,
-													timeStamp:time,
+						
+						wx.cloud.callFunction({
+							name: 'orderPay',
+							data: {
+								predictedPrice:this.possiblePrice*100
+							},
+							success: res => {
+								if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
+									var outTradeNo=res.result.outTradeNo;
+									const payment = res.result.payment
+									wx.requestPayment({
+										...payment,
+										success: (res)=> {
+											var timeStamp=new Date().getTime();
+											wx.cloud.callFunction({   //输入订单
+												name:'orderInput',
+												data:{
+													status:0,
+													uid:Number(this.$store.state.uid),
+													toUid:Number(this.uid),
+													cid:Number(this.cid),
+													timeStamp:timeStamp,
 													startTime:this.text1,
 													endTime:this.text2,
+													address:this.address,
+													location:this.location,
+													predictedPrice:this.possiblePrice,
+													outTradeNo:outTradeNo
+												}
+											}).then(res=>{
+													var oid =res.result;
+													wx.showToast({
+														title: "预约成功！",
+														icon: 'success',
+														complete: () => {
+															setTimeout(() => {
+																uni.navigateTo({
+																	url: '../communication/chat?toUid='+this.uid,
+																	success: (res) => {
+																		res.eventChannel.emit('bookOrder', { 
+																			data: {
+																				oid:oid,
+																				cid:this.cid,
+																				longitude:this.longitude,
+																				latitude:this.latitude,
+																				address:this.address,
+																				location:this.location,
+																				price:this.possiblePrice,
+																				timeStamp:timeStamp,
+																				startTime:this.text1,
+																				endTime:this.text2,
+																			}
+																		})
+																	}
+																});
+															}, 500)
+														}
+													})
+												}
+											)
+										},
+										fail (err) {
+											wx.showToast({
+												title: "支付失败！",
+												icon: 'error',
+												complete: () => {
+													
 												}
 											})
 										}
-									});
-								}, 500)
-							}
+									})
+								}
+								
+							},
+							fail: console.error,
 						})
 					}else{
 						wx.showToast({
