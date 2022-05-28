@@ -59,7 +59,7 @@
 							</view>
 							
 							<view style="transform: rotateY(180deg) translateZ(13upx);position: absolute;width: 100%;" :class="isSelected2?'auto':'none'">
-								<scroller>
+								<scroller @touchstart="scroll()">
 									<charger  v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 										:location="charger.location" :state="charger.isAvailable" :price="charger.price"
 										:time="charger.time" :cid="charger.cid"
