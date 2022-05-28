@@ -496,13 +496,14 @@
 			},
 			bookOrder(){
 				
-				wx.cloud.callFunction({ //查询order的状态
+				wx.cloud.callFunction({ //查询我是否有未完成的订单以及该电桩是否可用
 					name: 'orderNum',
 					data: {
 						uid:this.$store.state.uid,
+						cid:this.cid
 					}
 				}).then(res=>{
-					if(res.result){
+					if(res.result==1){
 						
 						wx.cloud.callFunction({
 							name: 'orderPay',
@@ -579,9 +580,16 @@
 							},
 							fail: console.error,
 						})
-					}else{
+					}else if(res.result==-1){
 						wx.showToast({
 							title: "您有订单未处理",
+							icon: 'error',
+							complete: () => {
+							}
+						})
+					}else if(res.result==-2){
+						wx.showToast({
+							title: "该电桩已被预约",
 							icon: 'error',
 							complete: () => {
 							}
