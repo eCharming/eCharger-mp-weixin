@@ -62,8 +62,8 @@
 								<scroller @touchstart="scroll()">
 									<charger  v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
 										:location="charger.location" :state="charger.isAvailable" :price="charger.price"
-										:time="charger.time" :cid="charger.cid"
-										@tap="tapCharger(index)">
+										:time="charger.time" :cid="charger.cid" :windowWidth="windowWidth" :detail="charger.detail"
+										@tap="tapCharger(index)" @chargerUndetail="chargerUndetail()">
 									</charger>
 									<view class="scrollerview">
 										<image :src="src3" style="width: 45rpx;height: 45rpx;" @tap="addCharger"></image>
@@ -111,9 +111,6 @@
 			hiddendetail,
 			navigator
 		},
-		props:[
-			"chargers"
-		],
 		data() {
 			return {
 				originY:0,//第一次触摸时的手指位置
@@ -139,6 +136,7 @@
 				rotate:0,
 
 				orders: [],
+				chargers:[],
 				orderSelected: -1,
 				preOrder:-2,
 				hiddenDetail:false,//记录是否显示订单详情气泡
@@ -253,13 +251,18 @@
 				
 			},
 			tapCharger(index) {  //用于触发点击charger的事件
-				if(this.preCharger!=this.chargerSelected){
+				if(index!=this.chargerSelected){
 					this.preCharger=this.chargerSelected;
 					this.chargerSelected = index;
 					if(this.preCharger!=-1)
-						this.$refs[`chargerRef${this.preCharger}`][0].untap();
-					this.$refs[`chargerRef${index}`][0].tap();
+						this.chargers[this.preCharger].detail=false;
+					this.chargers[index].detail=true;
 				}
+				
+			},
+			chargerUndetail() {
+				this.chargers[this.chargerSelected].detail=false;
+				this.chargerSelected=-1;
 			},
 			scrolltolower() { //用于下拉刷新加载order
 				
@@ -351,6 +354,28 @@
 			
 		},
 		watch: {
+			'$store.state.chargerCardDefault'() {
+				this.preCharger=-2;
+				this.chargerSelected=-1;
+			},
+			'$store.state.getChargers'() {//用于获得mycharger
+				wx.cloud.callFunction({ //uid获取
+					name: 'searchCharger',
+					data: {
+						uid:this.$store.state.uid
+					}
+				}).then(
+					res => {
+						if(res.result!=null && res.result) {
+							this.chargers.splice(0)
+							for(let i=0;i<res.result.length;i++) {
+								res.result[i].detail=false;
+							}
+							this.chargers.push(...res.result)
+						}
+					}
+				)
+			},
 			'$store.state.orders'() { //用于加载order
 				this.icontext = "上拉加载更多";
 				this.icontype = "download";

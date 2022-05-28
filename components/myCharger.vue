@@ -1,158 +1,298 @@
 <template>
-	<view class="card" 
-		:style="{'border-left':borderleft,'border-right':borderright,'box-shadow':boxshadow}"
-	@tap='editCharger'>
-		<view class="view1">
-			<text class="location">{{location}}</text>
-			<text class="state1" v-if="state">空闲中</text>
-			<text class="state2" v-if="!state">使用中</text>
-		</view>
-		
-		<view class="view2">
-			<view class="priceview">
-				<text>价格</text>
-				<text class="yuan">￥</text>
-				<text class="price">{{price}}</text>
+	<view
+		style="position: relative;height: 300upx;margin:20upx;margin-bottom: 40upx;transform-style: preserve-3d; transition: .7s all;"
+		:style="{'transform':'rotateY('+rotate+'deg)','height':height+'rpx'}">
+
+		<view id="box" style="border-radius: 40upx;height: 300upx;width: 100%;position: absolute;transform: translateZ(300upx);
+		background:linear-gradient(to right bottom,rgb(50,200,210),#d4fce9) ;overflow: hidden;">
+			<view
+				style="position: absolute;background-color: #2aacb3;border-radius: 40upx;height: 300upx;width:100%;left: 8upx;top: 8upx;transition: all .3s;"
+				:style="{'transform':translate}"></view>
+
+			<view class="card" :style="{'width':width+'px'}">
+				<view style="display: flex;flex-direction: column;">
+					<view class="view1">
+						<text class="location">{{location}}</text>
+						<text class="state1" v-if="state">空闲中</text>
+						<text class="state2" v-if="!state">使用中</text>
+					</view>
+
+				</view>
+				<view class="view2">
+					<view class="priceview">
+						<text>价格</text>
+						<text class="yuan">￥</text>
+						<text class="price">{{price}}</text>
+					</view>
+					<view class="timeview">
+						<text>可用时间：</text>
+						<text class="time">{{showTime}}</text>
+					</view>
+				</view>
+
 			</view>
-			<view class="timeview">
-				<text>可用时间：</text>
-				<text class="time">{{showTime}}</text>
-			</view>
-			
 		</view>
-		
+
+		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);width: 100%;
+		transition: .7s all;border-radius: 30upx;border-top: 10upx solid rgba(50,200,210,1);border-bottom: 10upx solid rgba(50,200,210,1);
+		transform-style: preserve-3d;overflow: hidden;" :style="{'height':height+'rpx'}">
+			<view
+				style="position: relative;transition: .7s all;transform-style: preserve-3d;transform-origin: 50% 50% -150upx;"
+				:style="{'transform':'rotateX('+buttonRotate+'deg)','height':height+'rpx'}">
+				<view class="button" :style="{'opacity':buttonOpacitty}">
+					<view style="position: absolute;right: 30upx;top: 20upx;">
+						<text style="color:rgba(50,200,210,1) ;letter-spacing: 2upx;font-size: 28upx;"
+							@click.native.stop.prevent="untap">
+							返回
+						</text>
+					</view>
+					<view class="smalldetailview">
+						<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"
+							@click.native.stop.prevent="editCharger"></image>
+						<text class="smalldetail">详情</text>
+					</view>
+					<view class="smalldetailview">
+						<image src="../static/image/delete.png" style="height: 125upx;width: 125upx;"
+							@click.native.stop.prevent="deleteCharger"></image>
+						<text class="smalldetail">删除</text>
+					</view>
+				</view>
+
+			</view>
+		</view>
+
 	</view>
 </template>
 
 <script>
-	export default{
-		props:{
-			location:{
-				type:String
+	export default {
+		props: {
+			location: {
+				type: String
 			},
-			state:{
-				type:Boolean
+			state: {
+				type: Boolean
 			},
-			price:{
-				type:String
+			price: {
+				type: String
 			},
-			cid:{
-				type:String
+			cid: {
+				type: String
 			},
-			time:{
-				type:Array,
-				default:()=>[]
-			}
-			
+			time: {
+				type: Array,
+				default: () => []
+			},
+			windowWidth: {
+				type: Number
+			},
+			detail: {
+				type: Boolean
+			},
 		},
-		data(){
-			return{
-				borderleft:"10rpx solid rgba(50,200,210,0.6)",
-				borderright:"10rpx solid rgba(50,200,210,0.6)",
-				boxshadow:"",
+		data() {
+			return {
+				boxshadow: "",
+
+				height: 300,
+				translate: 'translate(' + (this.windowWidth - uni.upx2px(160) + 10) + 'px,-' + uni.upx2px(300) + 'px)',
+				rotate: 0,
+				buttonRotate: 0,
+				buttonOpacitty: 1,
+				bookRotate: -90,
 			}
 		},
-		computed:{
+		computed: {
 			showTime() {
 				var tempDate = new Date();
 				var days = tempDate.getDay();
-				if(days==0) {
-					days=7;
+				if (days == 0) {
+					days = 7;
 				}
-				var showTime="";
-				if(this.time[days-1]=="") {
-					showTime="-"
+				var showTime = "";
+				if (this.time[days - 1] == "") {
+					showTime = "-"
 				} else {
-					showTime=this.time[days-1]
+					showTime = this.time[days - 1]
 				}
 				return showTime;
-			}
-		},
-		methods:{
-			tap(){
-				this.borderleft="12rpx solid rgba(50,200,210,1)";
-				this.borderright="12rpx solid rgba(50,200,210,1)";
-				this.boxshadow="0rpx 60rpx 28rpx -60rpx rgba(50,200,210,0.5)";
 			},
-			untap(){
-				this.borderleft="10rpx solid rgba(50,200,210,0.6)";
-				this.borderright="10rpx solid rgba(50,200,210,0.6)";
-				this.boxshadow="";
+			width() {
+				return (this.windowWidth - uni.upx2px(160))
+			},
+		},
+		methods: {
+			untap() {
+				this.$emit('chargerUndetail')
 			},
 			editCharger() {
+				this.$store.commit('setChargerCardDefault')
 				uni.navigateTo({
-					url: '../editCharger/editCharger?cid='+this.cid,
+					url: '../editCharger/editCharger?cid=' + this.cid,
 				});
+			},
+			deleteCharger() {
+				wx.showModal({
+					title: '提⽰',
+					content: '确认要删除该电桩?',
+					success: res => {
+						if (res.confirm) {
+							wx.cloud.callFunction({ //输入订单
+								name: 'chargerDelete',
+								data: {
+									_id: Number(this.cid)
+								}
+							}).then(
+								res => {
+									if (res.result == "charger unavailable") {
+										wx.showToast({
+											title: "删除失败！",
+											icon: 'error',
+											complete: () => {
+												this.$store.commit('setChargerCardDefault')
+												this.$store.commit('setGetChargers')
+											}
+										})
+									} else {
+										wx.request({
+											url: "https://ws.healtool.cn/deletePic/" + this.cid,
+											method: "POST",
+											success: res => {
+												//如果图片删除失败也不管了
+												wx.showToast({
+													title: "删除成功！",
+													icon: 'success',
+													complete: () => {
+														this.$store.commit('setChargerCardDefault')
+														this.$store.commit('setGetChargers')
+													}
+												})
+											}
+										})
+
+									}
+								}
+							)
+						}
+					}
+				})
+			}
+		},
+		watch: {
+			'detail'() {
+				if (this.detail == true) {
+					this.$nextTick(function() {
+						this.rotate = -90;
+					})
+				} else {
+					this.$nextTick(function() {
+						this.rotate = 0;
+						this.bookRotate = -90;
+						this.height = 300;
+						this.buttonRotate = 0;
+						this.buttonOpacitty = 1;
+					})
+				}
 			}
 		}
 	}
 </script>
 
 <style scoped>
-	.card{
-		margin:20upx;
-		margin-bottom: 40upx;;
+	.card {
+		position: absolute;
 		padding: 15upx;
-		background-color: rgba(253,255,253,1);
-		border-radius: 40upx;
+		background-color: white;
+		border-radius: 37upx;
 		display: flex;
 		flex-direction: column;
-		transition-property: box-shadow,border;
-		transition-duration: .5s;
+		justify-content: space-between;
+		transition: all .5s;
+
+		top: 8upx;
+		left: 8upx;
+		height: 284upx;
 	}
-	
-	.view1{
+
+	.view1 {
 		display: flex;
 		justify-content: space-between;
 	}
-	
-	.view2{
+
+	.view2 {
 		display: flex;
 		justify-content: space-between;
 		margin: 15upx;
 		margin-top: 60upx;
 	}
-	
-	.location{
-		margin:15upx;
+
+	.location {
+		margin: 15upx;
 		font-size: 30upx;
 		font-weight: 700;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		width:350upx;
+		width: 350upx;
 	}
-	
-	.state1{
-		margin:15upx;
+
+	.state1 {
+		margin: 15upx;
 		margin-top: 20upx;
-		color:rgb(50,200,210) ;
+		color: rgb(50, 200, 210);
 	}
-	
-	.state2{
-		margin:15upx;
+
+	.state2 {
+		margin: 15upx;
 		margin-top: 20upx;
-		color:rgb(255,99,71) ;
+		color: rgb(255, 99, 71);
 	}
-	
-	.yuan{
+
+	.yuan {
 		font-weight: 700;
 	}
-	
-	.price{
+
+	.price {
 		font-size: 50upx;
 		font-weight: 700;
 	}
-	
-	.time{
+
+	.time {
 		font-size: 35upx;
 		font-weight: 700;
-		color:rgba(50,200,210,1) ;
+		color: rgba(50, 200, 210, 1);
 		letter-spacing: 3upx;
 	}
-	
-	.timeview{
+
+	.timeview {
 		margin-top: 15upx;
 	}
-</style>
 
+	.smalldetailview {
+		height: 180upx;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+
+	}
+
+	.smalldetail {
+		font-size: 25upx;
+		letter-spacing: 0.6upx;
+		margin-left: 38upx;
+		position: relative;
+		bottom: 10upx;
+	}
+
+	.button {
+		position: absolute;
+		width: 100%;
+		height: 300upx;
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
+		transform: translateZ(5upx);
+		background-color: rgba(250, 255, 250, 1);
+		transition: all .7s;
+	}
+</style>

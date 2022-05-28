@@ -394,7 +394,6 @@
 				})
 			},
 			updateCharge(timestamp,time) {
-				console.log(this.cid)
 				wx.cloud.callFunction({
 					name: 'chargerUpdate',
 					data: {
@@ -414,13 +413,12 @@
 					}
 				}).then(
 					res => {
-						this.$store.commit('setRefresh', {
-							a: '1'
-						}) //占位对象，无意义，仅仅用于更新
+						this.$store.commit('setRefresh')
 						wx.showToast({
 							title: "提交成功！",
 							icon: 'success',
 							complete: () => {
+								this.$store.commit('setGetChargers')
 								setTimeout(() => {
 									uni.navigateBack({})
 								}, 1500)

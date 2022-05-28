@@ -495,7 +495,6 @@
 				})
 			},
 			bookOrder(){
-				
 				wx.cloud.callFunction({ //查询我是否有未完成的订单以及该电桩是否可用
 					name: 'orderNum',
 					data: {
@@ -559,6 +558,7 @@
 																		})
 																	}
 																});
+																this.$store.commit('setRefresh')//更新order
 															}, 500)
 														}
 													})
@@ -573,6 +573,14 @@
 													
 												}
 											})
+										}
+									})
+								} else {
+									wx.showToast({
+										title: "预约失败！",
+										icon: 'error',
+										complete: () => {
+											
 										}
 									})
 								}
@@ -594,11 +602,8 @@
 							complete: () => {
 							}
 						})
-					}
+					} 
 				})
-				
-				
-				
 			}
 		},
 		watch:{

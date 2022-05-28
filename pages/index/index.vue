@@ -1,7 +1,7 @@
 <template>
 	<view>
 		<mymap ></mymap>
-		<movablebox :chargers="chargers"></movablebox>
+		<movablebox></movablebox>
 		<!-- <loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading> -->
 	</view>
 </template>
@@ -20,7 +20,6 @@
 			return {
 				isLoading:true,
 				isShown:true,
-				chargers:[],
 			}
 		},
 		methods: {},
@@ -30,30 +29,23 @@
 			}).then(
 				res=>{
 					this.$store.commit('setUid',res.result.uid);
-					// this.$store.commit('setUid',1);
-	
 					var logInStatus=res.result.loginStatus
 					if(res.result.loginStatus){
 						wx.cloud.callFunction({   //uid获取
 							name:'infoReturn',
 							data:{
 								uid: res.result.uid
-								// uid:1
 							}
 						}).then(
 							res=>{
 								this.$store.commit('setUserName',res.result.userName);
 								this.$store.commit('setAvatarUrl',res.result.avatarUrl);
 								this.$store.commit('setLogInStatus',logInStatus);
-								
 							}
 						)
 					}
 				}
 			)
-			
-				
-			
 			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;
 			this.$store.commit('setWindowHeight',windowHeight);
 			setTimeout(() => {
@@ -64,36 +56,11 @@
 			}, 10000)
 		},
 		onShow() {
-				wx.cloud.callFunction({ //uid获取
-					name: 'searchCharger',
-					data: {
-						uid:this.$store.state.uid
-					}
-				}).then(
-					res => {
-						if(res.result!=null && res.result) {
-							this.chargers.splice(0)
-							this.chargers.push(...res.result)
-						}
-					}
-				)
-			
+			this.$store.commit('setGetChargers')
 		},
 		watch:{
 			'$store.state.uid'() {
-				wx.cloud.callFunction({ //uid获取
-					name: 'searchCharger',
-					data: {
-						uid:this.$store.state.uid
-					}
-				}).then(
-					res => {
-						if(res.result!=null && res.result) {
-							this.chargers.splice(0)
-							this.chargers.push(...res.result)
-						}
-					}
-				)
+				this.$store.commit('setGetChargers')
 			}
 		}
 	}

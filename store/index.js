@@ -30,8 +30,10 @@ export default new Vuex.Store({
 			latitude:null,
 			name:null,
 		},
-		refresh:null	,//用于添加电桩后更新地图和电桩信息
+		refresh:0,//用于添加电桩后更新地图和电桩信息
 		isWholeCity:0,
+		getChargers:0,//用于更新Mycharger数据
+		chargerCardDefault:0,//用于在从编编辑页面回退时恢复preCharger和selectedCharger
     },
     mutations: {
 		setLogInStatus(state,logInStatus) {
@@ -96,11 +98,17 @@ export default new Vuex.Store({
 			state.cityLocation.longitude=location.lng;
 			state.cityLocation.name = location.name;
 		},
-		setRefresh(state,item) {
-			state.refresh = item
+		setRefresh(state) {
+			state.refresh++;
 		},
 		setIsWholeCity(state) {
 			state.isWholeCity++;
+		},
+		setGetChargers(state) {
+			state.getChargers++;
+		},
+		setChargerCardDefault(state) {
+			state.chargerCardDefault++;
 		}
     },
     actions: {},
