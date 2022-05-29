@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<mymap ></mymap>
+		<mymap></mymap>
 		<movablebox></movablebox>
 		<!-- <loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading> -->
 	</view>
@@ -18,36 +18,45 @@
 		},
 		data() {
 			return {
-				isLoading:true,
-				isShown:true,
+				isLoading: true,
+				isShown: true,
+				refreshInterval: 0,
 			}
 		},
 		methods: {},
+		onUnload() {
+			clearInterval(this.refreshInterval)
+		},
 		onLoad() {
-			wx.cloud.callFunction({   //uid获取
-				name:'wxlogin',
+			//每隔五分钟自动刷新
+			this.refreshInterval = setInterval(() => {
+				this.$store.commit('setGetChargers')
+				this.$store.commit('setRefresh')
+			}, 300000);
+			wx.cloud.callFunction({ //uid获取
+				name: 'wxlogin',
 			}).then(
-				res=>{
-					this.$store.commit('setUid',res.result.uid);
-					var logInStatus=res.result.loginStatus
-					if(res.result.loginStatus){
-						wx.cloud.callFunction({   //uid获取
-							name:'infoReturn',
-							data:{
+				res => {
+					this.$store.commit('setUid', res.result.uid);
+					var logInStatus = res.result.loginStatus
+					if (res.result.loginStatus) {
+						wx.cloud.callFunction({ //uid获取
+							name: 'infoReturn',
+							data: {
 								uid: res.result.uid
 							}
 						}).then(
-							res=>{
-								this.$store.commit('setUserName',res.result.userName);
-								this.$store.commit('setAvatarUrl',res.result.avatarUrl);
-								this.$store.commit('setLogInStatus',logInStatus);
+							res => {
+								this.$store.commit('setUserName', res.result.userName);
+								this.$store.commit('setAvatarUrl', res.result.avatarUrl);
+								this.$store.commit('setLogInStatus', logInStatus);
 							}
 						)
 					}
 				}
 			)
-			var windowHeight=uni.getSystemInfoSync().windowHeight-uni.getSystemInfoSync().statusBarHeight-50;
-			this.$store.commit('setWindowHeight',windowHeight);
+			var windowHeight = uni.getSystemInfoSync().windowHeight - uni.getSystemInfoSync().statusBarHeight - 50;
+			this.$store.commit('setWindowHeight', windowHeight);
 			setTimeout(() => {
 				this.isShown = false;
 			}, 2500)
@@ -58,7 +67,7 @@
 		onShow() {
 			this.$store.commit('setGetChargers')
 		},
-		watch:{
+		watch: {
 			'$store.state.uid'() {
 				this.$store.commit('setGetChargers')
 			}

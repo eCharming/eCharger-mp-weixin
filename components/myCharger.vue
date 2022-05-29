@@ -17,7 +17,7 @@
 						<text class="state2" v-if="!state">使用中</text>
 					</view>
 
-				</view>
+				</view> 
 				<view class="view2">
 					<view class="priceview">
 						<text>价格</text>

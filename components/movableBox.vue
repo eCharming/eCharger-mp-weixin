@@ -49,12 +49,15 @@
 										:price="order.price" :time="order.time" :detail="order.detail" :windowWidth="windowWidth"
 										@map="tapOrder(index)" @detail="detail()" @undetail="undetail()" @toLow="toLow">
 									</order>
-									<view class="scrollerview">
+									<view class="scrollerview" v-if="orders.length!=0">
 										<image :src="src1" style="width: 45rpx;height: 45rpx;" v-show="icontype=='download'"></image>
-										<image :src="src2" style="width: 45rpx;height: 45rpx;" v-show="icontype=='warn'"></image>
+										<image :src="src2" style="width: 45rpx;height: 45rpx;" v-show="icontype=='warn'" ></image>
 										<text>{{icontext}}</text>  
 									</view>
-								  
+									<view v-if="orders.length===0" style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+										<image src="/static/image/blank.png" style="width: 200rpx;height: 200rpx;"></image>
+										<text style="font-weight: bold;color: rgba(102,205,170,1);">附近暂无电桩</text>
+									</view>
 								</scroller>
 							</view>
 							
@@ -65,6 +68,10 @@
 										:time="charger.time" :cid="charger.cid" :windowWidth="windowWidth" :detail="charger.detail"
 										@tap="tapCharger(index)" @chargerUndetail="chargerUndetail()">
 									</charger>
+									<view v-if="chargers.length===0" style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+										<image src="/static/image/blank_blue.png" style="width: 200rpx;height: 200rpx;"></image>
+										<text style="font-weight: bold;color: rgba(50,200,210,1);">暂无你的电桩</text>
+									</view>
 									<view class="scrollerview">
 										<image :src="src3" style="width: 45rpx;height: 45rpx;" @tap="addCharger"></image>
 										<text @tap="addCharger">添加你的电桩</text>  

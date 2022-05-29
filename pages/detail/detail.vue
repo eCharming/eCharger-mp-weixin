@@ -172,11 +172,25 @@
 				});
 			},
 			call(){
+				if(this.uid == this.$store.state.uid) {
+					wx.showToast({
+						title: "禁止联系自己",
+						icon: 'error',
+					})
+					return;
+				}
 				wx.makePhoneCall({
 					phoneNumber:this.phoneNumber
 				})
 			},
 			chat(){
+				if(this.uid == this.$store.state.uid) {
+					wx.showToast({
+						title: "禁止联系自己",
+						icon: 'error',
+					})
+					return;
+				}
 				uni.navigateTo({
 					url:'../communication/chat?toUid='+this.uid+'&name='+this.name+'&avatarUrl='+this.avatarUrl,
 				})
@@ -205,7 +219,6 @@
 					cid:Number(option.cid)
 				}
 			}).then(res=>{
-				console.log(res)
 					this.uid=res.result.uid;
 					this.address=res.result.address;
 					this.location=res.result.location;
