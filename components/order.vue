@@ -210,9 +210,6 @@
 		data(){
 			return{
 				height:300,
-				borderleft:"10rpx solid rgba(102,205,170,0.6)",
-				borderright:"10rpx solid rgba(102,205,170,0.6)",
-				boxshadow:"",
 				translate:'translate('+(this.windowWidth-uni.upx2px(160)+10)+'px,-'+uni.upx2px(300)+'px)',
 				check:false,
 				checkOpacity:0,
@@ -284,10 +281,6 @@
 				}
 			},
 			tap(){
-				// this.borderleft="12rpx solid rgba(102,205,170,1)";
-				// this.borderright="12rpx solid rgba(102,205,170,1)";
-				// this.boxshadow="0rpx 60rpx 28rpx -60rpx rgba(102,205,170,0.5)";
-				
 				// let info = uni.createSelectorQuery().in(this).select("#box");
 				// info.boundingClientRect(function(data) { 
 				// 	//	data - 包含元素的高度等信息
@@ -346,10 +339,6 @@
 			// 	}, 300)
 			},
 			untap(){
-				// this.borderleft="10rpx solid rgba(102,205,170,0.6)";
-				// this.borderright="10rpx solid rgba(102,205,170,0.6)";
-				// this.boxshadow="";
-				
 				this.translate='translate(0rpx,284rpx)';
 				setTimeout(()=>{
 					this.translate='translate('+(-this.width)+'px,0px)';
@@ -412,6 +401,13 @@
 				
 			},
 			book(){
+				if(this.uid == this.$store.state.uid) {
+					wx.showToast({
+						title: "禁止向自己预约",
+						icon: 'error',
+					})
+					return;
+				}
 				this.buttonRotate=180;
 				this.buttonOpacitty=0;
 				var animation = uni.createAnimation({
@@ -470,6 +466,13 @@
 				
 			},
 			chat(){
+				if(this.uid == this.$store.state.uid) {
+					wx.showToast({
+						title: "禁止联系自己",
+						icon: 'error',
+					})
+					return;
+				}
 				var animation = uni.createAnimation({
 					duration: 100,
 					timingFunction: 'ease',
