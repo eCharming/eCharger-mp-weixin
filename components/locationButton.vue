@@ -34,6 +34,11 @@
 							latitude: res.latitude,
 							longitude: res.longitude
 						});
+						this.$store.commit('setCityLocation',{
+															name:null,
+															latitude: null,
+															longitude: null
+														})
 					},
 					fail: () => {
 						this.$store.commit('setLocationRes',{});

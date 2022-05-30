@@ -273,17 +273,18 @@
 			'$store.state.cityLocation':{
 				deep:true,
 				handler(res) {
-					this.position=res.name
-					this.$store.commit("setCity",this.position)
-					uni.request({
-						url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
-						success: (res) => {
-							console.log(res)
-							if(res.data.now) {
-								this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
+					if(res.latitude!=null && res.longitude!=null) {
+						this.position=res.name
+						this.$store.commit("setCity",this.position)
+						uni.request({
+							url:'https://devapi.qweather.com/v7/weather/now?location='+res.longitude.toFixed(2)+','+res.latitude.toFixed(2)+'&key=c999b86fbd1d4b52aced1189c2ffef63',
+							success: (res) => {
+								if(res.data.now) {
+									this.weather=res.data.now.text+' '+res.data.now.temp+'℃'
+								}
 							}
-						}
-					})
+						})
+					}
 				}
 			}
 		}

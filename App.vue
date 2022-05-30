@@ -11,7 +11,6 @@
 				}
 				uni.setStorageSync('frePlace',JSON.stringify(obj))
 			}
-			console.log(uni.getStorageSync('frePlace'))
 		},
 		onShow: function() {
 			console.log('App Show')

@@ -49,7 +49,7 @@
 					<view class="smalldetailview">
 						<image src="../static/image/chargerdetail.png" style="height: 125upx;width: 125upx;"
 							@click.native.stop.prevent="editCharger"></image>
-						<text class="smalldetail">详情</text>
+						<text class="smalldetail">修改</text>
 					</view>
 					<view class="smalldetailview">
 						<image src="../static/image/delete.png" style="height: 125upx;width: 125upx;"

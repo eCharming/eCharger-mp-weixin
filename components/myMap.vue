@@ -15,6 +15,8 @@
 				center_longitude: 116.39742, //中心经度
 				latitude: 39.909, //当前纬度
 				longitude: 116.39742, //当前经度
+				city_latitude:39.909,//城市纬度，仅仅用于全城
+				city_longitude:116.39742,//城市经度，仅仅用于全城
 				mapSetting: {
 					"showCompass": true,
 					"enableOverlooking": false,
@@ -114,6 +116,8 @@
 				});
 			},
 			getWholeCity(lon,lat) {
+				this.center_latitude = lat
+				this.center_longitude = lon
 				this.scale = 0;
 				this.$nextTick(() => {
 					this.scale = 9;
@@ -176,6 +180,14 @@
 						this.covers.splice(0);
 						this.pickerHandler(lon, lat)
 					}
+				})
+				this.circles.splice(0, 1, {
+					latitude: -1,
+					longitude: -1,
+					fillColor: "rgb(255, 255, 255)",
+					color: "rgb(255, 255, 255)",
+					radius: 1,
+					strokeWidth: 1,
 				})
 			},
 			getChargerLocation(lon, lat, tle) {
@@ -309,6 +321,8 @@
 							oldlongitude = this.longitude;
 							this.latitude = res.latitude;
 							this.longitude = res.longitude;
+							this.city_latitude = res.latitude;
+							this.city_longitude = res.longitude;
 							this.$store.commit('setCurrentLocation', {
 								latitude: this.latitude,
 								longitude: this.longitude
@@ -427,6 +441,10 @@
 				if (res && res != {} && res.errMsg == "getLocation:ok") {
 					this.latitude = res.latitude;
 					this.longitude = res.longitude;
+					this.city_latitude = res.latitude;
+					this.city_longitude = res.longitude;
+					this.center_latitude = res.latitude;
+					this.center_longitude = res.longitude;
 					this.circles.splice(0, 1, {
 						latitude: this.latitude,
 						longitude: this.longitude,
@@ -476,20 +494,30 @@
 			'$store.state.cityLocation': {
 				deep: true, //必须深监听
 				handler(res) {
-					wx.stopLocationUpdate();
-					setTimeout(() => {
-						if (this.mapContext) {
-							this.mapContext.moveToLocation({
-								latitude: res.latitude,
-								longitude: res.longitude
-							})
-						}
-						this.getChargerLocation(res.longitude, res.latitude, res.name);
-					}, 500)
+					if(res.latitude!=null && res.longitude!=null) {
+						wx.stopLocationUpdate();
+						this.city_latitude = res.latitude
+						this.city_longitude  = res.longitude
+						this.scale = 0;
+						this.$nextTick(() => {
+							this.scale = 16;
+						})
+						setTimeout(() => {
+							if (this.mapContext) {
+								this.mapContext.moveToLocation({
+									latitude: res.latitude,
+									longitude: res.longitude
+								})
+							}
+							
+							this.getChargerLocation(res.longitude, res.latitude, res.name);
+						}, 500)
+					}
 				}
 			},
 			'$store.state.isWholeCity'() {
-				this.getWholeCity(this.longitude,this.latitude)
+				console.log(this.city_latitude)
+				this.getWholeCity(this.city_longitude,this.city_latitude)
 			}
 
 		}

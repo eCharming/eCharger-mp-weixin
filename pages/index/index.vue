@@ -66,6 +66,7 @@
 		},
 		onShow() {
 			this.$store.commit('setGetChargers')
+			this.$store.commit('setChargerCardDefault')
 		},
 		watch: {
 			'$store.state.uid'() {
