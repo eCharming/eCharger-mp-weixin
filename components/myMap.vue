@@ -49,6 +49,7 @@
 		},
 		methods: {
 			pickerHandler(lon, lat) {
+				this.$store.commit('setIsNavigate',false);
 				this.ordersCopy.splice(0);
 				this.polyline.splice(0);
 				this.markerSelected = -1;
@@ -116,6 +117,7 @@
 				});
 			},
 			getWholeCity(lon,lat) {
+				this.$store.commit('setIsNavigate',false);
 				this.center_latitude = lat
 				this.center_longitude = lon
 				this.scale = 0;
@@ -191,6 +193,7 @@
 				})
 			},
 			getChargerLocation(lon, lat, tle) {
+				this.$store.commit('setIsNavigate',false);
 				wx.cloud.callFunction({
 					name: 'getSurround',
 					data: {
@@ -414,7 +417,14 @@
 		},
 		watch: {
 			'$store.state.refresh'() {	//仅仅用于更新电桩信息
-				this.getChargerLocation(this.longitude,this.latitude,null)
+				if (this.$store.state.destination != null) {
+					var title = this.$store.state.destination.title;
+					var latitude = this.$store.state.destination.location.lat;
+					var longitude = this.$store.state.destination.location.lng;
+					this.getChargerLocation(longitude, latitude, title);
+				} else {
+					this.getChargerLocation(this.longitude,this.latitude,null)
+				}
 			},
 			'$store.state.destination'() { //监听destination变化 变化就在地图上加入标记点并且移动到该位置
 				if (this.$store.state.destination != null) { //按下locationbutton重置回到自己位置，destination置为空
@@ -523,6 +533,9 @@
 			},
 			'$store.state.isWholeCity'() {
 				this.getWholeCity(this.city_longitude,this.city_latitude)
+			},
+			'$store.state.refreshPolyline'() {
+				this.polyline.splice(0);
 			}
 
 		}

@@ -21,6 +21,8 @@ export default new Vuex.Store({
 		orderSelected:null,	//用于向mymap组件传递movablebox中选择的order编号
 		markerSelected:null, //用于向movablebox组件传递mymap中选择的marker编号
 		navigateSelected:null,//用于向mymap组件传递需要导航的marker编号
+		isNavigate:false,//是否导航
+		refreshPolyline:0,//用于清空导航
 		isLow:0,	//用于从search页面返回时收起movablebox至低位
 		windowHeight:null,
 		buttonSelected:1,
@@ -112,6 +114,12 @@ export default new Vuex.Store({
 		},
 		setChargerCardDefault(state) {
 			state.chargerCardDefault++;
+		},
+		setIsNavigate(state,bool) {
+			state.isNavigate = bool;
+		},
+		refreshPolyline(state) {
+			state.refreshPolyline++;
 		}
     },
     actions: {},

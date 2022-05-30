@@ -9,7 +9,13 @@
 				<view>
 					<view class="content">
 						
-						<view class="fixed-view">
+						<view class="fixed-view" :style="{'top':isNavigate?'-290rpx':'-150rpx'}">
+							<transition name="fade" appear="true">
+								<view class='flex-img-2' v-if="isNavigate">
+									<navigatebutton :isLow="isLow"></navigatebutton>
+								</view>
+							</transition>
+							
 							<view class='flex-img'>
 								<infobutton :isLow="isLow"></infobutton>
 								<locationbutton :isLow="isLow"></locationbutton>
@@ -21,8 +27,7 @@
 						</view>
 		
 						<hiddencard :isLow="isLow"></hiddencard>
-						<hiddendetail v-if="hiddenDetail" :isLow="isLow" @tap="detail"></hiddendetail>
-						
+						<hiddendetail v-if="hiddenDetail" :isLow="isLow" @tap="detail"></hiddendetail>						
 						<card>
 							<totalbutton :text1="'租电桩'" :text2="'电桩共享'" :selected="isSelected1" :isLow="isLow" :type="1"
 								@tap="tapButton1()">
@@ -96,6 +101,7 @@
 	import card from './card.vue'
 	import destination from './destination.vue'
 	import locationbutton from './locationButton.vue'
+	import navigatebutton from './navigateButton.vue'
 	import scroller from './scroller.vue'
 	import order from './order.vue'
 	import charger from './myCharger.vue'
@@ -110,6 +116,7 @@
 			card,
 			destination,
 			locationbutton,
+			navigatebutton,
 			scroller,
 			order,
 			charger,
@@ -360,6 +367,11 @@
 			this.currentY = this.windowHeight * (this.maxHeight - this.minHeight);
 			
 		},
+		computed:{
+			isNavigate() {
+				return this.$store.state.isNavigate;
+			}
+		},
 		watch: {
 			'$store.state.chargerCardDefault'() {
 				this.preCharger=-2;
@@ -511,6 +523,17 @@
 		position: fixed;
 		left:0;
 		right:0;
-		top:-150upx;
+	}
+	
+	.flex-img-2 {
+		display: flex;
+		justify-content: flex-end;
+	}
+	
+	.fade-enter-active, .fade-leave-active {
+	    transition: opacity 2s
+	}
+	.fade-enter-to, .fade-leave-to {
+	    opacity: 0
 	}
 </style>
