@@ -10,7 +10,10 @@ export default new Vuex.Store({
 		uid:null,//用户id
 		avatarUrl:null,//用户头像
 		userName:null,//用户名
-		currentLocation:null, //用于记录自身的经纬度坐标
+		currentLocation:{
+			longitude:116.39742,
+			latitude:39.909,
+		}, //用于记录自身的经纬度坐标
         locationres:null,
 		destination:null,	//用于记录目的地的名字、地址、经纬度坐标以及和现在位置的距离
 		relocate:true,		

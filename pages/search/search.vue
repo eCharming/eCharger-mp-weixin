@@ -48,6 +48,10 @@
 						<scroll-view scroll-y="true"
 							style="margin: 30upx;background-color: #FFFFFF;border-radius: 40upx;width:690upx"
 							:style="{'height': storageHeight+'px'}">
+							<view style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;" v-if ='storages.length===0'>
+								<image src="/static/image/blank.png" style="width: 200rpx;height: 200rpx;"></image>
+								<text style="font-weight: bold;color: rgba(102,205,170,1);">还没有搜索记录</text>
+							</view>
 							<view v-for="(storage,index) in storages" :key="index"
 								style="display: flex;flex-direction: column;">
 								<view class="storage" @tap="tapStorage(storage.title,storage.location)">
@@ -99,6 +103,11 @@
 						<scroll-view scroll-y="true"
 							style="margin: 30upx;background-color: #FFFFFF;border-radius: 40upx;width:690upx"
 							:style="{'height': (storageHeight-40)+'px'}">
+							<view style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;" v-if ="
+							JSON.stringify(frePlace.freHome) == '{}' && JSON.stringify(frePlace.freCompany) == '{}' && JSON.stringify(frePlace.freSchool) == '{}' && frePlace.freOther.length==0">
+								<image src="/static/image/blank_blue.png" style="width: 200rpx;height: 200rpx;"></image>
+								<text style="font-weight: bold;color: rgba(50,200,210,1);">还没有常用地点</text>
+							</view>
 							<view style="display: flex;flex-direction: column;" v-if="JSON.stringify(frePlace.freHome) != '{}'">
 								<view class="storage" @tap="tapStorage(frePlace.freHome.title,frePlace.freHome.location)">
 							

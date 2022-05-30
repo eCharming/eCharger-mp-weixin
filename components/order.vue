@@ -37,9 +37,7 @@
 						<text>可用时间：</text>
 						<text class="time">{{showTime}}</text>
 					</view>
-					
 				</view>
-			
 			</view>
 		</view>
 		
@@ -113,9 +111,7 @@
 									<text>可用时间：</text>
 									<text class="time">{{showTime}}</text>
 								</view>
-								
 							</view>
-							
 						</view>
 						
 						<view style="height: 300upx;width: 100%;position: absolute;transform-origin: top;top: 300upx;
@@ -157,9 +153,6 @@
 					
 				</view>
 			</view>
-			
-			
-			
 				
 		</view>
 	</view>
@@ -281,19 +274,6 @@
 				}
 			},
 			tap(){
-				// let info = uni.createSelectorQuery().in(this).select("#box");
-				// info.boundingClientRect(function(data) { 
-				// 	//	data - 包含元素的高度等信息
-				// 	// 	console.log(data.height)  // 获取元素宽度
-				// 	console.log(data)
-					
-				// }).exec(function(res){
-				// 	// 注意：exec方法必须执行，即便什么也不做，否则不会获取到任何数据
-				// })
-				// console.log(uni.upx2px(16))
-				// console.log(this.windowWidth)
-				// console.log(this.windowWidth-uni.upx2px(144))
-				
 				this.translate='translate(0rpx,-300rpx)';
 				setTimeout(()=>{
 					this.translate='translate('+(-this.width)+'px,0px)';
@@ -310,33 +290,6 @@
 					this.checkOpacity=1;
 					this.checkRight=10;
 				});
-				
-			// 	var animation = uni.createAnimation({
-			// 		duration: 100,
-			// 		timingFunction: 'ease',
-			// 	})	
-			// 	animation.rotateX(25).step()
-			
-			// 	this.animationData = animation.export()
-				
-			// 	setTimeout(() => {
-			// 		var animation2 = uni.createAnimation({
-			// 			duration: 200,
-			// 			timingFunction: 'ease',
-			// 		})	
-			// 		animation2.rotateX(-25).scale(1.1,1.1).step()
-								
-			// 		this.animationData = animation2.export()
-			// 	}, 100)
-			// 	setTimeout(() => {
-			// 		var animation3 = uni.createAnimation({
-			// 			duration: 100,
-			// 			timingFunction: 'ease',
-			// 		})	
-			// 		animation3.rotateX(0).scale(1.1,1.1).step()
-								
-			// 		this.animationData = animation3.export()
-			// 	}, 300)
 			},
 			untap(){
 				this.translate='translate(0rpx,284rpx)';
@@ -713,7 +666,7 @@
 	}
 	
 	.price{
-		font-size: 50upx;
+		font-size: 40upx;
 		font-weight: 700;
 	}
 	
@@ -827,7 +780,7 @@
 	
 	.priceview{
 		margin-right: 30upx;
-		margin-bottom: 30upx;
+		margin-top:15upx;
 		display: flex;
 		justify-content: flex-end;
 		align-items: center;

@@ -34,7 +34,10 @@
 						<myOrderHistotry v-for="(order,index) in myOrder" :key="index" :cid="order.cid" :uid="order.uid"
 						:toUid="order.toUid" :oid="order.oid" :startTime="order.startTime" :endTime="order.endTime" :predictedPrice="order.predictedPrice"
 						:timeStamp="order.timeStamp" :statusContext="order.status" :address="order.address" :location="order.location"></myOrderHistotry>
-						
+						<view v-if="myOrder.length===0" style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+							<image src="/static/image/blank.png" style="width: 200rpx;height: 200rpx;"></image>
+							<text style="font-weight: bold;color: rgba(102,205,170,1);">还没有预约订单</text>
+						</view>
 					</scroll-view>
 				</swiper-item>
 				<swiper-item>
@@ -45,7 +48,10 @@
 						<borrowOrderHistory v-for="(order,index) in borrowOrder" :key="index" :cid="order.cid" :uid="order.uid"
 						:toUid="order.toUid" :oid="order.oid" :startTime="order.startTime" :endTime="order.endTime"  :predictedPrice="order.predictedPrice"
 						:timeStamp="order.timeStamp" :statusContext="order.status" :address="order.address" :location="order.location"></borrowOrderHistory>
-						
+						<view v-if="borrowOrder.length===0" style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+							<image src="/static/image/blank_blue.png" style="width: 200rpx;height: 200rpx;"></image>
+							<text style="font-weight: bold;color: rgba(50,200,210,1);">还没有出租订单</text>
+						</view>
 					</scroll-view>
 				</swiper-item>
 			</swiper>

@@ -20,6 +20,10 @@
 					<text>{{friend.newMessageNum}}</text>
 				</view>
 			</view>
+			<view v-if="friends.length===0" style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+				<image src="/static/image/blank.png" style="width: 200rpx;height: 200rpx;"></image>
+				<text style="font-weight: bold;color: rgba(102,205,170,1);">还没有联系人</text>
+			</view>
 		</scroll-view>
 		
 	</view>

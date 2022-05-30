@@ -196,7 +196,9 @@
 					data: {
 						longitude: lon,
 						latitude: lat,
-						Distance: 2000
+						Distance: 2000,
+						rawLongitude:this.$store.state.currentLocation.longitude,
+						rawLatitude:this.$store.state.currentLocation.latitude,
 					}
 				}).then(
 					res => {
@@ -342,6 +344,10 @@
 							if (firstFlag || (oldlatitude && oldlongitude && Math.abs(
 									oldlatitude - this.latitude) + Math.abs(oldlongitude - this
 									.longitude) > 0.005)) { //两次定位距离过近时不调用云函数以减小负载
+								this.$store.commit('setCurrentLocation', {
+									latitude: this.latitude,
+									longitude: this.longitude
+								});
 								this.getChargerLocation(this.longitude, this.latitude, null);
 							}
 							firstFlag = false;
@@ -516,7 +522,6 @@
 				}
 			},
 			'$store.state.isWholeCity'() {
-				console.log(this.city_latitude)
 				this.getWholeCity(this.city_longitude,this.city_latitude)
 			}
 
