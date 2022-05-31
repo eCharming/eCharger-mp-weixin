@@ -9,12 +9,10 @@
 				<view>
 					<view class="content">
 						
-						<view class="fixed-view" :style="{'top':isNavigate?'-290rpx':'-150rpx'}">
-							<transition name="fade" appear="true">
-								<view class='flex-img-2' v-if="isNavigate">
-									<navigatebutton :isLow="isLow"></navigatebutton>
-								</view>
-							</transition>
+						<view class="fixed-view">
+							<view class='flex-img-2' :style="{'opacity':isNavigate}" style="transition: opacity 1s;">
+								<navigatebutton :isLow="isLow"></navigatebutton>
+							</view>
 							
 							<view class='flex-img'>
 								<infobutton :isLow="isLow"></infobutton>
@@ -369,7 +367,7 @@
 		},
 		computed:{
 			isNavigate() {
-				return this.$store.state.isNavigate;
+				return this.$store.state.isNavigate?1:0;
 			}
 		},
 		watch: {
@@ -523,17 +521,11 @@
 		position: fixed;
 		left:0;
 		right:0;
+		top:-290upx;
 	}
 	
 	.flex-img-2 {
 		display: flex;
 		justify-content: flex-end;
-	}
-	
-	.fade-enter-active, .fade-leave-active {
-	    transition: opacity 2s
-	}
-	.fade-enter-to, .fade-leave-to {
-	    opacity: 0
 	}
 </style>

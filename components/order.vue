@@ -333,7 +333,6 @@
 				this.$emit('undetail');
 			},
 			navigate(){
-				this.$store.commit('setIsNavigate',true);
 				var animation = uni.createAnimation({
 					duration: 100,
 					timingFunction: 'ease',

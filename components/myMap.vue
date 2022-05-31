@@ -409,7 +409,7 @@
 							};
 
 						}
-
+						this.$store.commit('setIsNavigate',true)
 					}
 				});
 				this.MoveLocation(this.covers[index].latitude, this.covers[index].longitude);

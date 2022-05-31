@@ -24,8 +24,11 @@
 		},
 		methods:{
 			unnavigate() {
-				this.$store.commit('refreshPolyline');
-				this.$store.commit('setIsNavigate',false);
+				console.log(this.$store.state.isNavigate)
+				if(this.$store.state.isNavigate==true) {
+					this.$store.commit('refreshPolyline');
+					this.$store.commit('setIsNavigate',false);
+				}	
 			}
 		},
 		watch:{
