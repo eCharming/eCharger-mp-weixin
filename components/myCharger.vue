@@ -3,34 +3,27 @@
 		style="position: relative;height: 300upx;margin:20upx;margin-bottom: 40upx;transform-style: preserve-3d; transition: .7s all;"
 		:style="{'transform':'rotateY('+rotate+'deg)','height':height+'rpx'}">
 
-		<view id="box" style="border-radius: 40upx;height: 300upx;width: 100%;position: absolute;transform: translateZ(300upx);
-		background:linear-gradient(to right bottom,rgb(50,200,210),#d4fce9) ;overflow: hidden;">
-			<view
-				style="position: absolute;background-color: #2aacb3;border-radius: 40upx;height: 300upx;width:100%;left: 8upx;top: 8upx;transition: all .3s;"
-				:style="{'transform':translate}"></view>
-
-			<view class="card" :style="{'width':width+'px'}">
-				<view style="display: flex;flex-direction: column;">
-					<view class="view1">
-						<text class="location">{{location}}</text>
-						<text class="state1" v-if="state">空闲中</text>
-						<text class="state2" v-if="!state">使用中</text>
-					</view>
-
-				</view> 
-				<view class="view2">
-					<view class="priceview">
-						<text>价格</text>
-						<text class="yuan">￥</text>
-						<text class="price">{{price}}</text>
-					</view>
-					<view class="timeview">
-						<text>可用时间：</text>
-						<text class="time">{{showTime}}</text>
-					</view>
+		<view class="card" :style="{'width':width+'px'}">
+			<view style="display: flex;flex-direction: column;">
+				<view class="view1">
+					<text class="location">{{location}}</text>
+					<text class="state1" v-if="state">空闲中</text>
+					<text class="state2" v-if="!state">使用中</text>
 				</view>
 
+			</view> 
+			<view class="view2">
+				<view class="priceview">
+					<text>价格</text>
+					<text class="yuan">￥</text>
+					<text class="price">{{price}}</text>
+				</view>
+				<view class="timeview">
+					<text>可用时间：</text>
+					<text class="time">{{showTime}}</text>
+				</view>
 			</view>
+
 		</view>
 
 		<view style="position: absolute;transform: rotateY(90deg) translateZ(300upx);width: 100%;
@@ -202,16 +195,15 @@
 	.card {
 		position: absolute;
 		padding: 15upx;
+		border: 8upx inset rgba(50,200,210,1);
 		background-color: white;
-		border-radius: 37upx;
+		border-radius: 40upx;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		transition: all .5s;
-
-		top: 8upx;
-		left: 8upx;
-		height: 284upx;
+		transform: translateZ(300upx);
+		height: 300upx;
 	}
 
 	.view1 {

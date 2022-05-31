@@ -623,14 +623,14 @@
 		
 		padding: 15upx;
 		background-color: white;
-		border-radius: 37upx;
+		border-radius: 32upx;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		transition: all .5s;
 		
 		top: 8upx;
-		left:8upx;
+		left:9upx;
 		height: 284upx;
 	}
 	

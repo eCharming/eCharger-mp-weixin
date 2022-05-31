@@ -28,16 +28,30 @@
 				<view class="selected-ball" :style="{'background-color':backColor}"></view>
 			</view>
 			<view class="image-1" @click="tap(0)" :style="{'bottom':imageBottom[0]+'rpx'}">
-				<image class="image" src="../static/image/scan.png"></image>
+				
+				<view style="position: absolute;height: 10upx;left: 25upx;top: 22upx;transition: all .3s;background-color: white;"
+				:style="{'width':length1+'rpx'}"></view>
+				<view style="position: absolute;height: 10upx;left: 25upx;top: 40upx;transition: all .6s;background-color: white;"
+				:style="{'width':length1+'rpx'}"></view>
+				<image class="image" src="../static/image/order1.png"></image>
+				
+				
 			</view>
 			<view class="image-2" @click="tap(1)" :style="{'bottom':imageBottom[1]+'rpx'}">
-				<image class="image" src="../static/image/connection2.png"></image>
+				<view style="position: absolute;height: 10upx;left: 25upx;top: 17upx;transition: all .3s;background-color: white;"
+				:style="{'width':length2+'rpx'}"></view>
+				<view style="position: absolute;height: 10upx;left: 25upx;top: 27upx;transition: all .6s;background-color: white;"
+				:style="{'width':length2+'rpx'}"></view>
+				
+				<image class="image" src="../static/image/order2.png"></image>
 			</view>
 			<view class="image-3" @click="tap(2)" :style="{'bottom':imageBottom[2]+'rpx'}">
-				<image class="image" src="../static/image/city.png"></image>
+				<image class="image" src="../static/image/order3.png"></image>
 			</view>
 			<view class="image-4" @click="tap(3)" :style="{'bottom':imageBottom[3]+'rpx'}">
-				<image class="image" src="../static/image/my.png" :style="{'opacity':opacity}"></image>
+				
+				<image class="image" src="../static/image/face.png" :style="{'opacity':opacity}"></image>
+				<image class="image" src="../static/image/eye.png" :style="{'opacity':opacity,'left':eyeLeft+'rpx','top':eyeTop+'rpx'}"></image>
 			</view>
 		</view>
 		
@@ -86,6 +100,10 @@
 				selected:0,
 				left:25,
 				pointerEvents:'auto',
+				length1:30,
+				length2:0,
+				eyeLeft:0,
+				eyeTop:-4,
 			}
 		},
 		props:{
@@ -154,6 +172,16 @@
 					} 
 				}else{
 					if(index==0){
+						if(this.selected==1){
+							this.length2=0;
+						}else if(this.selected==3){
+							this.eyeLeft=0;
+							this.eyeTop=-4;
+						}
+						
+						this.length1=30;
+						
+						
 						this.left=25;
 						this.word[0].bottom=-10;
 						this.word[0].opacity=1;
@@ -163,6 +191,13 @@
 						this.imageBottom[this.selected]=5;
 						this.selected=0;
 					}else if(index==1){
+						if(this.selected==0){
+							this.length1=0;
+						}else if(this.selected==3){
+							this.eyeLeft=0;
+							this.eyeTop=-4;
+						}
+						this.length2=30;
 						this.left=210;
 						this.word[1].bottom=-10;
 						this.word[1].opacity=1;
@@ -172,6 +207,15 @@
 						this.imageBottom[this.selected]=5;
 						this.selected=1;
 					}else if(index==2){
+						if(this.selected==0){
+							this.length1=0;
+						}else if(this.selected==1){
+							this.length2=0;
+						}else if(this.selected==3){
+							this.eyeLeft=0;
+							this.eyeTop=-4;
+						}
+						
 						this.left=400;
 						this.word[2].bottom=-10;
 						this.word[2].opacity=1;
@@ -181,6 +225,14 @@
 						this.imageBottom[this.selected]=5;
 						this.selected=2;
 					}else if(index==3){
+						if(this.selected==0){
+							this.length1=0;
+						}else if(this.selected==1){
+							this.length2=0;
+						}
+						
+						this.eyeLeft=7;
+						this.eyeTop=3;
 						this.left=590;
 						this.word[3].bottom=-10;
 						this.word[3].opacity=1;
@@ -409,24 +461,32 @@
 	}
 	
 	.image-1{
+		width: 80upx;
+		height: 80upx;
 		position: absolute;
 		left: 57upx;
 		transition: all .5s;
 	}
 	
 	.image-2{
+		width: 80upx;
+		height: 80upx;
 		position: absolute;
 		left: 242upx;
 		transition: all .5s;
 	}
 	
 	.image-3{
+		width: 80upx;
+		height: 80upx;
 		position: absolute;
 		left: 430upx;
 		transition: all .5s;
 	}
 	
 	.image-4{
+		width: 80upx;
+		height: 80upx;
 		position: absolute;
 		left: 621upx;
 		transition: all .5s;
@@ -480,9 +540,11 @@
 	}
 
 	.image{
+		position: absolute;
 		width: 80upx;
 		height: 80upx;
-		margin-bottom: 5upx;
+		bottom: 8upx;
 		transition: all .3s;
+		left: 0;
 	}
 </style>
