@@ -10,13 +10,12 @@
 					<view class="content">
 						
 						<view class="fixed-view">
-							<view class='flex-img-2' :style="{'opacity':isNavigate}" style="transition: opacity 1s;">
-								<navigatebutton :isLow="isLow"></navigatebutton>
-							</view>
-							
 							<view class='flex-img'>
 								<infobutton :isLow="isLow"></infobutton>
-								<locationbutton :isLow="isLow"></locationbutton>
+								<view style="display: flex;">
+									<navigatebutton :isLow="isLow" :style="{'opacity':isNavigate}" style="transition: opacity 1s;"></navigatebutton>
+									<locationbutton :isLow="isLow"></locationbutton>
+								</view>
 							</view>
 						</view>
 						
@@ -521,11 +520,6 @@
 		position: fixed;
 		left:0;
 		right:0;
-		top:-290upx;
-	}
-	
-	.flex-img-2 {
-		display: flex;
-		justify-content: flex-end;
+		top:-150upx;
 	}
 </style>

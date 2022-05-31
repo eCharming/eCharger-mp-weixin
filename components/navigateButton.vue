@@ -9,7 +9,7 @@
 
 <script>
 	export default {
-		name: "locationButton",
+		name: "navigateButton",
 		data() {
 			return {
 				src:"../static/image/navigate.png",
