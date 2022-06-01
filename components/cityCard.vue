@@ -11,11 +11,7 @@
 </template>
 
 <script>
-	import addcard from '../components/addCard.vue'
 	export default {
-		components: {
-			addcard
-		},
 		props: {
 			alphabet: {
 				type: String,

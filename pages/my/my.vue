@@ -13,22 +13,22 @@
 		</view>
 		
 		<view class="function-view">
-			<view>
+			<view @tap="navi(1)">
 				<text>历史订单</text>
 			</view>
-			<view>
+			<view @tap="navi(2)">
 				<text>我的电桩</text>
 			</view>
-			<view>
+			<view @tap="navi(3)">
 				<text>常见问题</text>
 			</view>
 		</view>
 		
 		<view class="other-view">
-			<view>
+			<view @tap="navi(4)">
 				消息推送设置
 			</view>
-			<view>
+			<view @tap="navi(5)">
 				关于我们
 			</view>
 		</view>
@@ -52,13 +52,30 @@
 				uni.navigateBack({
 				})
 			},
+			navi(index) {
+				if(index===1) {
+					//TODO
+				} else if(index ===2) {
+					//TODO
+				} else if(index ===3) {
+					uni.navigateTo({
+						url:'../faq/faq',
+					})
+				} else if(index ===4) {
+					//TODO
+				} else if(index ===5) {
+					uni.navigateTo({
+						url:'../aboutUs/aboutUs',
+					})
+				}
+			}
 		},
 		mounted() {
 			this.statusHeight=uni.getSystemInfoSync().statusBarHeight+50;
 			this.myBottom=(this.statusHeight-uni.getMenuButtonBoundingClientRect().bottom);
 			this.avatarUrl=this.$store.state.avatarUrl;
 			this.userName=this.$store.state.userName;
-		}
+		},
 	}
 </script>
 

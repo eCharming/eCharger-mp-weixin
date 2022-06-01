@@ -14,7 +14,7 @@
 	.card{
 		margin:20upx;
 		padding: 15upx;
-		background-color: rgba(250,255,250,1);
+		background-color: rgba(255, 255, 255, 1.0);
 		border-radius: 20upx;
 		display: flex;
 		flex-direction:column;

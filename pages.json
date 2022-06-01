@@ -77,6 +77,20 @@
 				"navigationBarTitleText": "易插eCharger"
 			}
 			
+		},
+		{
+			"path" : "pages/faq/faq",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+			
+		},
+		{
+			"path" : "pages/aboutUs/aboutUs",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+			
 		}
     ],
 	"globalStyle": {

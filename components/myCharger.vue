@@ -195,7 +195,7 @@
 	.card {
 		position: absolute;
 		padding: 15upx;
-		border: 8upx inset rgba(50,200,210,1);
+		border: 12upx inset rgba(50,200,210,1);
 		background-color: white;
 		border-radius: 40upx;
 		display: flex;
