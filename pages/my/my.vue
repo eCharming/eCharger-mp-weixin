@@ -28,6 +28,9 @@
 			<view @tap="navi(4)">
 				消息推送设置
 			</view>
+			<view @tap="navi(6)">
+				意见反馈
+			</view>
 			<view @tap="navi(5)">
 				关于我们
 			</view>
@@ -54,9 +57,12 @@
 			},
 			navi(index) {
 				if(index===1) {
-					//TODO
+					uni.navigateTo({
+						url: '../orders/ordersHistory',
+					});
 				} else if(index ===2) {
-					//TODO
+					this.$store.commit('setMyCharger')
+					uni.navigateBack({})
 				} else if(index ===3) {
 					uni.navigateTo({
 						url:'../faq/faq',
@@ -66,6 +72,10 @@
 				} else if(index ===5) {
 					uni.navigateTo({
 						url:'../aboutUs/aboutUs',
+					})
+				} else if(index ===6) {
+					uni.navigateTo({
+						url:'../feedback/feedback',
 					})
 				}
 			}

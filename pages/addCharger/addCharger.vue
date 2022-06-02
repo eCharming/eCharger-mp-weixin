@@ -208,7 +208,7 @@
 				<view class="divLine"></view>
 				<view class="display">
 					<text class="labeltext">备注</text>
-					<textarea class="input" placeholder="备注" maxlength="100" auto-height="true">{{remarks}}</textarea>
+					<textarea class="input" placeholder="备注" maxlength="100" auto-height="true" v-model='remarks'></textarea>
 				</view>
 			</addcard>
 			<button class="submit" @tap="submit">提交</button>

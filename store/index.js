@@ -39,6 +39,7 @@ export default new Vuex.Store({
 		isWholeCity:0,
 		getChargers:0,//用于更新Mycharger数据
 		chargerCardDefault:0,//用于在从编编辑页面回退时恢复preCharger和selectedCharger
+		myCharger:0,//用于回到我的电桩界面
     },
     mutations: {
 		setLogInStatus(state,logInStatus) {
@@ -120,6 +121,9 @@ export default new Vuex.Store({
 		},
 		refreshPolyline(state) {
 			state.refreshPolyline++;
+		},
+		setMyCharger(state) {
+			state.myCharger++;
 		}
     },
     actions: {},

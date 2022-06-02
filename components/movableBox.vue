@@ -435,6 +435,9 @@
 			},
 			'$store.state.isLow'(){  //用于从search页面回到主页面时将movablebox移向低位
 				this.toLow();
+			},
+			'$store.state.myCharger'() {
+				this.tapButton2()
 			}
 		}
 	}
