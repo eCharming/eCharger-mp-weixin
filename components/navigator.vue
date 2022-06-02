@@ -33,7 +33,7 @@
 				:style="{'width':length1+'rpx'}"></view>
 				<view style="position: absolute;height: 10upx;left: 25upx;top: 40upx;transition: all .6s;background-color: white;"
 				:style="{'width':length1+'rpx'}"></view>
-				<image class="image" src="../static/image/order1.png"></image>
+				<image class="image" :src="imgSrc[0]"></image>
 				
 				
 			</view>
@@ -43,14 +43,15 @@
 				<view style="position: absolute;height: 10upx;left: 25upx;top: 27upx;transition: all .6s;background-color: white;"
 				:style="{'width':length2+'rpx'}"></view>
 				
-				<image class="image" src="../static/image/order2.png"></image>
+				<image class="image" :src="imgSrc[1]"></image>
 			</view>
 			<view class="image-3" @click="tap(2)" :style="{'bottom':imageBottom[2]+'rpx'}">
-				<image class="image" src="../static/image/order3.png"></image>
+				<image class="image" src="../static/image/mark.png" :style="{'top':markTop+'rpx'}"></image>
+				<image class="image" :src="imgSrc[2]"></image>
 			</view>
 			<view class="image-4" @click="tap(3)" :style="{'bottom':imageBottom[3]+'rpx'}">
 				
-				<image class="image" src="../static/image/face.png" :style="{'opacity':opacity}"></image>
+				<image class="image" :src="imgSrc[3]" :style="{'opacity':opacity}"></image>
 				<image class="image" src="../static/image/eye.png" :style="{'opacity':opacity,'left':eyeLeft+'rpx','top':eyeTop+'rpx'}"></image>
 			</view>
 		</view>
@@ -102,8 +103,10 @@
 				pointerEvents:'auto',
 				length1:30,
 				length2:0,
+				markTop:-8,
 				eyeLeft:0,
-				eyeTop:-4,
+				eyeTop:-8,
+				imgSrc:["../static/image/order-green.png","../static/image/connect-green.png","../static/image/map-green.png","../static/image/face-green.png"]
 			}
 		},
 		props:{
@@ -176,7 +179,9 @@
 							this.length2=0;
 						}else if(this.selected==3){
 							this.eyeLeft=0;
-							this.eyeTop=-4;
+							this.eyeTop=-8;
+						}else if(this.selected==2){
+							this.markTop=-18
 						}
 						
 						this.length1=30;
@@ -195,7 +200,9 @@
 							this.length1=0;
 						}else if(this.selected==3){
 							this.eyeLeft=0;
-							this.eyeTop=-4;
+							this.eyeTop=-8;
+						}else if(this.selected==2){
+							this.markTop=-18
 						}
 						this.length2=30;
 						this.left=210;
@@ -213,9 +220,9 @@
 							this.length2=0;
 						}else if(this.selected==3){
 							this.eyeLeft=0;
-							this.eyeTop=-4;
+							this.eyeTop=-8;
 						}
-						
+						this.markTop=-8;
 						this.left=400;
 						this.word[2].bottom=-10;
 						this.word[2].opacity=1;
@@ -229,10 +236,12 @@
 							this.length1=0;
 						}else if(this.selected==1){
 							this.length2=0;
+						}else if(this.selected==2){
+							this.markTop=-18
 						}
 						
 						this.eyeLeft=7;
-						this.eyeTop=3;
+						this.eyeTop=0;
 						this.left=590;
 						this.word[3].bottom=-10;
 						this.word[3].opacity=1;
@@ -292,10 +301,12 @@
 				if(this.$store.state.buttonSelected==1){
 					this.backColor = "rgb(102,205,170)";
 					this.secondColor='rgb(166,236,146)';
+					this.imgSrc=["../static/image/order-green.png","../static/image/connect-green.png","../static/image/map-green.png","../static/image/face-green.png"];
 				}	
 				else{
 					this.backColor=this.$store.state.color;
 					this.secondColor='rgb(152,245,255)';
+					this.imgSrc=["../static/image/order-blue.png","../static/image/connect-blue.png","../static/image/map-blue.png","../static/image/face-blue.png"];
 				} 
 			},
 			'isLow'(){
