@@ -103,7 +103,7 @@
 				pointerEvents:'auto',
 				length1:30,
 				length2:0,
-				markTop:-8,
+				markTop:-18,
 				eyeLeft:0,
 				eyeTop:-8,
 				imgSrc:["../static/image/order-green.png","../static/image/connect-green.png","../static/image/map-green.png","../static/image/face-green.png"]

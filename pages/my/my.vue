@@ -12,34 +12,44 @@
 			</view>
 		</view>
 		
-		<view class="function-view">
-			<view @tap="navi(1)">
-				<text>历史订单</text>
+		<addcard style='margin:10rpx;'>
+			<view style="display: flex;justify-content: space-around;">
+				<view @tap="navi(1)" class='funbutton'>
+				<image src='../../static/image/historyOrder.png' style="width: 100upx;height:100upx;"></image>
+				<view class='labeltext'>历史订单</view>
 			</view>
-			<view @tap="navi(2)">
-				<text>我的电桩</text>
+			<view @tap="navi(2)" class='funbutton'>
+				<image src='../../static/image/myCharger.png' style="width: 100upx;height:100upx;"></image>
+				<view class='labeltext'>我的电桩</view>
 			</view>
-			<view @tap="navi(3)">
-				<text>常见问题</text>
+			<view @tap="navi(3)" class='funbutton'>
+				<image src='../../static/image/faq.png' style="width: 100upx;height:100upx;"></image>
+				<view class='labeltext'>常见问题</view>
 			</view>
-		</view>
+			</view>
+			
+		</addcard>
 		
-		<view class="other-view">
-			<view @tap="navi(4)">
-				消息推送设置
-			</view>
-			<view @tap="navi(6)">
-				意见反馈
-			</view>
-			<view @tap="navi(5)">
-				关于我们
-			</view>
+		<view style='margin:10rpx;'>
+			<addcard>
+				<view class='labeltext' @tap="navi(6)">
+					意见反馈
+				</view>
+				<view class='divLine'></view>
+				<view class='labeltext' @tap="navi(5)">
+					关于我们
+				</view>
+			</addcard>
 		</view>
 	</view>
 </template>
 
 <script>
+	import addcard from '../../components/addCard.vue'
 	export default{
+		components:{
+			addcard
+		},
 		data(){
 			return{
 				uid:-1,
@@ -67,8 +77,6 @@
 					uni.navigateTo({
 						url:'../faq/faq',
 					})
-				} else if(index ===4) {
-					//TODO
 				} else if(index ===5) {
 					uni.navigateTo({
 						url:'../aboutUs/aboutUs',
@@ -108,24 +116,27 @@
 		height:25px;
 	}
 	
-	.function-view{
-		padding: 15upx;
-		background-color: rgba(253,255,253,1);
-		border-radius: 40upx;
-		height: 220rpx;
-		display: flex;
-		justify-content: space-around;
-		margin-left: 40rpx;
-		margin-right: 40rpx;
+	.labeltext {
+		letter-spacing: 2upx;
+		font-weight: 700;
+		margin-top:10upx;
+		margin-bottom:10upx;
 	}
 	
-	.other-view{
-		padding: 15upx;
-		background-color: rgba(253,255,253,1);
-		border-radius: 40upx;
-		height: 420rpx;
-		margin-top: 40rpx;
-		margin-left: 40rpx;
-		margin-right: 40rpx;
+	.funbutton {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		margin-top:30upx;
+		margin-bottom:30upx;
+	}
+	
+	.divLine {
+		width: 100%;
+		height: 3upx;
+		background-color: #E0E3DA;
+		margin-top: 18rpx;
+		margin-bottom: 18rpx;
 	}
 </style>

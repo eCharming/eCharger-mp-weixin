@@ -245,7 +245,7 @@
 	}
 
 	.price {
-		font-size: 50upx;
+		font-size: 40upx;
 		font-weight: 700;
 	}
 
@@ -257,6 +257,9 @@
 	}
 
 	.timeview {
+		margin-top: 15upx;
+	}
+	.priceview {
 		margin-top: 15upx;
 	}
 
