@@ -7,6 +7,7 @@
 		<scroll-view
 			scroll-y="true"
 			scroll-with-animation=true
+			style="background-color: white;"
 			:style="{'height':scrollHeight+'px'}"
 		>
 			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(index)">
