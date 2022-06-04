@@ -98,7 +98,18 @@
 				"navigationBarTitleText": "易插eCharger",
 				"disableScroll":true
 			}
-			
+		},
+		{
+			"path" : "pages/customerPolicy/customerPolicy",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
+		},
+		{
+			"path" : "pages/privacyPolicy/privacyPolicy",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
 		}
     ],
 	"globalStyle": {
