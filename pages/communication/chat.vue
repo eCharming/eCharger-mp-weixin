@@ -248,7 +248,6 @@
 					this.hasNew=true;	
 				});
 				this.socketTask.onClose((res)=>{	//连接关闭
-					console.log(res)
 				})
 			},
 			scrollToUpper(){		//滚动到最上层刷新缓存

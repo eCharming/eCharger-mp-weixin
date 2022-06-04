@@ -16,8 +16,11 @@
 						{{address}}
 					</view>
 				</view>
+				<map id="myMap" style="width: 680upx; height: 500upx;" layer-style="1" :latitude="center_latitude"
+					:longitude="center_longitude" showLocation='true' subkey="ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL"
+					:markers="covers" :polyline="polyline">
+				</map>
 				
-				<view class="divLine"></view>
 				
 				<view style="margin: 28upx;">
 					<view class="labeltext">详细地址</view>
@@ -26,10 +29,7 @@
 					</view>
 				</view>
 						
-				<map id="myMap" style="width: 680upx; height: 500upx;" layer-style="1" :latitude="center_latitude"
-					:longitude="center_longitude" showLocation='true' subkey="ORFBZ-V73LX-N3Z4Y-Z3MR4-V35MJ-LNBFL"
-					:markers="covers" :polyline="polyline">
-				</map>
+				<view class="divLine"></view>
 
 				<view style="margin: 28upx;">
 					<view class="labeltext">电桩单价</view>
@@ -323,6 +323,8 @@
 	
 	.availabeTime{
 		 color:rgba(0,0,0,0.5);
-		 width: 150upx;
+		 width: 250upx;
+		 display: flex;
+		 justify-content: flex-end;
 	}
 </style>

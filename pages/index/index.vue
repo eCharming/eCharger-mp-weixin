@@ -2,7 +2,7 @@
 	<view>
 		<mymap></mymap>
 		<movablebox></movablebox>
-		<!-- <loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading> -->
+		<loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading>
 	</view>
 </template>
 
@@ -69,9 +69,9 @@
 			this.$store.commit('setChargerCardDefault')
 		},
 		watch: {
-			'$store.state.uid'() {
+			'$store.state.logInStatus'() {
 				this.$store.commit('setGetChargers')
-			}
+			},
 		}
 	}
 </script>

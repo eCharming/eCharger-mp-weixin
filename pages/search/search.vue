@@ -324,7 +324,6 @@
 			},
 			setStorage(id, title, location, category) {
 				var searchHistory = uni.getStorageSync('searchHistory');
-				console.log(searchHistory)
 				if (searchHistory != '') {
 					searchHistory = JSON.parse(searchHistory);
 					for (var index in searchHistory) {

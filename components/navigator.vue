@@ -152,7 +152,6 @@
 				if(index==this.selected){
 					if(index==0){
 						if(this.info()){
-							console.log(1)
 							uni.navigateTo({
 								// url: '../selectCity/selectCity',
 								url: '../orders/ordersHistory',

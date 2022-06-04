@@ -66,7 +66,7 @@
 							<view style="transform: rotateY(180deg) translateZ(13upx);position: absolute;width: 100%;" :class="isSelected2?'auto':'none'">
 								<scroller @touchstart="scroll()">
 									<charger  v-for="(charger,index) in chargers" :ref="'chargerRef'+index" :key="index"
-										:location="charger.location" :state="charger.isAvailable" :price="charger.price"
+										:location="charger.location" :address="charger.address" :state="charger.isAvailable" :price="charger.price"
 										:time="charger.time" :cid="charger.cid" :windowWidth="windowWidth" :detail="charger.detail"
 										@tap="tapCharger(index)" @chargerUndetail="chargerUndetail()">
 									</charger>
@@ -375,6 +375,10 @@
 				this.chargerSelected=-1;
 			},
 			'$store.state.getChargers'() {//用于获得mycharger
+				if(!this.$store.state.logInStatus) {
+					this.chargers.splice(0)
+					return;
+				} 
 				wx.cloud.callFunction({ //uid获取
 					name: 'searchCharger',
 					data: {

@@ -122,7 +122,6 @@
 					}
 				});
 				this.socketTask.onClose((res)=>{
-					// console.log(res)
 				});
 			},
 			timeObject(time){		//用于将时间戳转化为时间显示 需要完成显示 昨天 或者日期 或者不显示日期的功能

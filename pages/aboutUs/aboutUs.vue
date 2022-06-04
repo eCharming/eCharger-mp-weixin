@@ -15,12 +15,12 @@
 			<view style='width:100%' class='display'>
 				<view class="answer">我们的目标</view>
 				<view class="problem">我们致力于打造一个节能减排，绿色可持续发展的新能源健康社会体系。</view>
-				<view class="divLine"></view>
+				<!-- <view class="divLine"></view>
 				<view class="answer">我们的目标</view>
 				<view class="problem">我们致力于打造一个节能减排，绿色可持续发展的新能源健康社会体系。</view>
 				<view class="divLine"></view>
 				<view class="answer">我们的目标</view>
-				<view class="problem">我们致力于打造一个节能减排，绿色可持续发展的新能源健康社会体系。</view>
+				<view class="problem">我们致力于打造一个节能减排，绿色可持续发展的新能源健康社会体系。</view> -->
 			</view>
 			<view></view>
 		</addcard>

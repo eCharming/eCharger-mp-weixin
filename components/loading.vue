@@ -25,7 +25,7 @@
 		transition: all 1s cubic-bezier(.52,-0.46,.46,1.01);"
 		:style="{'transform':'scale('+scale+')'}"
 		>
-			<view class="lightning" style="height: 750upx;width: 750upx;background-color: #d0c51b;"></view>
+			<view class="lightning" style="height: 750upx;width: 750upx;background-color: #fff121;"></view>
 			<view class="view1" :style="{'bottom':bottom+'rpx','transform':'rotate('+rotate+'deg)'}"></view>
 			<view class="view2" :style="{'bottom':bottom+'rpx','transform':'rotate('+rotate+'deg)'}"></view>
 			
@@ -92,7 +92,7 @@
 		position: absolute;
 		height: 750upx;
 		width: 750upx;
-		background-color: #ede178;
+		background-color: #fef466;
 		border-radius: 52% 25% 62% 52% / 25% 38%;
 		transition: 7s all;
 	}
@@ -101,7 +101,7 @@
 		position: absolute;
 		height: 750upx;
 		width: 750upx;
-		background-color: #f5f0c7;
+		background-color: #f1eb93;
 		border-radius: 70% 30% 65% 35% / 37% 46% 54% 63%  ;
 		transition: 7s all;
 	}

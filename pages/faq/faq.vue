@@ -9,44 +9,37 @@
 		</view>
 		<addcard>
 			<view style='width:100%' class='display'>
-				<view class="problem">1. 附近没有电桩怎么办？</view>
+				<view class="problem">附近没有电桩怎么办？</view>
 				<view class="divLine"></view>
-				<view class="answer">可以用全城功能哦！</view>
+				<view class="answer">可以尝试使用全城功能</view>
 			</view>
 		</addcard>
 		<addcard>
 			<view style='width:100%' class='display'>
-				<view class="problem">2. 附近没有电桩怎么办？</view>
+				<view class="problem">为何预约不了可用时间内的电桩？</view>
 				<view class="divLine"></view>
-				<view class="answer">可以用全城功能哦！</view>
+				<view class="answer">预约时间应在可用之间结束前30分钟内，若电桩将在30分钟内下线，则该电桩无法被再次预约</view>
 			</view>
 		</addcard>
 		<addcard>
 			<view style='width:100%' class='display'>
-				<view class="problem">3. 附近没有电桩怎么办？</view>
+				<view class="problem">预约电桩后发现无法正常使用？</view>
 				<view class="divLine"></view>
-				<view class="answer">可以用全城功能哦！</view>
+				<view class="answer">使用问题反馈，核实后我们将对本单进行退款并强制电桩下线</view>
 			</view>
 		</addcard>
 		<addcard>
 			<view style='width:100%' class='display'>
-				<view class="problem">4. 附近没有电桩怎么办？</view>
+				<view class="problem">租金什么时候到账？</view>
 				<view class="divLine"></view>
-				<view class="answer">可以用全城功能哦！</view>
+				<view class="answer">在确认该单正常的情况下，租金将很快支付到您的账户中</view>
 			</view>
 		</addcard>
 		<addcard>
 			<view style='width:100%' class='display'>
-				<view class="problem">5. 附近没有电桩怎么办？</view>
+				<view class="problem">如何取消订单？</view>
 				<view class="divLine"></view>
-				<view class="answer">可以用全城功能哦！</view>
-			</view>
-		</addcard>
-		<addcard>
-			<view style='width:100%' class='display'>
-				<view class="problem">6. 附近没有电桩怎么办？</view>
-				<view class="divLine"></view>
-				<view class="answer">可以用全城功能哦！</view>
+				<view class="answer">在预约订单后若未完成支付，将在15分钟后自动取消订单，若已完成支付则无法取消订单</view>
 			</view>
 		</addcard>
 	</view>

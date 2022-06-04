@@ -9,22 +9,22 @@
 			<view style="padding: 15upx;display: flex;flex-direction: column;justify-content: space-between;position: absolute;height: 100%;width: 100%;">
 				<view style="display: flex;flex-direction: column;">
 					<view class="view1">
-						<text class="location">{{location}}</text>
-						<text class="state1" v-if="state">空闲中</text>
+						<text class="location">{{address}}</text>
+						<text class="state1" v-if="state">未使用</text>
 						<text class="state2" v-if="!state">使用中</text>
 					</view>
-				
+					<view style="display: flex;justify-content: space-between;position: relative;">
+						<text class="text">{{location}}</text>
+					</view>
 				</view> 
-				<view class="view2">
-					<view class="priceview">
-						<text>价格</text>
-						<text class="yuan">￥</text>
-						<text class="price">{{price}}</text>
-					</view>
-					<view class="timeview">
-						<text>可用时间：</text>
-						<text class="time">{{showTime}}</text>
-					</view>
+				<view style="margin-left: 10upx;">
+					<text>价格</text>
+					<text class="yuan">￥</text>
+					<text class="price">{{price}}</text>
+				</view>
+				<view style="margin-left: 10upx;margin-bottom: 10upx;">
+					<text>可用时间：</text>
+					<text class="time">{{showTime}}</text>
 				</view>
 			</view>
 			
@@ -66,6 +66,9 @@
 <script>
 	export default {
 		props: {
+			address: {
+				type:String
+			},
 			location: {
 				type: String
 			},
@@ -231,7 +234,15 @@
 		text-overflow: ellipsis;
 		width: 350upx;
 	}
-
+	.text{
+		margin-top: 10upx;
+		margin-left: 15upx;
+		opacity: 0.5;
+		width: 450upx;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 	.state1 {
 		margin: 15upx;
 		margin-top: 20upx;
@@ -244,19 +255,21 @@
 		color: rgb(255, 99, 71);
 	}
 
-	.yuan {
+	.yuan{
 		font-weight: 700;
+		color:#249399 ;
 	}
-
-	.price {
+	
+	.price{
 		font-size: 40upx;
 		font-weight: 700;
+		color:#249399 ;
 	}
 
-	.time {
+	.time{
 		font-size: 35upx;
 		font-weight: 700;
-		color: rgba(50, 200, 210, 1);
+		color:#249399 ;
 		letter-spacing: 3upx;
 	}
 

@@ -138,7 +138,6 @@
 							status:1,
 						}
 					}).then(res => {
-						console.log(res)
 						var data={
 							oid:this.oid,
 							uid:this.uid,

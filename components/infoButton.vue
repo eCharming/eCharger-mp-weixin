@@ -78,6 +78,12 @@
 				this.logInStatus = this.$store.state.logInStatus;
 				if (this.$store.state.logInStatus) {
 					this.src = this.$store.state.avatarUrl;
+				} else {
+					if (this.$store.state.buttonSelected == 1) {
+						this.src = "../static/image/person_1.gif";
+					} else {
+						this.src = "../static/image/person_blue_1.gif";
+					}
 				}
 			}
 		}
