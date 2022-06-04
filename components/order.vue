@@ -11,33 +11,40 @@
 				:style="{'width':width+'px'}"
 				@tap="checkMap()"
 			>
-				<view style="display: flex;flex-direction: column;">
-					<view class="view1">
-						<text class="location">{{address}}</text>
-						<view>
-							<image class="image" src="../static/image/arrow.png"></image>
-							<text class="distance">{{distance}}km</text>
+			
+				<image style="position: absolute;opacity: 0.25;height: 284upx;width: 333upx;right: -2upx;" src="../static/image/background.png"></image>
+				
+				<view style="display: flex;flex-direction: column;justify-content: space-between;position: absolute;height: 100%;width: 100%;padding: 15upx;">
+					<view style="display: flex;flex-direction: column;">
+						<view class="view1">
+							<text class="location">{{address}}</text>
+							<view>
+								<image class="image" src="../static/image/arrow.png"></image>
+								<text class="distance">{{distance}}km</text>
+							</view>
+							
+						</view>
+						<view style="display: flex;justify-content: space-between;position: relative;">
+							<text class="text">{{location}}</text>
+							<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight+'rpx'}" src='../static/image/checkdetail.png' v-if="check" 
+							@click.native.stop.prevent="checkDetail"></image>
 						</view>
 						
 					</view>
-					<view style="display: flex;justify-content: space-between;position: relative;">
-						<text class="text">{{location}}</text>
-						<image class="image1" :style="{'opacity':checkOpacity,'right':checkRight+'rpx'}" src='../static/image/checkdetail.png' v-if="check" 
-						@click.native.stop.prevent="checkDetail"></image>
-					</view>
 					
-				</view>
-				<view class="view2">
-					<view>
+					<view style="margin-left: 10upx;">
 						<text>价格</text>
 						<text class="yuan">￥</text>
 						<text class="price">{{price}}</text>
 					</view>
-					<view class="timeview">
+					<view style="margin-left: 10upx;margin-bottom: 10upx;">
 						<text>可用时间：</text>
 						<text class="time">{{showTime}}</text>
 					</view>
+					
 				</view>
+			
+				
 			</view>
 		</view>
 		
@@ -621,12 +628,10 @@
 	.card{
 		position: absolute;
 		
-		padding: 15upx;
+		
 		background-color: white;
 		border-radius: 32upx;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+		
 		transition: all .5s;
 		
 		top: 8upx;
@@ -643,7 +648,7 @@
 		display: flex;
 		justify-content: space-between;
 		margin: 15upx;
-
+		margin-bottom: 0;
 	}
 	
 	.location{
@@ -663,17 +668,19 @@
 	
 	.yuan{
 		font-weight: 700;
+		color:#219779 ;
 	}
 	
 	.price{
 		font-size: 40upx;
 		font-weight: 700;
+		color:#219779 ;
 	}
 	
 	.time{
 		font-size: 35upx;
 		font-weight: 700;
-		color:rgba(102,205,170,1) ;
+		color:#219779 ;
 		letter-spacing: 3upx;
 	}
 	
@@ -702,11 +709,9 @@
 		margin-left: 15upx;
 		opacity: 0.5;
 		width: 450upx;
+		white-space: nowrap;
 		overflow: hidden;
-		-webkit-line-clamp: 3;
 		text-overflow: ellipsis;
-		display: -webkit-box;
-		-webkit-box-orient: vertical;
 	}
 	
 	.button{

@@ -4,25 +4,31 @@
 		:style="{'transform':'rotateY('+rotate+'deg)','height':height+'rpx'}">
 
 		<view class="card" :style="{'width':width+'px'}">
-			<view style="display: flex;flex-direction: column;">
-				<view class="view1">
-					<text class="location">{{location}}</text>
-					<text class="state1" v-if="state">空闲中</text>
-					<text class="state2" v-if="!state">使用中</text>
-				</view>
-
-			</view> 
-			<view class="view2">
-				<view class="priceview">
-					<text>价格</text>
-					<text class="yuan">￥</text>
-					<text class="price">{{price}}</text>
-				</view>
-				<view class="timeview">
-					<text>可用时间：</text>
-					<text class="time">{{showTime}}</text>
+			<image style="position: absolute;opacity: 0.25;height: 280upx;width: 328upx;right: 0;top: 0;" src="../static/image/background-blue.png"></image>
+			
+			<view style="padding: 15upx;display: flex;flex-direction: column;justify-content: space-between;position: absolute;height: 100%;width: 100%;">
+				<view style="display: flex;flex-direction: column;">
+					<view class="view1">
+						<text class="location">{{location}}</text>
+						<text class="state1" v-if="state">空闲中</text>
+						<text class="state2" v-if="!state">使用中</text>
+					</view>
+				
+				</view> 
+				<view class="view2">
+					<view class="priceview">
+						<text>价格</text>
+						<text class="yuan">￥</text>
+						<text class="price">{{price}}</text>
+					</view>
+					<view class="timeview">
+						<text>可用时间：</text>
+						<text class="time">{{showTime}}</text>
+					</view>
 				</view>
 			</view>
+			
+			
 
 		</view>
 
@@ -194,13 +200,11 @@
 <style scoped>
 	.card {
 		position: absolute;
-		padding: 15upx;
-		border: 12upx inset rgba(50,200,210,1);
+		
+		border: 10upx inset rgba(50,200,210,1);
 		background-color: white;
 		border-radius: 40upx;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
+		
 		transition: all .5s;
 		transform: translateZ(300upx);
 		height: 300upx;
