@@ -210,12 +210,16 @@
 				});
 				this.socketTask.onOpen(()=>{
 					if(this.orderStatusChange!=''){
-						this.orderText(this.orderStatusChange);
-						this.orderStatusChange='';
+						setTimeout(()=>{
+							this.orderText(this.orderStatusChange);
+							this.orderStatusChange='';
+						},1000)
 					}
 					if(this.newOrder!=null){
-						this.sendNewOrder(this.newOrder);
-						this.newOrder=null;
+						setTimeout(()=>{
+							this.sendNewOrder(this.newOrder);
+							this.newOrder=null;
+						},1000)
 					}
 				})
 				this.socketTask.onMessage((res)=>{

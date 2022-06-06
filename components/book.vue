@@ -86,97 +86,115 @@
 				if(this.status==0){		//状态码为0 也即预约订单正在等待桩主确定
 					if(this.uid==this.$store.state.uid){	//我向对方发起预约 电桩是对方的 按下则为取消预约
 					
-						wx.cloud.callFunction({
-							name:'orderRefund',
-							data:{
-								oid:this.oid,
-								refundPrice:this.price,
-							},
-							success:(res)=>{
-								if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
-									wx.cloud.callFunction({ //更改order的状态
-										name: 'orderStatusChange',
-										data: {
+						wx.showModal({
+							content: '确定取消预约？',
+							success :(res)=> {
+								if (res.confirm) {
+									wx.cloud.callFunction({
+										name:'orderRefund',
+										data:{
 											oid:this.oid,
-											status:-1,
-										}
-									}).then(res => {
-										wx.showToast({
-											title: "预约取消成功！",
-											icon: 'success',
-											complete: () => {
-												
-											}
-										})
-										this.$emit('changeOrderStatus',-1);
-										this.$emit('orderText','已取消预约');
-										this.status=-1;
-										this.statusText='已取消预约';
-										this.color='rgba(0,0,0,0.6)';
-										var data={
-											oid:this.oid,
-											uid:this.uid,
-											toUid:this.toUid,
-											message:'-1'
-										};
-										data=JSON.stringify(data);
-										this.socketTask.send({
-											data:data,
-											success: () => {
-												this.socketTask.close({
-													success: () => {
-														this.socketTask=null;
+											refundPrice:this.price,
+										},
+										success:(res)=>{
+											if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
+												wx.cloud.callFunction({ //更改order的状态
+													name: 'orderStatusChange',
+													data: {
+														oid:this.oid,
+														status:-1,
 													}
-												});			
+												}).then(res => {
+													wx.showToast({
+														title: "预约取消成功！",
+														icon: 'success',
+														complete: () => {
+															
+														}
+													})
+													this.$emit('changeOrderStatus',-1);
+													this.$emit('orderText','已取消预约');
+													this.status=-1;
+													this.statusText='已取消预约';
+													this.color='rgba(0,0,0,0.6)';
+													var data={
+														oid:this.oid,
+														uid:this.uid,
+														toUid:this.toUid,
+														message:'-1'
+													};
+													data=JSON.stringify(data);
+													this.socketTask.send({
+														data:data,
+														success: () => {
+															this.socketTask.close({
+																success: () => {
+																	this.socketTask=null;
+																}
+															});			
+														}
+													})
+												})
+												
+											}else{
+												wx.showToast({
+													title: "预约取消失败！",
+													icon: 'error',
+													complete: () => {
+														
+													}
+												})
 											}
-										})
-									})
-									
-								}else{
-									wx.showToast({
-										title: "预约取消失败！",
-										icon: 'error',
-										complete: () => {
 											
 										}
 									})
-								}
-								
+								} 
 							}
 						})
 					
 						
+					
+						
 						
 					}else{		//对方向我发起预约 电桩是自己的 按下则为确定预约
-						wx.cloud.callFunction({ //更改order的状态
-							name: 'orderStatusChange',
-							data: {
-								oid:this.oid,
-								status:1,
-							}
-						}).then(res => {console.log(res)});
-						this.$emit('changeOrderStatus',1);
-						this.$emit('orderText','已确定预约');
-						this.status=1;
-						this.statusText='已确定预约';
-						this.color='rgba(0,0,0,0.6)';
-						var data={
-							oid:this.oid,
-							uid:this.uid,
-							toUid:this.toUid,
-							message:'1'
-						};
-						data=JSON.stringify(data);
-						this.socketTask.send({
-							data:data,
-							success: () => {
-								this.socketTask.close({
-									success: () => {
-										this.socketTask=null;
-									}
-								});			
+						wx.showModal({
+							content: '确定预约？',
+							success :(res)=> {
+								if (res.confirm) {
+									wx.cloud.callFunction({ //更改order的状态
+										name: 'orderStatusChange',
+										data: {
+											oid:this.oid,
+											status:1,
+										}
+									}).then(res => {console.log(res)});
+									this.$emit('changeOrderStatus',1);
+									this.$emit('orderText','已确定预约');
+									this.status=1;
+									this.statusText='已确定预约';
+									this.color='rgba(0,0,0,0.6)';
+									var data={
+										oid:this.oid,
+										uid:this.uid,
+										toUid:this.toUid,
+										message:'1'
+									};
+									data=JSON.stringify(data);
+									this.socketTask.send({
+										data:data,
+										success: () => {
+											this.socketTask.close({
+												success: () => {
+													this.socketTask=null;
+												}
+											});			
+										}
+									})
+								} 
 							}
 						})
+					
+						
 					}
 				}
 			}

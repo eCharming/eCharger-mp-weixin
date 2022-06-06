@@ -458,115 +458,135 @@
 				})
 			},
 			bookOrder(){
-				wx.cloud.callFunction({ //查询我是否有未完成的订单以及该电桩是否可用
-					name: 'orderNum',
-					data: {
-						uid:this.$store.state.uid,
-						cid:this.cid
-					}
-				}).then(res=>{
-					if(res.result==1){
-						
-						wx.cloud.callFunction({
-							name: 'orderPay',
-							data: {
-								predictedPrice:this.possiblePrice*100
-							},
-							success: res => {
-								if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
-									var outTradeNo=res.result.outTradeNo;
-									const payment = res.result.payment
-									wx.requestPayment({
-										...payment,
-										success: (res)=> {
-											var timeStamp=new Date().getTime();
-											wx.cloud.callFunction({   //输入订单
-												name:'orderInput',
-												data:{
-													status:0,
-													uid:Number(this.$store.state.uid),
-													toUid:Number(this.uid),
-													cid:Number(this.cid),
-													timeStamp:timeStamp,
-													startTime:this.text1,
-													endTime:this.text2,
-													address:this.address,
-													location:this.location,
-													predictedPrice:this.possiblePrice,
-													outTradeNo:outTradeNo
-												}
-											}).then(res=>{
-													var oid =res.result;
-													wx.showToast({
-														title: "预约成功！",
-														icon: 'success',
-														complete: () => {
-															setTimeout(() => {
-																uni.navigateTo({
-																	url: '../communication/chat?toUid='+this.uid,
-																	success: (res) => {
-																		res.eventChannel.emit('bookOrder', { 
-																			data: {
-																				oid:oid,
-																				cid:this.cid,
-																				longitude:this.longitude,
-																				latitude:this.latitude,
-																				address:this.address,
-																				location:this.location,
-																				price:this.possiblePrice,
-																				timeStamp:timeStamp,
-																				startTime:this.text1,
-																				endTime:this.text2,
-																			}
-																		})
-																	}
-																});
-																this.$store.commit('setRefresh')//更新order
-															}, 500)
-														}
-													})
-												}
-											)
-										},
-										fail (err) {
-											wx.showToast({
-												title: "支付失败！",
-												icon: 'error',
-												complete: () => {
-													
-												}
-											})
-										}
-									})
-								} else {
-									wx.showToast({
-										title: "预约失败！",
-										icon: 'error',
-										complete: () => {
-											
-										}
-									})
-								}
-								
-							},
-							fail: console.error,
-						})
-					}else if(res.result==-1){
-						wx.showToast({
-							title: "您有订单未处理",
-							icon: 'error',
-							complete: () => {
-							}
-						})
-					}else if(res.result==-2){
-						wx.showToast({
-							title: "该电桩已被预约",
-							icon: 'error',
-							complete: () => {
-							}
-						})
-					} 
+				wx.showModal({
+				  content: '确定预约吗？',
+				  success: (res) =>{
+				    if (res.confirm) {
+				      wx.cloud.callFunction({ //查询我是否有未完成的订单以及该电桩是否可用
+				      	name: 'orderNum',
+				      	data: {
+				      		uid:this.$store.state.uid,
+				      		cid:this.cid
+				      	}
+				      }).then(res=>{
+				      	if(res.result==1){
+				      		
+				      		wx.cloud.callFunction({
+				      			name: 'orderPay',
+				      			data: {
+				      				predictedPrice:this.possiblePrice*100
+				      			},
+				      			success: res => {
+				      				if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
+				      					var outTradeNo=res.result.outTradeNo;
+				      					const payment = res.result.payment
+				      					wx.requestPayment({
+				      						...payment,
+				      						success: (res)=> {
+				      							
+				      							wx.cloud.callFunction({
+				      								name:'payQuery',
+				      								data:{
+				      									outTradeNo:outTradeNo,
+				      								}
+				      							}).then(res=>{
+				      								console.log(res)
+				      								var transactionId=res.result.transactionId;
+				      								var timeStamp=new Date().getTime();
+				      								wx.cloud.callFunction({   //输入订单
+				      									name:'orderInput',
+				      									data:{
+				      										status:0,
+				      										uid:Number(this.$store.state.uid),
+				      										toUid:Number(this.uid),
+				      										cid:Number(this.cid),
+				      										timeStamp:timeStamp,
+				      										startTime:this.text1,
+				      										endTime:this.text2,
+				      										address:this.address,
+				      										location:this.location,
+				      										predictedPrice:this.possiblePrice,
+				      										outTradeNo:outTradeNo,
+				      										transactionId:transactionId,
+				      									}
+				      								}).then(res=>{
+				      										var oid =res.result;
+				      										wx.showToast({
+				      											title: "预约成功！",
+				      											icon: 'success',
+				      											complete: () => {
+				      												setTimeout(() => {
+				      													uni.navigateTo({
+				      														url: '../communication/chat?toUid='+this.uid,
+				      														success: (res) => {
+				      															res.eventChannel.emit('bookOrder', { 
+				      																data: {
+				      																	oid:oid,
+				      																	cid:this.cid,
+				      																	longitude:this.longitude,
+				      																	latitude:this.latitude,
+				      																	address:this.address,
+				      																	location:this.location,
+				      																	price:this.possiblePrice,
+				      																	timeStamp:timeStamp,
+				      																	startTime:this.text1,
+				      																	endTime:this.text2,
+				      																}
+				      															})
+				      														}
+				      													});
+				      													this.$store.commit('setRefresh')//更新order
+				      												}, 500)
+				      											}
+				      										})
+				      									}
+				      								)
+				      							})
+				      							
+				      						},
+				      						fail (err) {
+				      							wx.showToast({
+				      								title: "支付失败！",
+				      								icon: 'error',
+				      								complete: () => {
+				      									
+				      								}
+				      							})
+				      						}
+				      					})
+				      				} else {
+				      					wx.showToast({
+				      						title: "预约失败！",
+				      						icon: 'error',
+				      						complete: () => {
+				      							
+				      						}
+				      					})
+				      				}
+				      				
+				      			},
+				      			fail: console.error,
+				      		})
+				      	}else if(res.result==-1){
+				      		wx.showToast({
+				      			title: "您有订单未处理",
+				      			icon: 'error',
+				      			complete: () => {
+				      			}
+				      		})
+				      	}else if(res.result==-2){
+				      		wx.showToast({
+				      			title: "该电桩已被预约",
+				      			icon: 'error',
+				      			complete: () => {
+				      			}
+				      		})
+				      	} 
+				      })
+				    }
+				  }
 				})
+				
 			}
 		},
 		watch:{

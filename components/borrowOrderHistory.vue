@@ -4,12 +4,12 @@
 		<view style="font-size: 32upx;font-weight: 700;letter-spacing: 1upx;margin-bottom: 15upx;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
 			{{address}}
 		</view>
-		<view style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;margin-bottom: 15upx;color: rgba(0,0,0,0.5);
+		<view style="font-size: 25upx;font-weight: 600;margin-bottom: 15upx;color: rgba(0,0,0,0.5);
 			overflow: hidden;-webkit-line-clamp: 3;text-overflow: ellipsis;display: -webkit-box;">
 			{{location}}
 		</view>
 		<view style="margin-bottom: 15upx;">
-			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
+			<text style="font-size: 25upx;font-weight: 600;color: rgba(0,0,0,0.5);">
 				下单时间：
 			</text>
 			<text style="font-size: 25upx;letter-spacing: 1upx;color: rgba(0,0,0,0.5);font-weight: 600;">
@@ -17,7 +17,7 @@
 			</text>
 		</view>
 		<view style="margin-bottom: 15upx;">
-			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
+			<text style="font-size: 25upx;font-weight: 600;color: rgba(0,0,0,0.5);">
 				剩余时间：
 			</text>
 			<text style="font-size: 25upx;letter-spacing: 1upx;color: rgba(0,0,0,0.5);font-weight: 600;">
@@ -25,7 +25,7 @@
 			</text>
 		</view>
 		<view style="margin-bottom: 15upx;">
-			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
+			<text style="font-size: 25upx;font-weight: 600;color: rgba(0,0,0,0.5);">
 				预约时间：
 			</text>
 			<text style="font-size: 32upx;font-weight: 700;color:rgb(50,200,210) ;letter-spacing: 1upx;">
@@ -33,7 +33,7 @@
 			</text>
 		</view>
 		<view style="margin-bottom: 15upx;">
-			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
+			<text style="font-size: 25upx;font-weight: 600;color: rgba(0,0,0,0.5);">
 				预估价格：
 			</text>
 			<text style="font-size: 32upx;font-weight: 700;color:rgb(50,200,210) ;letter-spacing: 1upx;">
@@ -41,7 +41,7 @@
 			</text>
 		</view>
 		<view style="margin-bottom: 15upx;">
-			<text style="font-size: 25upx;font-weight: 600;letter-spacing: 1upx;color: rgba(0,0,0,0.5);">
+			<text style="font-size: 25upx;font-weight: 600;color: rgba(0,0,0,0.5);">
 				状态：
 			</text>
 			<text style="font-size: 32upx;font-weight: 700;letter-spacing: 1upx;" :style="{'color':statusColor}">
@@ -63,6 +63,7 @@
 			</view>
 			
 		</view>
+		<image src="../static/image/orderHistory-blue.png" style="width: 300upx;height: 300upx;position: absolute;right: -10upx;bottom: 120upx;opacity: 0.3;"></image>
 	</view>
 </template>
 
@@ -124,59 +125,78 @@
 			},
 			check(){
 				if(this.status==0){
-					this.status=1;
-					this.timeRemain='订单完成';
-					this.checkStatus='预约已确定';
-					this.checkColor='rgba(0,0,0,0.5)';
-					this.statusText='预约已确定';
-					this.statusColor='rgb(50,200,210)';
-					
-					wx.cloud.callFunction({ //更改order的状态
-						name: 'orderStatusChange',
-						data: {
-							oid:this.oid,
-							status:1,
-						}
-					}).then(res => {
-						var data={
-							oid:this.oid,
-							uid:this.uid,
-							toUid:this.toUid,
-							message:'1'
-						};
-						data=JSON.stringify(data);
-						this.socketTask.send({
-							data:data,
-							success: () => {
+					wx.showModal({
+						content: '确定预约？',
+						success :(res)=> {
+							if (res.confirm) {
+								this.status=1;
+								this.timeRemain='订单完成';
+								this.checkStatus='预约已确定';
+								this.checkColor='rgba(0,0,0,0.5)';
+								this.statusText='预约已确定';
+								this.statusColor='rgb(50,200,210)';
 								
+								// wx.cloud.callFunction({
+								// 	name:'paySharing',
+								// 	data:{
+								// 		oid:this.oid,
+								// 	},
+								// 	success:res=>{
+								// 		console.log(res)
+								// 	}
+								// })
 								
-								this.socketTask.close({
-									success: () => {
-										this.socketTask=null;
-										wx.showToast({
-											title: "已确定预约",
-											icon: 'success',
-											complete: () => {
-												setTimeout(() => {
-													uni.navigateTo({
-														url: '../communication/chat?toUid='+this.uid,
-														success: (res) => {
-															res.eventChannel.emit('sendStatus', { 
-																data: {
-																	message:'已确定预约'
-																}
-															})
-														}
-													});
-												}, 500)
-											}
-										})
+								wx.cloud.callFunction({ //更改order的状态
+									name: 'orderStatusChange',
+									data: {
+										oid:this.oid,
+										status:1,
 									}
-								});			
-							}
-						})
-						
+								}).then(res => {
+									var data={
+										oid:this.oid,
+										uid:this.uid,
+										toUid:this.toUid,
+										message:'1'
+									};
+									data=JSON.stringify(data);
+									this.socketTask.send({
+										data:data,
+										success: () => {
+											
+											
+											this.socketTask.close({
+												success: () => {
+													this.socketTask=null;
+													wx.showToast({
+														title: "已确定预约",
+														icon: 'success',
+														complete: () => {
+															setTimeout(() => {
+																uni.navigateTo({
+																	url: '../communication/chat?toUid='+this.uid,
+																	success: (res) => {
+																		res.eventChannel.emit('sendStatus', { 
+																			data: {
+																				message:'已确定预约'
+																			}
+																		})
+																	}
+																});
+															}, 500)
+														}
+													})
+												}
+											});			
+										}
+									})
+									
+								})
+							} 
+						}
 					})
+					
+					
 					
 				}
 			}

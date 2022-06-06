@@ -19,7 +19,6 @@
 		data() {
 			return {
 				isLoading: true,
-				isShown: true,
 				refreshInterval: 0,
 			}
 		},
@@ -58,11 +57,8 @@
 			var windowHeight = uni.getSystemInfoSync().windowHeight - uni.getSystemInfoSync().statusBarHeight - 50;
 			this.$store.commit('setWindowHeight', windowHeight);
 			setTimeout(() => {
-				this.isShown = false;
-			}, 2500)
-			setTimeout(() => {
 				this.isLoading = false;
-			}, 10000)
+			}, 8000)
 		},
 		onShow() {
 			this.$store.commit('setGetChargers')

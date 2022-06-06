@@ -103,7 +103,7 @@
 				pointerEvents:'auto',
 				length1:30,
 				length2:0,
-				markTop:-18,
+				markTop:-15,
 				eyeLeft:0,
 				eyeTop:-8,
 				imgSrc:["../static/image/order-green.png","../static/image/connect-green.png","../static/image/map-green.png","../static/image/face-green.png"]
@@ -180,7 +180,7 @@
 							this.eyeLeft=0;
 							this.eyeTop=-8;
 						}else if(this.selected==2){
-							this.markTop=-18
+							this.markTop=-15
 						}
 						
 						this.length1=30;
@@ -201,7 +201,7 @@
 							this.eyeLeft=0;
 							this.eyeTop=-8;
 						}else if(this.selected==2){
-							this.markTop=-18
+							this.markTop=-15
 						}
 						this.length2=30;
 						this.left=210;
@@ -236,7 +236,7 @@
 						}else if(this.selected==1){
 							this.length2=0;
 						}else if(this.selected==2){
-							this.markTop=-18
+							this.markTop=-15
 						}
 						
 						this.eyeLeft=7;
