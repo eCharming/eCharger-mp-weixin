@@ -33,10 +33,10 @@
 		watch:{
 			'$store.state.buttonSelected'(){
 				if(this.$store.state.buttonSelected==1){
-					this.src="../static/image/location.png";
+					this.src="../static/image/navigate.png";
 				}	
 				else{
-					this.src="../static/image/location_blue.png";
+					this.src="../static/image/navigate_blue.png";
 				} 
 			},
 			'isLow'(){
