@@ -84,7 +84,7 @@
 		border-radius: 20upx;
 		margin: 20upx;
 		padding-left: 10upx;
-		border: 6upx solid;
+		border: 3px solid;
 		overflow: visible;
 		display: flex;
 		flex-direction: column;

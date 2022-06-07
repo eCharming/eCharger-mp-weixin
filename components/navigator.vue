@@ -29,9 +29,9 @@
 			</view>
 			<view class="image-1" @click="tap(0)" :style="{'bottom':imageBottom[0]+'rpx'}">
 				
-				<view style="position: absolute;height: 10upx;left: 25upx;top: 22upx;transition: all .3s;background-color: white;"
+				<view style="position: absolute;height: 15upx;left: 25upx;top: 22upx;transition: all .3s;background-color: white;"
 				:style="{'width':length1+'rpx'}"></view>
-				<view style="position: absolute;height: 10upx;left: 25upx;top: 40upx;transition: all .6s;background-color: white;"
+				<view style="position: absolute;height: 17upx;left: 25upx;top: 37upx;transition: all .6s;background-color: white;"
 				:style="{'width':length1+'rpx'}"></view>
 				<image class="image" :src="imgSrc[0]"></image>
 				
@@ -40,7 +40,7 @@
 			<view class="image-2" @click="tap(1)" :style="{'bottom':imageBottom[1]+'rpx'}">
 				<view style="position: absolute;height: 10upx;left: 25upx;top: 17upx;transition: all .3s;background-color: white;"
 				:style="{'width':length2+'rpx'}"></view>
-				<view style="position: absolute;height: 10upx;left: 25upx;top: 27upx;transition: all .6s;background-color: white;"
+				<view style="position: absolute;height: 20upx;left: 25upx;top: 27upx;transition: all .6s;background-color: white;"
 				:style="{'width':length2+'rpx'}"></view>
 				
 				<image class="image" :src="imgSrc[1]"></image>

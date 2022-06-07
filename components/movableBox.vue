@@ -39,7 +39,7 @@
 						</card>
 						<destination></destination>
 		
-		
+						
 						<view style="transform-style: preserve-3d;transition:all .6s;
 						transition-timing-function: cubic-bezier(.6,-0.5,.44,1.5);position: relative;" 
 						:style="{'transform':'rotateY('+rotate+'deg)'}">
@@ -80,7 +80,6 @@
 									</view>
 								</scroller>
 							</view>
-								
 						</view>
 
 					</view>
@@ -499,11 +498,11 @@
 	}
 
 	.image1 {
-		height: 180upx;
-		width: 180upx;
-		position: relative;
-		bottom: 154upx;
-		left: 70upx;
+		height: 140upx;
+		width: 140upx;
+		position: absolute;
+		bottom: 0;
+		right: 10upx;
 		transition-property: opacity, filter;
 		transition-duration: .3s;
 	}
@@ -511,9 +510,9 @@
 	.image2 {
 		height: 150upx;
 		width: 150upx;
-		position: relative;
-		bottom: 170upx;
-		left: 70upx;
+		position: absolute;
+		bottom: 0;
+		right: 10upx;
 		transition-property: opacity, filter;
 		transition-duration: .3s;
 	}

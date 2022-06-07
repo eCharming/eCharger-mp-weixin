@@ -4,7 +4,7 @@
 	
 		<view id="box" style="border-radius: 40upx;height: 300upx;width: 100%;position: absolute;transform: translateZ(300upx);
 		background:linear-gradient(to right bottom,rgb(102,205,170),#d4fce9) ;overflow: hidden;">
-			<view style="position: absolute;background-color: #219779;border-radius: 40upx;height: 300upx;width:100%;left: 8upx;top: 8upx;transition: all .3s;"
+			<view style="position: absolute;background-color: #219779;border-radius: 40upx;height: 300upx;width:100%;left: 10upx;top: 10upx;transition: all .3s;"
 			:style="{'transform':translate}"></view>
 			
 			<view class="card"
@@ -210,6 +210,7 @@
 		data(){
 			return{
 				height:300,
+				width:0,
 				translate:'translate('+(this.windowWidth-uni.upx2px(160)+10)+'px,-'+uni.upx2px(300)+'px)',
 				check:false,
 				checkOpacity:0,
@@ -249,9 +250,7 @@
 				}
 				return showTime;
 			},
-			width(){
-				return (this.windowWidth-uni.upx2px(160))
-			},
+			
 		},
 		methods:{
 			changetime1(e){
@@ -628,6 +627,12 @@
 			}
 		},
 		mounted(){
+			let info = uni.createSelectorQuery().in(this).select("#box");
+			info.boundingClientRect((data)=> { 
+				this.width=data.width-uni.upx2px(16);
+			}).exec(function(res){
+				
+			})
 			var tempDate = new Date();
 			var days = tempDate.getDay();
 			if(days==0) {
@@ -654,8 +659,8 @@
 		
 		transition: all .5s;
 		
-		top: 8upx;
-		left:9upx;
+		top: 9upx;
+		left:8upx;
 		height: 284upx;
 	}
 	
