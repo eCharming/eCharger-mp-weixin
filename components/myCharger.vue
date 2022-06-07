@@ -128,6 +128,16 @@
 				this.$emit('chargerUndetail')
 			},
 			editCharger() {
+				if(this.state==false) {
+					wx.showToast({
+						title: "无法修改！",
+						icon: 'error',
+						complete:()=>{
+							
+						}
+					})
+					return;
+				}
 				this.$store.commit('setChargerCardDefault')
 				uni.navigateTo({
 					url: '../editCharger/editCharger?cid=' + this.cid,

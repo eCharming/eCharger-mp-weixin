@@ -211,7 +211,7 @@
 					<textarea class="input" placeholder="备注" maxlength="100" auto-height="true" v-model='remarks'></textarea>
 				</view>
 			</addcard>
-			<button class="submit" @tap="submit">提交</button>
+			<button class="submit" @tap="submit" :disabled="disable">提交</button>
 		</view>
 	</view>
 </template>
@@ -256,6 +256,7 @@
 				locationList: [],
 				center_latitude:this.$store.state.currentLocation == null ? 39.909 : this.$store.state.currentLocation.latitude,
 				center_longitude:this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation.longitude,
+				disable:false,
 			}
 		},
 		computed: {
@@ -485,6 +486,7 @@
 						timestamp.push(Number(sp[0]) * 60 + Number(sp[1]))
 					}
 				}
+				this.disable=true;
 				wx.cloud.callFunction({ //uid获取
 					name: 'chargerInput',
 					data: {
@@ -522,6 +524,7 @@
 												_id: id
 											},
 										})
+										this.disable=false;
 										return;
 									}
 									var res = JSON.parse(res.data)
@@ -536,6 +539,7 @@
 												_id: id
 											},
 										})
+										this.disable=false;
 										return;
 									} else {
 										this.$store.commit('setRefresh')
@@ -544,6 +548,7 @@
 											icon: 'success',
 											complete:()=>{
 												setTimeout(()=>{
+													this.disable=false;
 													uni.navigateBack({})
 												},1500)
 											}
@@ -561,6 +566,7 @@
 											_id: id
 										},
 									})
+									this.disable=false;
 									return;
 								}
 							})

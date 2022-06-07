@@ -214,7 +214,7 @@
 					<textarea class="input" placeholder="备注" maxlength="100" auto-height="true">{{remarks}}</textarea>
 				</view>
 			</addcard>
-			<button class="submit" @tap="submit">提交</button>
+			<button class="submit" @tap="submit" :disabled="disable">提交</button>
 		</view>
 	</view>
 </template>
@@ -263,6 +263,7 @@
 					.latitude,
 				center_longitude: this.$store.state.currentLocation == null ? 116.39742 : this.$store.state.currentLocation
 					.longitude,
+				disable:false,
 			}
 		},
 		computed: {
@@ -420,6 +421,7 @@
 							complete: () => {
 								this.$store.commit('setGetChargers')
 								setTimeout(() => {
+									this.disable=false;
 									uni.navigateBack({})
 								}, 1500)
 							}
@@ -440,6 +442,7 @@
 										title: "图片上传失败！",
 										icon: 'none',
 									})
+									this.disable=false;
 									return;
 								}
 							}
@@ -449,6 +452,7 @@
 									title: "图片上传失败！",
 									icon: 'none',
 								})
+								this.disable=false;
 								return;
 							} else {
 								this.updateCharge()
@@ -459,6 +463,7 @@
 								title: "图片上传失败！",
 								icon: 'none',
 							})
+							this.disable=false;
 							return;
 							//不会回滚
 						}
@@ -478,6 +483,7 @@
 										title: "图片上传失败！",
 										icon: 'none',
 									})
+									this.disable=false;
 									return;
 								}
 							}
@@ -498,6 +504,7 @@
 										fileNames: fileNames
 									}
 								})
+								this.disable=false;
 								return;
 							} else {
 								if (type == 1) {
@@ -521,6 +528,7 @@
 									fileNames: fileNames
 								},
 							})
+							this.disable=false;
 							return;
 						}
 					})
@@ -654,6 +662,7 @@
 				let fileNames = this.rawUrl.map((item) => {
 					return item.split("/")[4];
 				})
+				this.disable=true;
 				if (uploadList.length != 0 && deleteList.length != 0) {
 					this.uplPic(uploadList, deleteList, 1,timestamp,time)
 				} else if (uploadList.length != 0 && deleteList.length == 0) {

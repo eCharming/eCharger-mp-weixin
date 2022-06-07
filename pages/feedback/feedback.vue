@@ -48,7 +48,13 @@
 				uni.navigateBack({})
 			},
 			submit() {
-				setTimeout(()=>{
+				wx.cloud.callFunction({
+					name: 'feedback',
+					data: {
+						feedback:this.feedback,
+						phoneNumber:this.phoneNumber
+					}
+				}).then(res=>{
 					wx.showToast({
 						title: "提交成功！",
 						icon: 'success',
@@ -58,7 +64,7 @@
 							},1000)
 						}
 					})
-				},500)
+				})
 			}
 		},
 		mounted() {
