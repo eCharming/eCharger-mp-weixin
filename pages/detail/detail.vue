@@ -219,37 +219,50 @@
 					cid:Number(option.cid)
 				}
 			}).then(res=>{
-					this.uid=res.result.uid;
-					this.address=res.result.address;
-					this.location=res.result.location;
-					this.geopoint.latitude=res.result.geoPoint.coordinates[1];
-					this.geopoint.longitude=res.result.geoPoint.coordinates[0];
-					this.name=res.result.userName;
-					this.avatarUrl=res.result.avatarUrl;
-					this.phoneNumber=res.result.phoneNumber;
-					this.price=res.result.price;
-					this.time=res.result.time;
-					
-					this.covers.push({
-						title: this.address,
-						id: Number(option.cid),
-						latitude: this.geopoint.latitude,
-						longitude: this.geopoint.longitude,
-						iconPath: "/static/image/charger.png",
-						width: 40,
-						height: 40,
-						callout: {
-							content: this.address,
-							color: "#333333",
-							fontSize: 13,
-							borderRadius: 20,
-							bgColor: "#e7ffed",
-							textAlign: "center",
-							padding: 10,
-						}
-					});
-					this.navigate();
-					this.getPic(option.cid);
+					if(res.result.status == -1) {
+						wx.showToast({
+							title: "电桩已被删除",
+							icon: 'error',
+							complete: () => {
+								setTimeout(() => {
+									uni.navigateBack({})
+								}, 1500)
+							
+							}
+						})
+					} else {
+						this.uid=res.result.uid;
+						this.address=res.result.address;
+						this.location=res.result.location;
+						this.geopoint.latitude=res.result.geoPoint.coordinates[1];
+						this.geopoint.longitude=res.result.geoPoint.coordinates[0];
+						this.name=res.result.userName;
+						this.avatarUrl=res.result.avatarUrl;
+						this.phoneNumber=res.result.phoneNumber;
+						this.price=res.result.price;
+						this.time=res.result.time;
+						
+						this.covers.push({
+							title: this.address,
+							id: Number(option.cid),
+							latitude: this.geopoint.latitude,
+							longitude: this.geopoint.longitude,
+							iconPath: "/static/image/charger.png",
+							width: 40,
+							height: 40,
+							callout: {
+								content: this.address,
+								color: "#333333",
+								fontSize: 13,
+								borderRadius: 20,
+								bgColor: "#e7ffed",
+								textAlign: "center",
+								padding: 10,
+							}
+						});
+						this.navigate();
+						this.getPic(option.cid);
+					}
 				}
 			)
 			if(this.$store.state.currentLocation==null) {

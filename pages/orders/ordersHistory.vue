@@ -144,7 +144,7 @@
 					uid:this.$store.state.uid
 				}
 			}).then(res=>{
-				console.log(res)
+				//console.log(res)
 				this.myOrder=res.result.myOrder;
 				this.borrowOrder=res.result.borrowOrder;
 				

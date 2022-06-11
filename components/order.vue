@@ -489,7 +489,7 @@
 				      									outTradeNo:outTradeNo,
 				      								}
 				      							}).then(res=>{
-				      								console.log(res)
+				      								//console.log(res)
 				      								var transactionId=res.result.transactionId;
 				      								var timeStamp=new Date().getTime();
 				      								wx.cloud.callFunction({   //输入订单
