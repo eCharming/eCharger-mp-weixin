@@ -12,7 +12,7 @@
 				
 				
 				<!-- 这里需要vif hasNewLocal，但是有bug -->
-				<view class="newMessage">
+				<view v-if="hasNewLocal" class="newMessage">
 					<text>{{newMessageNumLocal}}</text>
 				</view>
 				
@@ -113,8 +113,7 @@
 		},
 		watch:{
 			'hasNew'(){
-				// this.hasNewLocal=this.hasNew;
-				// console.log(this.hasNewLocal)
+				this.hasNewLocal=this.hasNew;
 			},
 			'newMessageNum'(){
 				this.newMessageNumLocal=this.newMessageNum;
