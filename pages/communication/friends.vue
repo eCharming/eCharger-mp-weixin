@@ -10,17 +10,13 @@
 			style="background-color: white;"
 			:style="{'height':scrollHeight+'px'}"
 		>
-			<view class="friends" v-for="friend,index in friends" :key="index" @click="click(index)">
-				<view class="avatarView">
-					<image class="avatar" :src="friend.avatarUrl"></image>
-				</view>
-				<text class="name">{{friend.name}}</text>
-				<text class="lastWord">{{friend.lastWord}}</text>
-				<text class="lastTime">{{friend.lastTime}}</text>
-				<view v-if="friend.hasNew" class="newMessage">
-					<text>{{friend.newMessageNum}}</text>
-				</view>
-			</view>
+			 
+			 <view v-for="friend,index in friends" :key="index">
+				 <friendList :avatarUrl="friend.avatarUrl" :name="friend.name" :lastTime="friend.lastTime" :lastWord="friend.lastWord"
+				 :hasNew="friend.hasNew" :newMessageNum="friend.newMessageNum" @clickMessage="click(index)" @deleteFriends="deleteFriends(index)"></friendList>
+			 </view>
+			
+			
 			<view v-if="friends.length===0" style="width:100%;height:100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
 				<image src="/static/image/blank.png" style="width: 200rpx;height: 200rpx;"></image>
 				<text style="font-weight: bold;color: rgba(102,205,170,1);">还没有联系人</text>
@@ -32,7 +28,11 @@
 </template>
 
 <script>
+	import friendList from '../../components/friendList.vue'
 	export default{
+		components:{
+			friendList,
+		},
 		data(){
 			return{
 				contacterBottom:0,//联系人距离导航栏底部距离
@@ -41,6 +41,8 @@
 				friends:[],//所有好友数据的信息都存储在这个数组里
 				uid:-1,
 				statusBarHeight:uni.getSystemInfoSync().statusBarHeight,//状态栏高度
+				
+				reminders:{},
 			}
 		},
 		methods:{
@@ -48,6 +50,7 @@
 				uni.navigateBack({
 				})
 			},
+			
 			click(index){	//按下某一个好友 导航到chat页面 通过缓存传送好友的uid、姓名和头像url
 				this.friends[index].hasNew=false;
 				this.friends[index].newMessageNum=0;
@@ -55,7 +58,13 @@
 					url: './chat?toUid='+this.friends[index].uid+'&name='+this.friends[index].name+'&avatarUrl='+this.friends[index].avatarUrl,
 				});
 			},
-			connect(reminder){
+			deleteFriends(index){
+				var uid=this.friends[index].uid;
+				this.friends.splice(index,1);
+				delete this.reminders[uid];
+				uni.setStorageSync(this.uid+'friends',JSON.stringify(this.reminders));
+			},
+			connect(){
 				this.socketTask=uni.connectSocket({		//打开链接
 					url:'wss://ws.healtool.cn/websocketapi/Reminder/'+this.uid,
 					// url:'ws://127.0.0.1:8080/websocketapi/Reminder/'+this.uid,
@@ -99,13 +108,13 @@
 									}else{
 										message="对方发来了一个预约";
 									}
-									reminder[fromUid]={			//将传入的reminder参数增加该好友
+									this.reminders[fromUid]={			//将传入的reminder参数增加该好友
 										name:res.result.userName,
 										avatarUrl:res.result.avatarUrl,
 										time:time,
 										message:message
 									};
-									uni.setStorageSync(this.uid+'friends',JSON.stringify(reminder)); 	//存入缓存持久化该好友 用于下一次打开时可以找到该好友
+									uni.setStorageSync(this.uid+'friends',JSON.stringify(this.reminders)); 	//存入缓存持久化该好友 用于下一次打开时可以找到该好友
 									this.friends.unshift({		//向好友列表当中推入该好友
 										uid:fromUid,
 										name:res.result.userName,
@@ -180,34 +189,23 @@
 			this.friends.splice(0);   //正式版
 			var reminder=uni.getStorageSync(this.uid+'friends');		//获取好友列表缓存
 			if(reminder!=''){
-				reminder=JSON.parse(reminder);
-				var keys=Object.keys(reminder);
+				this.reminders=JSON.parse(reminder);
+				var keys=Object.keys(this.reminders);
 				for(var index in keys){   //正式版
 					this.friends.push({
 						uid:keys[index],
-						name:reminder[[keys[index]]].name,
-						avatarUrl:reminder[[keys[index]]].avatarUrl,
-						lastWord:reminder[[keys[index]]].message,
-						lastTime:this.timeObject(reminder[[keys[index]]].time),
+						name:this.reminders[[keys[index]]].name,
+						avatarUrl:this.reminders[[keys[index]]].avatarUrl,
+						lastWord:this.reminders[[keys[index]]].message,
+						lastTime:this.timeObject(this.reminders[[keys[index]]].time),
 						newMessageNum:0,//新消息数量
 						hasNew:false//是否有新消息
 					})
 				}
 				
-				// for(var index in keys){ //临时测试用
-				// 	for(var i in this.friends){
-				// 		if(this.friends[i].uid==keys[index]){
-				// 			this.friends[i].name=reminder[[keys[index]]].name;
-				// 			this.friends[i].avatarUrl=reminder[[keys[index]]].avatarUrl;
-				// 			this.friends[i].lastWord=reminder[[keys[index]]].message;
-				// 			this.friends[i].lastTime=this.timeObject(reminder[[keys[index]]].time);
-				// 		}
-				// 	}
-				// }
-				
-			}else reminder={};
+			}else this.reminders={};
 			if(this.socketTask==null){
-				this.connect(reminder);		//先注入缓存再打开websocket链接查看好友是否在我离线的时候发来了新消息
+				this.connect();		//先注入缓存再打开websocket链接查看好友是否在我离线的时候发来了新消息
 			}
 		},
 		onHide() {

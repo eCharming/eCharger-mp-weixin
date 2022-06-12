@@ -2,7 +2,7 @@
 	<view>
 		<mymap></mymap>
 		<movablebox></movablebox>
-		<loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading>
+		<!-- <loading v-if="isLoading" style="position: absolute;top: 0;width: 100%;"></loading> -->
 	</view>
 </template>
 
