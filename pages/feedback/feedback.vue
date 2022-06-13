@@ -52,7 +52,8 @@
 					name: 'feedback',
 					data: {
 						feedback:this.feedback,
-						phoneNumber:this.phoneNumber
+						phoneNumber:this.phoneNumber,
+						uid:this.$store.state.uid
 					}
 				}).then(res=>{
 					wx.showToast({

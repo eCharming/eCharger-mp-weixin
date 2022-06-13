@@ -90,6 +90,10 @@
 							content: '确定取消预约？',
 							success :(res)=> {
 								if (res.confirm) {
+									wx.showLoading({
+									  title:'加载中',                             
+									  mask:true                                    
+									})
 									wx.cloud.callFunction({
 										name:'orderRefund',
 										data:{
@@ -105,6 +109,7 @@
 														status:-1,
 													}
 												}).then(res => {
+													wx.hideLoading()
 													wx.showToast({
 														title: "预约取消成功！",
 														icon: 'success',
@@ -137,6 +142,7 @@
 												})
 												
 											}else{
+												wx.hideLoading()
 												wx.showToast({
 													title: "预约取消失败！",
 													icon: 'error',
@@ -161,13 +167,26 @@
 							content: '确定预约？',
 							success :(res)=> {
 								if (res.confirm) {
+									wx.showLoading({
+									  title:'加载中',                             
+									  mask:true                                    
+									})
 									wx.cloud.callFunction({ //更改order的状态
 										name: 'orderStatusChange',
 										data: {
 											oid:this.oid,
 											status:1,
 										}
-									}).then(res => {console.log(res)});
+									}).then(res => {
+										wx.hideLoading()
+										wx.showToast({
+											title: "预约确认成功！",
+											icon: 'success',
+											complete: () => {
+												
+											}
+										})
+									});
 									this.$emit('changeOrderStatus',1);
 									this.$emit('orderText','已确定预约');
 									this.status=1;

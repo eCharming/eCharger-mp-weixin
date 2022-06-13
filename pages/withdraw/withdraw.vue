@@ -33,7 +33,7 @@
 		</addcard>
 		</view>
 		<view>
-			<button class="submit" @tap="submit" :disabled="avatarUrl.length==0 || String(withdraw).length==0">提现</button>
+			<button class="submit" @tap="submit" :disabled="(avatarUrl.length==0 || String(withdraw).length==0) || disable">提现</button>
 		</view>
 	</view>
 </template>
@@ -55,6 +55,7 @@
 				maxBalance:0,
 				maxlength:5,
 				haveDot:false,
+				disable:false,
 			}
 		},
 		computed: {
@@ -91,15 +92,61 @@
 					})
 					return;
 				}
-				wx.showToast({
-					title: "提交提现申请！",
-					icon: 'success',
-					complete:()=>{
-						setTimeout(()=>{
-							uni.navigateBack({})
-						},1500)
-					}
-				})
+				this.disable=true
+				for (var i = 0; i < this.avatarUrl.length; i++) {
+					wx.uploadFile({
+						url: "https://ws.healtool.cn/uploadPay/" + this.$store.state.uid,
+						filePath: this.avatarUrl[i],
+						name: 'file',
+						success: res => {
+							if (res.data.startsWith("<html>")) {
+								wx.showToast({
+									title: "图片上传失败！",
+									icon: 'none',
+								})
+								this.disable=false;
+								return;
+							}
+							var res = JSON.parse(res.data)
+							if (res.code != 200) {
+								wx.showToast({
+									title: "图片上传失败！",
+									icon: 'none',
+								})
+								this.disable=false;
+								return;
+							} else {
+								wx.cloud.callFunction({
+									name: 'withdrawalInput',
+									data: {
+										uid:this.$store.state.uid,
+										withdrawal:this.withdraw,
+										wxPay:res.data
+									}
+								}).then(res=>{
+									wx.showToast({
+										title: "提交成功！",
+										icon: 'success',
+										complete:()=>{
+											setTimeout(()=>{
+												this.disable=false;
+												uni.navigateBack({})
+											},1500)
+										}
+									})
+								})
+							}
+						},
+						fail: res => {
+							wx.showToast({
+								title: "图片上传失败！",
+								icon: 'none',
+							})
+							this.disable=false;
+							return;
+						}
+					})
+				}
 			},
 			showPic(item) {
 				wx.previewImage({
