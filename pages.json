@@ -110,6 +110,12 @@
 			"style" : {
 				"navigationBarTitleText": "易插eCharger"
 			}
+		},
+		{
+			"path" : "pages/withdraw/withdraw",
+			"style" : {
+				"navigationBarTitleText": "易插eCharger"
+			}
 		}
     ],
 	"globalStyle": {

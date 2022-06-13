@@ -14,6 +14,7 @@
 					<image :src="avatarUrl" style="height: 130rpx;width: 130rpx;border-radius: 50%;margin: 20rpx;">
 					</image>
 					<text>{{userName}}</text>
+					<text style="font-size: 25rpx;">余额：{{balance}}元</text>
 				</view>
 			</view>
 
@@ -36,6 +37,10 @@
 			</addcard>
 
 			<addcard style='margin:10rpx;'>
+				<view class='labeltext' @tap="navi(7)">
+					申请提现
+				</view>
+				<view class='divLine'></view>
 				<view class='labeltext' @tap="navi(6)">
 					意见反馈
 				</view>
@@ -66,6 +71,7 @@
 				myBottom: 0, //联系人距离导航栏底部距离
 				statusHeight: 0, //导航栏高度
 				statusBarHeight: uni.getSystemInfoSync().statusBarHeight, //状态栏高度
+				balance:0,	//余额
 			}
 		},
 		methods: {
@@ -91,6 +97,10 @@
 				} else if (index === 6) {
 					uni.navigateTo({
 						url: '../feedback/feedback',
+					})
+				} else if (index === 7) {
+					uni.navigateTo({
+						url: '../withdraw/withdraw?maxBalance='+this.balance
 					})
 				}
 			},
@@ -121,7 +131,25 @@
 			this.myBottom = (this.statusHeight - uni.getMenuButtonBoundingClientRect().bottom);
 			this.avatarUrl = this.$store.state.avatarUrl;
 			this.userName = this.$store.state.userName;
+			wx.cloud.callFunction({
+				name: 'getBalance',
+				data: {
+					uid:this.$store.state.uid
+				}
+			}).then(res=>{
+				this.balance = res.result/100
+			})
 		},
+		onShow() {
+			wx.cloud.callFunction({
+				name: 'getBalance',
+				data: {
+					uid:this.$store.state.uid
+				}
+			}).then(res=>{
+				this.balance = res.result/100
+			})
+		}
 	}
 </script>
 
