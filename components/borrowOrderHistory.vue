@@ -136,62 +136,62 @@
 								this.statusText='预约已确定';
 								this.statusColor='rgb(50,200,210)';
 								
-								// wx.cloud.callFunction({
-								// 	name:'paySharing',
-								// 	data:{
-								// 		oid:this.oid,
-								// 	},
-								// 	success:res=>{
-								// 		console.log(res)
-								// 	}
-								// })
-								
-								wx.cloud.callFunction({ //更改order的状态
-									name: 'orderStatusChange',
-									data: {
+								wx.cloud.callFunction({
+									name:'paySharing',
+									data:{
 										oid:this.oid,
-										status:1,
-									}
-								}).then(res => {
-									var data={
-										oid:this.oid,
-										uid:this.uid,
-										toUid:this.toUid,
-										message:'1'
-									};
-									data=JSON.stringify(data);
-									this.socketTask.send({
-										data:data,
-										success: () => {
-											
-											
-											this.socketTask.close({
+									},
+									success:res=>{
+										wx.cloud.callFunction({ //更改order的状态
+											name: 'orderStatusChange',
+											data: {
+												oid:this.oid,
+												status:1,
+											}
+										}).then(res => {
+											var data={
+												oid:this.oid,
+												uid:this.uid,
+												toUid:this.toUid,
+												message:'1'
+											};
+											data=JSON.stringify(data);
+											this.socketTask.send({
+												data:data,
 												success: () => {
-													this.socketTask=null;
-													wx.showToast({
-														title: "已确定预约",
-														icon: 'success',
-														complete: () => {
-															setTimeout(() => {
-																uni.navigateTo({
-																	url: '../communication/chat?toUid='+this.uid,
-																	success: (res) => {
-																		res.eventChannel.emit('sendStatus', { 
-																			data: {
-																				message:'已确定预约'
+													
+													
+													this.socketTask.close({
+														success: () => {
+															this.socketTask=null;
+															wx.showToast({
+																title: "已确定预约",
+																icon: 'success',
+																complete: () => {
+																	setTimeout(() => {
+																		uni.navigateTo({
+																			url: '../communication/chat?toUid='+this.uid,
+																			success: (res) => {
+																				res.eventChannel.emit('sendStatus', { 
+																					data: {
+																						message:'已确定预约'
+																					}
+																				})
 																			}
-																		})
-																	}
-																});
-															}, 500)
+																		});
+																	}, 500)
+																}
+															})
 														}
-													})
+													});			
 												}
-											});			
-										}
-									})
-									
+											})
+											
+										})
+									}
 								})
+								
+								
 							} 
 						}
 					})
