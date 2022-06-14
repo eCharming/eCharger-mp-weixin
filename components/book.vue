@@ -91,16 +91,16 @@
 							success :(res)=> {
 								if (res.confirm) {
 									wx.showLoading({
-									  title:'加载中',                             
-									  mask:true                                    
+										title:"请稍候",
+										mask:true
 									})
 									wx.cloud.callFunction({
 										name:'orderRefund',
 										data:{
 											oid:this.oid,
-											refundPrice:this.price,
 										},
 										success:(res)=>{
+											console.log(res)
 											if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
 												wx.cloud.callFunction({ //更改order的状态
 													name: 'orderStatusChange',
@@ -109,7 +109,7 @@
 														status:-1,
 													}
 												}).then(res => {
-													wx.hideLoading()
+													wx.hideLoading();
 													wx.showToast({
 														title: "预约取消成功！",
 														icon: 'success',
@@ -142,7 +142,6 @@
 												})
 												
 											}else{
-												wx.hideLoading()
 												wx.showToast({
 													title: "预约取消失败！",
 													icon: 'error',
@@ -168,47 +167,56 @@
 							success :(res)=> {
 								if (res.confirm) {
 									wx.showLoading({
-									  title:'加载中',                             
-									  mask:true                                    
+										title:"请稍候",
+										mask:true
 									})
-									wx.cloud.callFunction({ //更改order的状态
-										name: 'orderStatusChange',
-										data: {
+									wx.cloud.callFunction({
+										name:'paySharing',
+										data:{
 											oid:this.oid,
-											status:1,
-										}
-									}).then(res => {
-										wx.hideLoading()
-										wx.showToast({
-											title: "预约确认成功！",
-											icon: 'success',
-											complete: () => {
-												
-											}
-										})
-									});
-									this.$emit('changeOrderStatus',1);
-									this.$emit('orderText','已确定预约');
-									this.status=1;
-									this.statusText='已确定预约';
-									this.color='rgba(0,0,0,0.6)';
-									var data={
-										oid:this.oid,
-										uid:this.uid,
-										toUid:this.toUid,
-										message:'1'
-									};
-									data=JSON.stringify(data);
-									this.socketTask.send({
-										data:data,
-										success: () => {
-											this.socketTask.close({
-												success: () => {
-													this.socketTask=null;
+										},
+										success:(res)=>{
+											
+											wx.cloud.callFunction({ //更改order的状态
+												name: 'orderStatusChange',
+												data: {
+													oid:this.oid,
+													status:1,
 												}
-											});			
-										}
-									})
+											}).then(res => {console.log(res)});
+											wx.hideLoading();
+											wx.showToast({
+												title: "预约取消成功！",
+												icon: 'success',
+												complete: () => {
+													
+												}
+											})
+											this.$emit('changeOrderStatus',1);
+											this.$emit('orderText','已确定预约');
+											this.status=1;
+											this.statusText='已确定预约';
+											this.color='rgba(0,0,0,0.6)';
+											var data={
+												oid:this.oid,
+												uid:this.uid,
+												toUid:this.toUid,
+												message:'1'
+											};
+											data=JSON.stringify(data);
+											this.socketTask.send({
+												data:data,
+												success: () => {
+													this.socketTask.close({
+														success: () => {
+															this.socketTask=null;
+														}
+													});			
+												}
+											})
+										},
+									});
+									
 								} 
 							}
 						})

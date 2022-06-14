@@ -483,9 +483,6 @@
 								wx.showToast({
 									title: "时间不合法！",
 									icon: 'error',
-									complete:()=>{
-										
-									}
 								})
 								return;
 							}
@@ -493,9 +490,6 @@
 								wx.showToast({
 									title: "预约时间过短！",
 									icon: 'error',
-									complete:()=>{
-										
-									}
 								})
 								return;
 							}
@@ -503,15 +497,12 @@
 								wx.showToast({
 									title: "预约金额过少！",
 									icon: 'error',
-									complete:()=>{
-										
-									}
 								})
 								return;
 							}
 							wx.showLoading({
-							  title:'加载中',                             
-							  mask:true                                    
+								title:"请稍候",
+								mask:true
 							})
 							wx.cloud.callFunction({ //查询我是否有未完成的订单以及该电桩是否可用
 								name: 'orderNum',
@@ -524,9 +515,10 @@
 									wx.cloud.callFunction({
 										name: 'orderPay',
 										data: {
-											predictedPrice: this.possiblePrice * 100
+											predictedPrice:Math.round(this.possiblePrice * 100)
 										},
 										success: res => {
+											console.log(res)
 											if (res.result.returnCode == "SUCCESS" && res.result.resultCode == "SUCCESS") {
 												var outTradeNo = res.result.outTradeNo;
 												const payment = res.result.payment
@@ -539,8 +531,8 @@
 																outTradeNo: outTradeNo,
 															}
 														}).then(res => {
-															var transactionId =res.result.transactionId;
-															var timeStamp =new Date().getTime();
+															var transactionId = res.result.transactionId;
+															var timeStamp = new Date().getTime();
 															wx.cloud.callFunction({ //输入订单
 																name: 'orderInput',
 																data: {
@@ -557,11 +549,10 @@
 																	outTradeNo: outTradeNo,
 																	transactionId: transactionId,
 																}
-															})
-															.then(
+															}).then(
 																res => {
-																	wx.hideLoading();
 																	var oid =res.result;
+																	wx.hideLoading()
 																	wx.showToast({
 																		title: "预约成功！",
 																		icon: 'success',
@@ -571,8 +562,8 @@
 																					url: '../communication/chat?toUid=' +
 																						this.uid,
 																					success: (res) => {
-																						res.eventChannel.emit(
-																							'bookOrder', {
+																						res.eventChannel
+																							.emit('bookOrder', {
 																								data: {
 																									oid: oid,
 																									cid: this.cid,
@@ -596,10 +587,9 @@
 																}
 															)
 														})
-
 													},
 													fail(err) {
-														wx.hideLoading();
+														wx.hideLoading()
 														wx.showToast({
 															title: "支付失败！",
 															icon: 'error',
@@ -610,35 +600,27 @@
 													}
 												})
 											} else {
-												wx.hideLoading();
+												wx.hideLoading()
 												wx.showToast({
 													title: "预约失败！",
 													icon: 'error',
-													complete: () => {
-
-													}
 												})
 											}
 
 										},
-										fail: res=>{
-											wx.hideLoading();
-											console.error
-										}
+										fail: wx.hideLoading(),
 									})
 								} else if (res.result == -1) {
-									wx.hideLoading();
+									wx.hideLoading()
 									wx.showToast({
 										title: "您有订单未处理",
 										icon: 'error',
-										complete: () => {}
 									})
 								} else if (res.result == -2) {
-									wx.hideLoading();
+									wx.hideLoading()
 									wx.showToast({
 										title: "该电桩已被预约",
 										icon: 'error',
-										complete: () => {}
 									})
 								}
 							})

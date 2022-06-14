@@ -129,6 +129,10 @@
 					  content: '确定取消预约？',
 					  success :(res)=> {
 					    if (res.confirm) {
+							wx.showLoading({
+								title:"请稍候",
+								mask:true
+							})
 					      this.status=-1;
 					      this.timeRemain='订单完成';
 					      this.checkStatus='预约已取消';
@@ -140,7 +144,6 @@
 					      	name:'orderRefund',
 					      	data:{
 					      		oid:this.oid,
-					      		refundPrice:this.predictedPrice,
 					      	},
 					      	success:(res)=>{
 					      		if(res.result.returnCode=="SUCCESS"&&res.result.resultCode=="SUCCESS"){
@@ -166,6 +169,7 @@
 					      						this.socketTask.close({
 					      							success: () => {
 					      								this.socketTask=null;
+														wx.hideLoading();
 					      								wx.showToast({
 					      									title: "已取消预约",
 					      									icon: 'success',

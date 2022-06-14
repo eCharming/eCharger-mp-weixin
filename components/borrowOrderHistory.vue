@@ -129,6 +129,10 @@
 						content: '确定预约？',
 						success :(res)=> {
 							if (res.confirm) {
+								wx.showLoading({
+									title:"请稍候",
+									mask:true
+								})
 								this.status=1;
 								this.timeRemain='订单完成';
 								this.checkStatus='预约已确定';
@@ -164,6 +168,7 @@
 													this.socketTask.close({
 														success: () => {
 															this.socketTask=null;
+															wx.hideLoading();
 															wx.showToast({
 																title: "已确定预约",
 																icon: 'success',
