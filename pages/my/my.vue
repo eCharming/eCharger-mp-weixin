@@ -38,7 +38,7 @@
 
 			<addcard style='margin:10rpx;'>
 				<view class='labeltext' @tap="navi(7)">
-					申请提现
+					申请提现（Beta）
 				</view>
 				<view class='divLine'></view>
 				<view class='labeltext' @tap="navi(6)">

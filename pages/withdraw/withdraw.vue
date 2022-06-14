@@ -17,7 +17,18 @@
 		</addcard>
 		<addcard>
 			<view class="display">
-				<text class="labeltext">收款码</text>
+				<view class="labeltext">手机号</view>
+				<input maxlength="11" class="input" v-model="phoneNumber"></input>
+			</view>
+		</addcard>
+		<addcard>
+			<view class="display">
+				<view class="labeltext">*仅供测试，无实际用途</view>
+			</view>
+		</addcard>
+		<!-- <addcard>
+			<view class="display">
+				<text class="labeltext">图片</text>
 			</view>
 			<view class='content'>
 				<view class='img-view' v-for='(item,index) in avatarUrl' :key='index'>
@@ -30,10 +41,11 @@
 				</view>
 				<image @tap='uploadPic' class='add-img' src='../../static/image/addImg.png' v-show="isAdd"></image>
 			</view>
-		</addcard>
+		</addcard> -->
 		</view>
 		<view>
-			<button class="submit" @tap="submit" :disabled="(avatarUrl.length==0 || String(withdraw).length==0) || disable">提现</button>
+			<!-- <button class="submit" @tap="submit" :disabled="(avatarUrl.length==0 || String(withdraw).length==0) || disable">提现</button> -->
+			<button class="submit" @tap="submit" :disabled=" phoneNumber.length==0 || String(withdraw).length==0 || disable">提现</button>
 		</view>
 	</view>
 </template>
@@ -56,6 +68,7 @@
 				maxlength:5,
 				haveDot:false,
 				disable:false,
+				phoneNumber:"",
 			}
 		},
 		computed: {
@@ -71,7 +84,7 @@
 				uni.navigateBack({})
 			},
 			submit() {
-				if(Number(this.withdraw)>this.maxBalance) {
+				/*if(Number(this.withdraw)>this.maxBalance) {
 					wx.showToast({
 						title: "提现金额过大！",
 						icon: 'error',
@@ -84,16 +97,42 @@
 						icon: 'error',
 					})
 					return;
-				}
-				if(this.avatarUrl.length==0) {
+				}*/
+				if(this.phoneNumber.length==0) {
 					wx.showToast({
-						title: "请上传收款码！",
+						title: "请输入手机号！",
 						icon: 'error',
 					})
 					return;
 				}
+				/*if(this.avatarUrl.length==0) {
+					wx.showToast({
+						title: "请上传图片！",
+						icon: 'error',
+					})
+					return;
+				}*/
 				this.disable=true
-				for (var i = 0; i < this.avatarUrl.length; i++) {
+				wx.cloud.callFunction({
+					name: 'withdrawalInput',
+					data: {
+						uid:this.$store.state.uid,
+						withdrawal:this.withdraw,
+						phoneNumber:this.phoneNumber
+					}
+				}).then(res=>{
+					wx.showToast({
+						title: "提交成功！",
+						icon: 'success',
+						complete:()=>{
+							setTimeout(()=>{
+								this.disable=false;
+								uni.navigateBack({})
+							},1500)
+						}
+					})
+				})
+				/*for (var i = 0; i < this.avatarUrl.length; i++) {
 					wx.uploadFile({
 						url: "https://ws.healtool.cn/uploadPay/" + this.$store.state.uid,
 						filePath: this.avatarUrl[i],
@@ -146,7 +185,8 @@
 							return;
 						}
 					})
-				}
+				}*/
+				
 			},
 			showPic(item) {
 				wx.previewImage({
@@ -245,8 +285,8 @@
 	.labeltext {
 		letter-spacing: 2upx;
 		font-weight: 700;
-		margin-top:20upx;
-		margin-bottom:20upx;
+		margin-top:10upx;
+		margin-bottom:10upx;
 	}
 	
 	.submit {
@@ -271,8 +311,8 @@
 		margin-top: 10upx;
 	}
 	.input {
-		margin-top:20upx;
-		margin-bottom:20upx;
+		margin-top:10upx;
+		margin-bottom:10upx;
 		width: 500upx;
 		text-align: right;
 	}

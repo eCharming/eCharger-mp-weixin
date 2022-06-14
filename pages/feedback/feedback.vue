@@ -17,7 +17,7 @@
 		<addcard>
 			<view class="display">
 				<view class="labeltext">联系方式</view>
-				<input placeholder="请输入您的手机号(选填)" maxlength="11">{{phoneNumber}}</input>
+				<input placeholder="请输入您的手机号(选填)" maxlength="11" v-model="phoneNumber"></input>
 			</view>
 		</addcard>
 		</view>
