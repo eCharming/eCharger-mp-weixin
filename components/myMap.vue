@@ -61,12 +61,12 @@
 					}
 					var rawStartTime = this.$store.state.startTime.split(":");
 					var rawEndTime = this.$store.state.endTime.split(":");
-					var endTime = rawEndTime.length > 1 ? (Number(rawEndTime[0]) * 60 + Number(rawEndTime[1])) : 1440;
+					var endTime = rawEndTime.length > 1 ? (Number(rawEndTime[0]) * 60 + Number(rawEndTime[1])) : 1439;
 					var startTime = rawStartTime.length > 1 ? (Number(rawStartTime[0]) * 60 + Number(rawStartTime[1])) : 0;
 
 					for (let charger of this.chargerList) {
 						var timeStamp = charger.timeStamp;
-						if (timeStamp[2 * days - 2] >= startTime && timeStamp[2 * days - 1] <= endTime) {
+						if (timeStamp[2 * days - 2] <= startTime && timeStamp[2 * days - 1] >= endTime) {
 							this.covers.push({
 								title: charger.address,
 								id: charger._id,
