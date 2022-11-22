@@ -101,6 +101,7 @@
 		},
 		methods:{
 			keyboardheightchange(e) {
+			
 				if(e.detail.height!=this.keyboardHeight) {
 					this.keyboardHeight=e.detail.height
 					this.scrollHeight=this.constscrollHeight-e.detail.height;
