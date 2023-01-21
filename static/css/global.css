@@ -1,8 +1,8 @@
 body {
-	font-size: 28upx;
-	color: #333333;
-	font-family: Helvetica Neue, Helvetica, sans-serif;
-	background-color: rgb(240,240,240);
+    font-size: 28upx;
+    color: #333333;
+    font-family: Helvetica Neue, Helvetica, sans-serif;
+    background-color: rgb(240, 240, 240);
 }
 
 view,
@@ -14,7 +14,9 @@ label,
 movable-area,
 movable-view,
 image {
-	box-sizing: border-box;
+    box-sizing: border-box;
 }
 
-::-webkit-scrollbar{ display:none;}
+::-webkit-scrollbar {
+    display: none;
+}
